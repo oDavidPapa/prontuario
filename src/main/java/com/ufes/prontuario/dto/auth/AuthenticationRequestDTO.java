@@ -1,15 +1,18 @@
-package com.ufes.prontuario.dto.usuario;
+package com.ufes.prontuario.dto.auth;
 
 import lombok.*;
 
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class UsuarioCadastroDTO {
+@Getter
+@Setter
+public class AuthenticationRequestDTO {
 
+    @NonNull
     private String login;
+    @NonNull
     private String senha;
+    @NonNull
     private String role;
+
 }
