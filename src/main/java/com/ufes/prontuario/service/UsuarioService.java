@@ -30,7 +30,4 @@ public class UsuarioService {
     public UserDetails findByLogin(String login) {
         return this.repository.findByLogin(login);
     }
-
-
-
 }

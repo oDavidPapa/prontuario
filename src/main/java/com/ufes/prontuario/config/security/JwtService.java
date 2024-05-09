@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.ufes.prontuario.exception.UsuarioNaoAutenticadoException;
 import com.ufes.prontuario.model.Usuario;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,16 +24,14 @@ public class JwtService {
     public String generateToken(Usuario usuario) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
-            String token = JWT.create()
+            return JWT.create()
                     .withIssuer("auth-prontuario")
                     .withSubject(usuario.getLogin())
                     .withExpiresAt(genExpirationDate())
                     .sign(algorithm);
 
-            return token;
         } catch ( JWTCreationException e ) {
-            // TODO: tratar no handler de exceptions
-            throw new RuntimeException("Erro ao gerar token", e);
+            throw new UsuarioNaoAutenticadoException();
         }
     }
 
