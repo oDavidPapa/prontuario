@@ -1,7 +1,10 @@
 package com.ufes.prontuario.dto.paciente;
 
 import com.ufes.prontuario.dto.pessoa.PessoaDTO;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 

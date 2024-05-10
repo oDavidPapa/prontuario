@@ -19,8 +19,8 @@ public class Doenca {
     private Long id;
 
     @Column
-    String descricao;
+    private String descricao;
 
     @Column
-    String cid;
+    private String cid;
 }

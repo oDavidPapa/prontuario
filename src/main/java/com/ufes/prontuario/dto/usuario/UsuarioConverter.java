@@ -1,23 +1,21 @@
 package com.ufes.prontuario.dto.usuario;
 
-import com.ufes.prontuario.enums.Role;
+import com.ufes.prontuario.enums.RoleEnum;
 import com.ufes.prontuario.model.Usuario;
-import lombok.Builder;
 
-@Builder
 public class UsuarioConverter {
 
-    public static Usuario usuarioCadastroToEntity(UsuarioCadastroDTO usuarioCadastroDTO) {
+    public static Usuario toEntity(UsuarioCadastroDTO usuarioCadastroDTO) {
 
         var usuario = new Usuario();
         usuario.setLogin(usuarioCadastroDTO.getLogin());
         usuario.setSenha(usuarioCadastroDTO.getSenha());
-        usuario.setRole(Role.valueOf(usuarioCadastroDTO.getRole()));
+        usuario.setRole(RoleEnum.valueOf(usuarioCadastroDTO.getRole()));
 
         return usuario;
     }
 
-    public static UsuarioDTO entityToDTO(Usuario usuario) {
+    public static UsuarioDTO toDTO(Usuario usuario) {
         return UsuarioDTO.builder()
                 .id(usuario.getId())
                 .login(usuario.getLogin())

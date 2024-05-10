@@ -1,6 +1,6 @@
 package com.ufes.prontuario.enums;
 
-public enum Status {
+public enum StatusEnum {
     ATIVO,
     INATIVO
 }

@@ -1,7 +1,23 @@
 package com.ufes.prontuario.dto.arquivo;
 
-import lombok.Builder;
+import com.ufes.prontuario.model.Arquivo;
 
-@Builder
 public class ArquivoConverter {
+
+    public static Arquivo toEntity(ArquivoCadastroDTO arquivoCadastroDTO) {
+
+        var arquivo = new Arquivo();
+        arquivo.setArquivo(arquivo.getArquivo());
+        arquivo.setNome(arquivo.getNome());
+
+        return arquivo;
+    }
+
+    public static ArquivoDTO toDTO(Arquivo arquivo) {
+        return ArquivoDTO.builder()
+                .id(arquivo.getId())
+                .arquivo(arquivo.getArquivo())
+                .nome(arquivo.getNome())
+                .build();
+    }
 }

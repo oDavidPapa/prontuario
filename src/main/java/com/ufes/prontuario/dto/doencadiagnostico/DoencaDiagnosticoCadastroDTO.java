@@ -10,4 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class DoencaDiagnosticoCadastroDTO {
+    
+    private Long idDoenca;
+    private Long idDiagnostico;
 }

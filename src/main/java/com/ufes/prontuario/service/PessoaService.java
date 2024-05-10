@@ -1,7 +1,5 @@
 package com.ufes.prontuario.service;
 
-import com.ufes.prontuario.dto.pessoa.PessoaConverter;
-import com.ufes.prontuario.dto.pessoa.PessoaDTO;
 import com.ufes.prontuario.exception.RecursoNaoEncontradoException;
 import com.ufes.prontuario.model.Pessoa;
 import com.ufes.prontuario.repository.PessoaRepository;

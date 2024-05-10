@@ -9,5 +9,10 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @Builder
-public class PrescricaoMedicamentoCadastroDTO {
+public class PrescricaoConsultaMedicamentoCadastroDTO {
+
+    private String dosagem;
+    private String instrucaoUso;
+    private Long idPrescricao;
+    private Long idMedicamento;
 }

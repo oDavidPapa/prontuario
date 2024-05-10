@@ -2,9 +2,7 @@ package com.ufes.prontuario.dto.paciente;
 
 import com.ufes.prontuario.dto.pessoa.PessoaConverter;
 import com.ufes.prontuario.model.Paciente;
-import lombok.*;
 
-@Builder
 public class PacienteConverter {
 
     public static PacienteDTO toDTO(Paciente paciente) {

@@ -10,4 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class DoencaCadastroDTO {
+
+    private String descricao;
+    private String cid;
 }

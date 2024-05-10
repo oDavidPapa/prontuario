@@ -10,4 +10,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class PrescricaoCadastroDTO {
+
+    private Long idConsulta;
 }

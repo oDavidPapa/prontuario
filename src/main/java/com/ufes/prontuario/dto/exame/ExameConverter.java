@@ -1,7 +1,23 @@
 package com.ufes.prontuario.dto.exame;
 
-import lombok.Builder;
+import com.ufes.prontuario.dto.consulta.ConsultaConverter;
+import com.ufes.prontuario.model.Exame;
 
-@Builder
 public class ExameConverter {
+
+    public static Exame toEntity(ExameCadastroDTO exameCadastroDTO) {
+
+        var exame = new Exame();
+        exame.setDescricao(exameCadastroDTO.getDescricao());
+
+        return exame;
+    }
+
+    public static ExameDTO toDTO(Exame exame) {
+        return ExameDTO.builder()
+                .id(exame.getId())
+                .descricao(exame.getDescricao())
+                .consulta(ConsultaConverter.toDTO(exame.getConsulta()))
+                .build();
+    }
 }

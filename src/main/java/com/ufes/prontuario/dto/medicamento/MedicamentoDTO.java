@@ -10,4 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class MedicamentoDTO {
+
+    private Long id;
+    private String descricao;
 }

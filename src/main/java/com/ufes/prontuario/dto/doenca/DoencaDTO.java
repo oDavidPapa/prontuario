@@ -10,4 +10,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class DoencaDTO {
+
+    private Long id;
+    private String descricao;
+    private String cid;
 }

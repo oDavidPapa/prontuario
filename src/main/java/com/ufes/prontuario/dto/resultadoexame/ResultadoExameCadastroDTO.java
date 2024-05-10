@@ -10,4 +10,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class ResultadoExameCadastroDTO {
+
+    private String descricao;
+    private Long idExame;
+    private Long idArquivo;
 }

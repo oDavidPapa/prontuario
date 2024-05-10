@@ -1,8 +1,11 @@
 package com.ufes.prontuario.model;
 
-import com.ufes.prontuario.enums.Role;
+import com.ufes.prontuario.enums.RoleEnum;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,9 +32,9 @@ public class Usuario implements UserDetails {
     private String senha;
 
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private RoleEnum role;
 
-    public Usuario(String login, String senha, Role role) {
+    public Usuario(String login, String senha, RoleEnum role) {
         this.login = login;
         this.senha = senha;
         this.role = role;

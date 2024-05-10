@@ -10,4 +10,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class ArquivoDTO {
+
+    private Long id;
+    private String nome;
+    private byte[] arquivo;
 }

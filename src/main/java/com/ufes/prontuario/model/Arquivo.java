@@ -19,7 +19,7 @@ public class Arquivo {
     private Long id;
 
     @Column
-    String nome;
+    private String nome;
 
     @Column
     @Lob

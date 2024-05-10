@@ -1,6 +1,6 @@
 package com.ufes.prontuario.enums;
 
-public enum Role {
+public enum RoleEnum {
     MEDICO,
     CADASTRO
 }

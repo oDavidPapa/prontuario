@@ -10,4 +10,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class AgendaConsultaCadastroDTO {
+
+    private Long idPaciente;
+    private Long idMedico;
+    private Long idAgenda;
 }

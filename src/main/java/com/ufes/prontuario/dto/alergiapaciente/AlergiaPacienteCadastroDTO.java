@@ -10,4 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class AlergiaPacienteCadastroDTO {
+
+    private String descricao;
+    private Long idPaciente;
 }
