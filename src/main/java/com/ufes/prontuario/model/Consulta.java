@@ -1,5 +1,6 @@
 package com.ufes.prontuario.model;
 
+import com.ufes.prontuario.enums.TipoConsultaEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,8 +27,8 @@ public class Consulta {
     @Column
     private LocalDate data;
 
-    @Column
-    private String tipo; // enum
+    @Enumerated(EnumType.STRING)
+    private TipoConsultaEnum tipo;
 
     @OneToOne
     @JoinColumn(name = "id_medico")

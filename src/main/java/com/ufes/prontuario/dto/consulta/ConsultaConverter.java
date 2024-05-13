@@ -3,6 +3,7 @@ package com.ufes.prontuario.dto.consulta;
 import com.ufes.prontuario.dto.agendaconsulta.AgendaConsultaConverter;
 import com.ufes.prontuario.dto.medico.MedicoConverter;
 import com.ufes.prontuario.dto.paciente.PacienteConverter;
+import com.ufes.prontuario.enums.TipoConsultaEnum;
 import com.ufes.prontuario.model.Consulta;
 
 import java.util.Optional;
@@ -14,7 +15,7 @@ public class ConsultaConverter {
         var consulta = new Consulta();
         consulta.setData(consultaCadastroDTO.getData());
         consulta.setMotivo(consultaCadastroDTO.getMotivo());
-        consulta.setTipo(consultaCadastroDTO.getTipo());
+        consulta.setTipo(TipoConsultaEnum.valueOf(consultaCadastroDTO.getTipo()));
 
         return consulta;
     }
@@ -24,7 +25,7 @@ public class ConsultaConverter {
                 .id(consulta.getId())
                 .data(consulta.getData())
                 .motivo(consulta.getMotivo())
-                .tipo(consulta.getTipo())
+                .tipo(consulta.getTipo().name())
                 .agendaConsulta(Optional.ofNullable(consulta.getAgendaConsulta())
                         .map(AgendaConsultaConverter::toDTO)
                         .orElse(null))
