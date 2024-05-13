@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
-public class PacienteService implements IBaseService<PacienteCadastroDTO, Paciente, Long>{
+public class PacienteService implements IBaseService<PacienteCadastroDTO, Paciente>{
 
     private final PacienteRepository repository;
     private final PessoaService pessoaService;
@@ -44,7 +44,7 @@ public class PacienteService implements IBaseService<PacienteCadastroDTO, Pacien
     public Paciente update(Long id, PacienteCadastroDTO pacienteCadastroDTO) {
         return Optional.ofNullable(pacienteCadastroDTO)
                 .map(pDto -> validarUpdate(pDto, id))
-                .map(p -> prepareUpdate(p ,id))
+                .map(paciente -> prepareUpdate(paciente ,id))
                 .map(this.repository::save)
                 .orElseThrow();
     }

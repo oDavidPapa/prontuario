@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class UsuarioService {
+public class UsuarioService implements IBaseService<UsuarioCadastroDTO, Usuario> {
 
     private final UsuarioRepository repository;
 
@@ -26,5 +26,30 @@ public class UsuarioService {
 
     public UserDetails findByLogin(String login) {
         return this.repository.findByLogin(login);
+    }
+
+    @Override
+    public UsuarioCadastroDTO validarInsert(UsuarioCadastroDTO dtoCadastro) {
+        return null;
+    }
+
+    @Override
+    public UsuarioCadastroDTO validarUpdate(UsuarioCadastroDTO dtoCadastro, Long id) {
+        return null;
+    }
+
+    @Override
+    public void validarDelete(Usuario entity) {
+
+    }
+
+    @Override
+    public Usuario prepareInsert(UsuarioCadastroDTO dtoCadastro) {
+        return null;
+    }
+
+    @Override
+    public Usuario prepareUpdate(UsuarioCadastroDTO dtoCadastro, Long id) {
+        return null;
     }
 }
