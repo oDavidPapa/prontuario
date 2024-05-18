@@ -6,13 +6,14 @@ import com.ufes.prontuario.dto.paciente.PacienteDTO;
 import com.ufes.prontuario.service.PacienteService;
 import com.ufes.prontuario.util.BaseResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/paciente")
+@RequestMapping("/pacientes")
 public class PacienteController {
 
     private final PacienteService service;
@@ -26,9 +27,12 @@ public class PacienteController {
     }
 
     @GetMapping
-    public BaseResponse<PacienteDTO> list() {
-       var pacientes =  this.service.listar().stream()
-                .map(PacienteConverter::toDTO).toList();
+    public BaseResponse<PacienteDTO> filter(
+            @RequestParam String nome, @RequestParam String cpf,
+            @RequestParam Long id, Pageable pageable) {
+
+        var pacientes = this.service.filter(id, nome, cpf, pageable)
+                .stream().map(PacienteConverter::toDTO).toList();
 
         return new BaseResponse<>(pacientes, pacientes.size());
     }
@@ -43,7 +47,7 @@ public class PacienteController {
 
     @PutMapping("/{id}")
     public BaseResponse<PacienteDTO> update(@PathVariable Long id, @RequestBody PacienteCadastroDTO pacienteCadastroDTO) {
-        var pacienteDTO = Optional.ofNullable(this.service.update(id,pacienteCadastroDTO))
+        var pacienteDTO = Optional.ofNullable(this.service.update(id, pacienteCadastroDTO))
                 .map(PacienteConverter::toDTO).orElse(null);
 
         return new BaseResponse<>(pacienteDTO);

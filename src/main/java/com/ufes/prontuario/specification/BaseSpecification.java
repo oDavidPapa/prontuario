@@ -24,6 +24,12 @@ public class BaseSpecification<T> implements Specification<T> {
                 .orElse(null);
     }
 
+    public Specification<T> findById(@Nullable Long id) {
+        return Optional.ofNullable(id)
+                .map(i -> prepareEqualsSpecification("id", i))
+                .orElse(null);
+    }
+
     public Specification<T> findLikeByDescricao(@Nullable String descricao) {
         return Optional.ofNullable(descricao)
                 .map(s -> prepareLikeSpecification("descricao", s))
@@ -33,6 +39,12 @@ public class BaseSpecification<T> implements Specification<T> {
     public Specification<T> findLikeByColumn(String column, @Nullable String nome) {
         return Optional.ofNullable(nome)
                 .map(s -> prepareLikeSpecification(column, s))
+                .orElse(null);
+    }
+
+    public Specification<T> findLikeBySubColumn(String column, String campo,  @Nullable String nome) {
+        return Optional.ofNullable(nome)
+                .map(s -> prepareLikeSubSpecification(column,campo, s))
                 .orElse(null);
     }
 

@@ -3,9 +3,15 @@ package com.ufes.prontuario.service;
 import com.ufes.prontuario.dto.pessoa.PessoaCadastroDTO;
 import com.ufes.prontuario.dto.pessoa.PessoaConverter;
 import com.ufes.prontuario.exception.RecursoNaoEncontradoException;
+import com.ufes.prontuario.model.Paciente;
 import com.ufes.prontuario.model.Pessoa;
 import com.ufes.prontuario.repository.PessoaRepository;
+import com.ufes.prontuario.specification.BaseSpecification;
+import com.ufes.prontuario.util.PageUtils;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,6 +39,22 @@ public class PessoaService implements IBaseService<PessoaCadastroDTO, Pessoa>{
                 .map(this::prepareInsert)
                 .map(repository::save)
                 .orElseThrow();
+    }
+
+    public Page<Pessoa> filter(Long id, String nome, String cpf, Pageable pageable) {
+        var specification = this.prepareSpecification(id, nome, cpf);
+
+        return this.repository.findAll(specification, PageUtils.preparePageable(pageable));
+    }
+
+    private Specification<Pessoa> prepareSpecification(Long id, String nome, String cpf) {
+        final var specification = new BaseSpecification<Pessoa>();
+
+        return specification
+                .and(specification.findById(id))
+                .and(specification.findLikeByColumn("nome", nome))
+                .and(specification.findLikeByColumn( "cpf", cpf));
+
     }
 
     public Pessoa update(Long id, PessoaCadastroDTO pessoaCadastroDTO) {

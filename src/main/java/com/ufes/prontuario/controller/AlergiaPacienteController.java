@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/alergia-paciente")
+@RequestMapping("/alergias-paciente")
 public class AlergiaPacienteController {
 
     private final AlergiaPacienteService service;
@@ -30,8 +30,7 @@ public class AlergiaPacienteController {
     @GetMapping
     public BaseResponse<AlergiaPacienteDTO> filter(@RequestParam Long idPaciente, Pageable pageable) {
         var alergiasPaciente = this.service.filter(idPaciente, pageable)
-                .getContent().stream()
-                .map(AlergiaPacienteConverter::toDTO).toList();
+                .stream().map(AlergiaPacienteConverter::toDTO).toList();
 
         return new BaseResponse<>(alergiasPaciente, alergiasPaciente.size());
     }
@@ -46,7 +45,7 @@ public class AlergiaPacienteController {
 
     @PutMapping("/{id}")
     public BaseResponse<AlergiaPacienteDTO> update(@PathVariable Long id, @RequestBody AlergiaPacienteCadastroDTO alergiaPacienteCadastroDTO) {
-        var alergiaPacienteDTO = Optional.ofNullable(this.service.update(id,alergiaPacienteCadastroDTO))
+        var alergiaPacienteDTO = Optional.ofNullable(this.service.update(id, alergiaPacienteCadastroDTO))
                 .map(AlergiaPacienteConverter::toDTO).orElse(null);
 
         return new BaseResponse<>(alergiaPacienteDTO);

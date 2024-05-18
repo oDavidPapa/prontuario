@@ -21,7 +21,9 @@ public class PessoaConverter {
                 .usuario(Optional.ofNullable(pessoa.getUsuario())
                         .map(UsuarioConverter::toDTO)
                         .orElse(null))
-                .contato(ContatoConverter.toDTO(pessoa.getContato()))
+                .contato(Optional.ofNullable(pessoa.getContato())
+                        .map(ContatoConverter::toDTO)
+                        .orElse(null))
                 .build();
     }
 

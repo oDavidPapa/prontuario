@@ -17,4 +17,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleProductNotFoundException(UsuarioNaoAutenticadoException e) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
     }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<String> handleProductNotFoundException(RuntimeException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro Inesperado: " + e.getMessage());
+    }
 }
