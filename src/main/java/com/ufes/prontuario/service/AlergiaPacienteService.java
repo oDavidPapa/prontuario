@@ -4,7 +4,13 @@ import com.ufes.prontuario.dto.alergiapaciente.AlergiaPacienteCadastroDTO;
 import com.ufes.prontuario.exception.RecursoNaoEncontradoException;
 import com.ufes.prontuario.model.AlergiaPaciente;
 import com.ufes.prontuario.repository.AlergiaPacienteRepository;
+import com.ufes.prontuario.specification.BaseSpecification;
+import com.ufes.prontuario.util.PageUtils;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,6 +31,19 @@ public class AlergiaPacienteService implements IBaseService<AlergiaPacienteCadas
         return this.repository.findAll();
     }
 
+
+    public Page<AlergiaPaciente> filter(Long idPaciente, @Nullable Pageable pageable) {
+        var specification = this.prepareSpecification(idPaciente);
+
+        return repository.findAll(specification, PageUtils.preparePageable(pageable));
+    }
+
+    private Specification<AlergiaPaciente> prepareSpecification(Long idPaciente) {
+        final var specification = new BaseSpecification<AlergiaPaciente>();
+
+        return specification.and(specification.findByColumnId("paciente", "id", idPaciente));
+    }
+
     public AlergiaPaciente inserir(AlergiaPacienteCadastroDTO alergiaPacienteCadastroDTO) {
         return Optional.ofNullable(alergiaPacienteCadastroDTO)
                 .map(this::validarInsert)
@@ -36,7 +55,7 @@ public class AlergiaPacienteService implements IBaseService<AlergiaPacienteCadas
     public AlergiaPaciente update(Long id, AlergiaPacienteCadastroDTO alergiaPacienteCadastroDTO) {
         return Optional.ofNullable(alergiaPacienteCadastroDTO)
                 .map(aDto -> validarUpdate(aDto, id))
-                .map(arquivo -> prepareUpdate(arquivo ,id))
+                .map(arquivo -> prepareUpdate(arquivo, id))
                 .map(this.repository::save)
                 .orElseThrow();
     }

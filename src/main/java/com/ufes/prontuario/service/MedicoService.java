@@ -1,9 +1,7 @@
 package com.ufes.prontuario.service;
 
 import com.ufes.prontuario.dto.medico.MedicoCadastroDTO;
-import com.ufes.prontuario.dto.medico.MedicoCadastroDTO;
 import com.ufes.prontuario.exception.RecursoNaoEncontradoException;
-import com.ufes.prontuario.model.Medico;
 import com.ufes.prontuario.model.Medico;
 import com.ufes.prontuario.repository.MedicoRepository;
 import lombok.AllArgsConstructor;

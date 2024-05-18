@@ -8,4 +8,5 @@ public interface IBaseService<T, U> {
 
     U prepareInsert(T dtoCadastro);
     U prepareUpdate(T dtoCadastro, Long id);
+
 }

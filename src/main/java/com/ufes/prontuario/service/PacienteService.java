@@ -2,7 +2,6 @@ package com.ufes.prontuario.service;
 
 import com.ufes.prontuario.dto.paciente.PacienteCadastroDTO;
 import com.ufes.prontuario.dto.paciente.PacienteConverter;
-import com.ufes.prontuario.dto.paciente.PacienteDTO;
 import com.ufes.prontuario.exception.RecursoNaoEncontradoException;
 import com.ufes.prontuario.model.Paciente;
 import com.ufes.prontuario.repository.PacienteRepository;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -25,12 +23,8 @@ public class PacienteService implements IBaseService<PacienteCadastroDTO, Pacien
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Pessoa", id));
     }
 
-    public List<PacienteDTO> listar() {
-        var pacientes = repository.findAll();
-
-        return pacientes.stream()
-                .map(PacienteConverter::toDTO)
-                .collect(Collectors.toList());
+    public List<Paciente> listar() {
+        return this.repository.findAll();
     }
 
     public Paciente inserir(PacienteCadastroDTO pacienteCadastroDTO) {

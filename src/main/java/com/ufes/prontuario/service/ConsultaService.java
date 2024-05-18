@@ -2,7 +2,6 @@ package com.ufes.prontuario.service;
 
 import com.ufes.prontuario.dto.consulta.ConsultaCadastroDTO;
 import com.ufes.prontuario.exception.RecursoNaoEncontradoException;
-import com.ufes.prontuario.model.Agenda;
 import com.ufes.prontuario.model.Consulta;
 import com.ufes.prontuario.repository.ConsultaRepository;
 import lombok.AllArgsConstructor;
