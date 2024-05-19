@@ -15,4 +15,6 @@ public class ContatoDTO {
     private String celular;
     private String telefone;
     private String email;
+    private String tipoContato;
+    private Long idPessoa;
 }

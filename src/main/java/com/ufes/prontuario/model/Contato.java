@@ -1,5 +1,6 @@
 package com.ufes.prontuario.model;
 
+import com.ufes.prontuario.enums.TipoContatoEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,4 +27,13 @@ public class Contato {
 
     @Column(nullable = true)
     private String telefone;
+
+    @ManyToOne
+    @JoinColumn(name = "id_pessoa")
+    private Pessoa pessoa;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tipo_contato")
+    private TipoContatoEnum tipoContato;
+
 }

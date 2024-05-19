@@ -41,7 +41,7 @@ public class AlergiaPacienteService implements IBaseService<AlergiaPacienteCadas
     private Specification<AlergiaPaciente> prepareSpecification(Long idPaciente) {
         final var specification = new BaseSpecification<AlergiaPaciente>();
 
-        return specification.and(specification.findByColumnId("paciente", "id", idPaciente));
+        return specification.and(specification.findBySubColumnId("paciente", "id", idPaciente));
     }
 
     public AlergiaPaciente inserir(AlergiaPacienteCadastroDTO alergiaPacienteCadastroDTO) {

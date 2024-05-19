@@ -7,15 +7,14 @@ import com.ufes.prontuario.service.PessoaService;
 import com.ufes.prontuario.util.BaseResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/pessoas")
+@RequestMapping("pessoas")
 public class PessoaController {
 
     private final PessoaService service;
@@ -35,11 +34,12 @@ public class PessoaController {
             @RequestParam(required = false) String cpf,
             Pageable pageable) {
 
-        var pessoas = this.service.filter(id, nome, cpf, pageable)
-                .stream()
-                .map(PessoaConverter::toDTO).toList();
+        var pessoas = this.service.filter(id, nome, cpf, pageable);
 
-        return new BaseResponse<>(pessoas, pessoas.size());
+        return new BaseResponse<>(pessoas.getContent().stream()
+                .map(PessoaConverter::toDTO)
+                .collect(Collectors.toList()),
+                pessoas.getTotalElements());
     }
 
 

@@ -28,9 +28,14 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/actuator/health").permitAll()
                         .requestMatchers(HttpMethod.POST, "api/auth/autenticar").permitAll()
                         .requestMatchers(HttpMethod.POST, "api/auth/registrar").permitAll()
-                        .requestMatchers(HttpMethod.GET, "api/pessoas/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "pessoas/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "pessoas/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "contatos/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "contatos/**").permitAll()
+
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

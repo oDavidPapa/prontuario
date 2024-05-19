@@ -1,6 +1,5 @@
 package com.ufes.prontuario.dto.pessoa;
 
-import com.ufes.prontuario.dto.contato.ContatoDTO;
 import com.ufes.prontuario.dto.usuario.UsuarioDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,6 +19,5 @@ public class PessoaDTO {
     private String cpf;
     private char sexo;
     private LocalDate dataNascimento;
-    private ContatoDTO contato;
     private UsuarioDTO usuario;
 }

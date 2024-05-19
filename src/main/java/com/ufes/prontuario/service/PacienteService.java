@@ -3,7 +3,6 @@ package com.ufes.prontuario.service;
 import com.ufes.prontuario.dto.paciente.PacienteCadastroDTO;
 import com.ufes.prontuario.dto.paciente.PacienteConverter;
 import com.ufes.prontuario.exception.RecursoNaoEncontradoException;
-import com.ufes.prontuario.model.AlergiaPaciente;
 import com.ufes.prontuario.model.Paciente;
 import com.ufes.prontuario.repository.PacienteRepository;
 import com.ufes.prontuario.specification.BaseSpecification;

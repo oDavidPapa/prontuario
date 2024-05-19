@@ -17,6 +17,4 @@ public class PessoaCadastroDTO {
     private String cpf;
     private char sexo;
     private LocalDate dataNascimento;
-    private Long idContato;
-    private Long idUsuario;
 }

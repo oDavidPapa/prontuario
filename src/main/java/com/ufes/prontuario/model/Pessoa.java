@@ -33,10 +33,6 @@ public class Pessoa {
     private LocalDate dataNascimento;
 
     @OneToOne
-    @JoinColumn(name = "id_contato")
-    private Contato contato;
-
-    @OneToOne
     @JoinColumn(name = "id_usuario")
     private Usuario usuario;
 }

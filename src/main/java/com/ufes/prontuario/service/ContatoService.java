@@ -1,10 +1,18 @@
 package com.ufes.prontuario.service;
 
 import com.ufes.prontuario.dto.contato.ContatoCadastroDTO;
+import com.ufes.prontuario.dto.contato.ContatoConverter;
+import com.ufes.prontuario.enums.TipoContatoEnum;
 import com.ufes.prontuario.exception.RecursoNaoEncontradoException;
 import com.ufes.prontuario.model.Contato;
 import com.ufes.prontuario.repository.ContatoRepository;
+import com.ufes.prontuario.specification.BaseSpecification;
+import com.ufes.prontuario.util.PageUtils;
 import lombok.AllArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +23,7 @@ import java.util.Optional;
 public class ContatoService implements IBaseService<ContatoCadastroDTO, Contato> {
 
     private final ContatoRepository repository;
+    private final PessoaService pessoaService;
 
     public Contato findById(Long id) {
         return this.repository.findById(id)
@@ -23,6 +32,21 @@ public class ContatoService implements IBaseService<ContatoCadastroDTO, Contato>
 
     public List<Contato> listar() {
         return this.repository.findAll();
+    }
+
+    public Page<Contato> filter(Long idPessoa, String tipoContato, Pageable pageable) {
+        var specification = this.prepareSpecification(idPessoa, tipoContato);
+
+        return this.repository.findAll(specification, PageUtils.preparePageable(pageable));
+    }
+
+    private Specification<Contato> prepareSpecification(Long idPessoa, String tipoContato) {
+        final var specification = new BaseSpecification<Contato>();
+
+        return specification
+                .and(specification.findLikeByColumn("tipoContato", tipoContato))
+                .and(specification.findBySubColumnId( "pessoa", "id", idPessoa));
+
     }
 
     public Contato inserir(ContatoCadastroDTO contatoCadastroDTO) {
@@ -53,12 +77,12 @@ public class ContatoService implements IBaseService<ContatoCadastroDTO, Contato>
 
     @Override
     public ContatoCadastroDTO validarInsert(ContatoCadastroDTO dtoCadastro) {
-        return null;
+        return dtoCadastro;
     }
 
     @Override
     public ContatoCadastroDTO validarUpdate(ContatoCadastroDTO dtoCadastro, Long id) {
-        return null;
+        return dtoCadastro;
     }
 
     @Override
@@ -68,11 +92,22 @@ public class ContatoService implements IBaseService<ContatoCadastroDTO, Contato>
 
     @Override
     public Contato prepareInsert(ContatoCadastroDTO dtoCadastro) {
-        return null;
+        var contato = ContatoConverter.toEntity(dtoCadastro);
+        var pessoa = this.pessoaService.findById(dtoCadastro.getIdPessoa());
+
+        contato.setPessoa(pessoa);
+        return contato;
     }
 
     @Override
     public Contato prepareUpdate(ContatoCadastroDTO dtoCadastro, Long id) {
-        return null;
+        var contato = this.findById(id);
+
+        contato.setCelular(StringUtils.getDigits(dtoCadastro.getCelular()));
+        contato.setEmail(dtoCadastro.getEmail());
+        contato.setTelefone(StringUtils.getDigits(dtoCadastro.getTelefone()));
+        contato.setTipoContato(TipoContatoEnum.valueOf(dtoCadastro.getTipoContato()));
+
+        return contato;
     }
 }

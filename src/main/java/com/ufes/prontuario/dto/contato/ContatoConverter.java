@@ -1,15 +1,18 @@
 package com.ufes.prontuario.dto.contato;
 
+import com.ufes.prontuario.enums.TipoContatoEnum;
 import com.ufes.prontuario.model.Contato;
+import org.apache.commons.lang3.StringUtils;
 
 public class ContatoConverter {
 
     public static Contato toEntity(ContatoCadastroDTO contatoCadastroDTO) {
 
         var contato = new Contato();
-        contato.setCelular(contatoCadastroDTO.getCelular());
+        contato.setCelular(StringUtils.getDigits(contatoCadastroDTO.getCelular()));
         contato.setEmail(contatoCadastroDTO.getEmail());
-        contato.setTelefone(contatoCadastroDTO.getTelefone());
+        contato.setTelefone(StringUtils.getDigits(contatoCadastroDTO.getTelefone()));
+        contato.setTipoContato(TipoContatoEnum.valueOf(contatoCadastroDTO.getTipoContato()));
 
         return contato;
     }
@@ -19,6 +22,8 @@ public class ContatoConverter {
                 .celular(contato.getCelular())
                 .email(contato.getEmail())
                 .telefone(contato.getTelefone())
+                .idPessoa(contato.getPessoa().getId())
+                .tipoContato(contato.getTipoContato().name())
                 .build();
     }
 }

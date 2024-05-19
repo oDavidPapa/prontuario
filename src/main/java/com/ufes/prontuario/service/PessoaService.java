@@ -3,7 +3,6 @@ package com.ufes.prontuario.service;
 import com.ufes.prontuario.dto.pessoa.PessoaCadastroDTO;
 import com.ufes.prontuario.dto.pessoa.PessoaConverter;
 import com.ufes.prontuario.exception.RecursoNaoEncontradoException;
-import com.ufes.prontuario.model.Paciente;
 import com.ufes.prontuario.model.Pessoa;
 import com.ufes.prontuario.repository.PessoaRepository;
 import com.ufes.prontuario.specification.BaseSpecification;
@@ -22,7 +21,6 @@ import java.util.Optional;
 public class PessoaService implements IBaseService<PessoaCadastroDTO, Pessoa>{
 
     private final PessoaRepository repository;
-    private final ContatoService contatoService;
 
     public Pessoa findById(Long id) {
         return this.repository.findById(id)
@@ -95,9 +93,6 @@ public class PessoaService implements IBaseService<PessoaCadastroDTO, Pessoa>{
         pessoa.setNome(dtoCadastro.getNome());
         pessoa.setCpf(dtoCadastro.getCpf());
         pessoa.setDataNascimento(dtoCadastro.getDataNascimento());
-
-        var contato = this.contatoService.findById(dtoCadastro.getIdContato());
-        pessoa.setContato(contato);
 
         return pessoa;
     }

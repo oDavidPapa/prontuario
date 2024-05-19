@@ -71,7 +71,7 @@ public class BaseSpecification<T> implements Specification<T> {
                 .get(campoName)), "%" + value.toLowerCase() + "%");
     }
 
-    public Specification<T> findByColumnId(@Nullable String columnName, String campoName, Long valor) {
+    public Specification<T> findBySubColumnId(@Nullable String columnName, String campoName, Long valor) {
         return Optional.ofNullable(valor)
                 .map(id -> prepareEqualSubSpecification(columnName, campoName, id))
                 .orElse(null);

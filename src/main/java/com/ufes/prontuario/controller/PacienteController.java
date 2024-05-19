@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/pacientes")
+@RequestMapping("pacientes")
 public class PacienteController {
 
     private final PacienteService service;
@@ -31,10 +31,11 @@ public class PacienteController {
             @RequestParam String nome, @RequestParam String cpf,
             @RequestParam Long id, Pageable pageable) {
 
-        var pacientes = this.service.filter(id, nome, cpf, pageable)
-                .stream().map(PacienteConverter::toDTO).toList();
+        var pacientes = this.service.filter(id, nome, cpf, pageable);
 
-        return new BaseResponse<>(pacientes, pacientes.size());
+        return new BaseResponse<>(pacientes.stream()
+                .map(PacienteConverter::toDTO).toList(),
+                pacientes.getTotalElements());
     }
 
     @PostMapping

@@ -1,6 +1,5 @@
 package com.ufes.prontuario.dto.pessoa;
 
-import com.ufes.prontuario.dto.contato.ContatoConverter;
 import com.ufes.prontuario.dto.usuario.UsuarioConverter;
 import com.ufes.prontuario.model.Pessoa;
 import lombok.AllArgsConstructor;
@@ -20,9 +19,6 @@ public class PessoaConverter {
                 .dataNascimento(pessoa.getDataNascimento())
                 .usuario(Optional.ofNullable(pessoa.getUsuario())
                         .map(UsuarioConverter::toDTO)
-                        .orElse(null))
-                .contato(Optional.ofNullable(pessoa.getContato())
-                        .map(ContatoConverter::toDTO)
                         .orElse(null))
                 .build();
     }
