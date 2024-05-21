@@ -1,0 +1,65 @@
+package com.ufes.prontuario.controller;
+
+import com.ufes.prontuario.dto.medico.MedicoCadastroDTO;
+import com.ufes.prontuario.dto.medico.MedicoConverter;
+import com.ufes.prontuario.dto.medico.MedicoDTO;
+import com.ufes.prontuario.dto.pessoa.PessoaCadastroDTO;
+import com.ufes.prontuario.dto.pessoa.PessoaConverter;
+import com.ufes.prontuario.service.MedicoService;
+import com.ufes.prontuario.util.BaseResponse;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("medicos")
+public class MedicoController {
+
+    private final MedicoService service;
+
+    @GetMapping("/{id}")
+    public BaseResponse<MedicoDTO> findById(@PathVariable Long id) {
+        var medicoDTO = Optional.ofNullable(service.findById(id))
+                .map(MedicoConverter::toDTO).orElse(null);
+
+        return new BaseResponse<>(medicoDTO);
+    }
+
+    @GetMapping
+    public BaseResponse<MedicoDTO> filter(
+            @RequestParam(required = false) Long id,
+            @RequestParam(required = false) String nome,
+            @RequestParam(required = false) String cpf,
+            @RequestParam(required = false) String especialidade,
+            @RequestParam(required = false) String crm,
+            Pageable pageable) {
+
+        var pessoas = this.service.filter(id, nome, cpf, especialidade, crm, pageable);
+
+        return new BaseResponse<>(pessoas.getContent().stream()
+                .map(MedicoConverter::toDTO)
+                .collect(Collectors.toList()),
+                pessoas.getTotalElements());
+    }
+
+
+    @PostMapping
+    public BaseResponse<MedicoDTO> insert(@RequestBody MedicoCadastroDTO medicoCadastroDTO) {
+        var medicoDTO = Optional.ofNullable(this.service.inserir(medicoCadastroDTO))
+                .map(MedicoConverter::toDTO).orElse(null);
+
+        return new BaseResponse<>(medicoDTO);
+    }
+
+    @PutMapping("/{id}")
+    public BaseResponse<MedicoDTO> update(@PathVariable Long id, @RequestBody MedicoCadastroDTO medicoCadastroDTO) {
+        var medicoDTO = Optional.ofNullable(this.service.update(id, medicoCadastroDTO))
+                .map(MedicoConverter::toDTO).orElse(null);
+
+        return new BaseResponse<>(medicoDTO);
+    }
+}

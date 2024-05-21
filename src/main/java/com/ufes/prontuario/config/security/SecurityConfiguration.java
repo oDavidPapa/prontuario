@@ -30,8 +30,8 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/actuator/health").permitAll()
                         .requestMatchers(HttpMethod.POST, "api/auth/autenticar", "api/auth/registrar").permitAll()
-                        .requestMatchers(HttpMethod.GET, "pessoas/**", "pacientes/**", "contatos/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "pessoas/**", "contatos/**", "pacientes/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "pessoas/**", "pacientes/**", "contatos/**", "medicos/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "pessoas/**", "contatos/**", "pacientes/**", "medicos/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

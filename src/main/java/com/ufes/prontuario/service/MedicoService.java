@@ -1,10 +1,17 @@
 package com.ufes.prontuario.service;
 
 import com.ufes.prontuario.dto.medico.MedicoCadastroDTO;
+import com.ufes.prontuario.dto.medico.MedicoConverter;
 import com.ufes.prontuario.exception.RecursoNaoEncontradoException;
 import com.ufes.prontuario.model.Medico;
+import com.ufes.prontuario.model.Paciente;
 import com.ufes.prontuario.repository.MedicoRepository;
+import com.ufes.prontuario.specification.BaseSpecification;
+import com.ufes.prontuario.util.PageUtils;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,9 +21,32 @@ import java.util.Optional;
 @Service
 public class MedicoService implements IBaseService<MedicoCadastroDTO, Medico> {
 
+    private final MedicoRepository repository;
+    private final PessoaService pessoaService;
+
     public Medico findById(Long id) {
         return this.repository.findById(id)
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Medico", id));
+    }
+
+    public Page<Medico> filter(
+            Long id, String nome, String cpf, String especialidade, String crm, Pageable pageable) {
+        var specification = this.prepareSpecification(id, nome, cpf, especialidade, crm);
+
+        return this.repository.findAll(specification, PageUtils.preparePageable(pageable));
+    }
+
+    private Specification<Medico> prepareSpecification(
+            Long id, String nome, String cpf, String especialidade, String crm) {
+        final var specification = new BaseSpecification<Medico>();
+
+        return specification
+                .and(specification.findById(id))
+                .and(specification.findLikeByColumn("especialidade", especialidade))
+                .and(specification.findLikeByColumn("crm", crm))
+                .and(specification.findLikeBySubColumn("pessoa", "nome", nome))
+                .and(specification.findLikeBySubColumn("pessoa", "cpf", cpf));
+
     }
 
     public List<Medico> listar() {
@@ -34,7 +64,7 @@ public class MedicoService implements IBaseService<MedicoCadastroDTO, Medico> {
     public Medico update(Long id, MedicoCadastroDTO medicoCadastroDTO) {
         return Optional.ofNullable(medicoCadastroDTO)
                 .map(aDto -> validarUpdate(aDto, id))
-                .map(medico -> prepareUpdate(medico ,id))
+                .map(medico -> prepareUpdate(medico, id))
                 .map(this.repository::save)
                 .orElseThrow();
     }
@@ -49,11 +79,9 @@ public class MedicoService implements IBaseService<MedicoCadastroDTO, Medico> {
                 });
     }
 
-    private final MedicoRepository repository;
-
     @Override
     public MedicoCadastroDTO validarInsert(MedicoCadastroDTO dtoCadastro) {
-        return null;
+        return dtoCadastro;
     }
 
     @Override
@@ -68,11 +96,20 @@ public class MedicoService implements IBaseService<MedicoCadastroDTO, Medico> {
 
     @Override
     public Medico prepareInsert(MedicoCadastroDTO dtoCadastro) {
-        return null;
+        var medico = MedicoConverter.toEntity(dtoCadastro);
+        var pessoa = this.pessoaService.inserir(dtoCadastro.getPessoaCadastroDTO());
+
+        medico.setPessoa(pessoa);
+
+        return medico;
     }
 
     @Override
     public Medico prepareUpdate(MedicoCadastroDTO dtoCadastro, Long id) {
-        return null;
+        var medico = this.findById(id);
+        medico.setEspecialidade(dtoCadastro.getEspecialidade());
+        medico.setCrm(dtoCadastro.getCrm());
+
+        return medico;
     }
 }
