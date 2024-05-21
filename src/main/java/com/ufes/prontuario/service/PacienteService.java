@@ -91,9 +91,9 @@ public class PacienteService implements IBaseService<PacienteCadastroDTO, Pacien
 
     @Override
     public Paciente prepareInsert(PacienteCadastroDTO dtoCadastro) {
-
         var paciente = PacienteConverter.toEntity(dtoCadastro);
-        var pessoa = pessoaService.findById(dtoCadastro.getIdPessoa());
+        var pessoa = this.pessoaService.inserir(dtoCadastro.getPessoaCadastroDTO());
+
         paciente.setPessoa(pessoa);
 
         return paciente;
@@ -105,9 +105,6 @@ public class PacienteService implements IBaseService<PacienteCadastroDTO, Pacien
         var paciente = this.findById(id);
         paciente.setAltura(dtoCadastro.getAltura());
         paciente.setPeso(dtoCadastro.getPeso());
-
-        var pessoa = this.pessoaService.findById(dtoCadastro.getIdPessoa());
-        paciente.setPessoa(pessoa);
 
         return paciente;
     }

@@ -24,18 +24,14 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        return  httpSecurity
+        return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/actuator/health").permitAll()
-                        .requestMatchers(HttpMethod.POST, "api/auth/autenticar").permitAll()
-                        .requestMatchers(HttpMethod.POST, "api/auth/registrar").permitAll()
-                        .requestMatchers(HttpMethod.GET, "pessoas/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "pessoas/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "contatos/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "contatos/**").permitAll()
-
+                        .requestMatchers(HttpMethod.POST, "api/auth/autenticar", "api/auth/registrar").permitAll()
+                        .requestMatchers(HttpMethod.GET, "pessoas/**", "pacientes/**", "contatos/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "pessoas/**", "contatos/**", "pacientes/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
@@ -48,7 +44,7 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }

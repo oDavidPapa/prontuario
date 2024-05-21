@@ -1,5 +1,6 @@
 package com.ufes.prontuario.dto.paciente;
 
+import com.ufes.prontuario.dto.pessoa.PessoaCadastroDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,5 +16,6 @@ public class PacienteCadastroDTO {
 
     private BigDecimal peso;
     private BigDecimal altura;
-    private Long idPessoa;
+    private PessoaCadastroDTO pessoaCadastroDTO;
+
 }

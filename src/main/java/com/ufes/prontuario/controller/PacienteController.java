@@ -28,8 +28,10 @@ public class PacienteController {
 
     @GetMapping
     public BaseResponse<PacienteDTO> filter(
-            @RequestParam String nome, @RequestParam String cpf,
-            @RequestParam Long id, Pageable pageable) {
+            @RequestParam(required = false) String nome,
+            @RequestParam(required = false) String cpf,
+            @RequestParam(required = false) Long id,
+            Pageable pageable) {
 
         var pacientes = this.service.filter(id, nome, cpf, pageable);
 
