@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,7 +26,7 @@ public class Consulta {
     private String motivo;
 
     @Column
-    private LocalDate data;
+    private LocalDateTime data;
 
     @Enumerated(EnumType.STRING)
     private TipoConsultaEnum tipo;

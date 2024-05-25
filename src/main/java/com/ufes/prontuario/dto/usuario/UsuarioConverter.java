@@ -1,5 +1,6 @@
 package com.ufes.prontuario.dto.usuario;
 
+import com.ufes.prontuario.dto.pessoa.PessoaConverter;
 import com.ufes.prontuario.enums.RoleEnum;
 import com.ufes.prontuario.model.Usuario;
 
@@ -21,6 +22,8 @@ public class UsuarioConverter {
                 .login(usuario.getLogin())
                 .senha(usuario.getSenha())
                 .role(usuario.getRole().name())
+                .status(usuario.getStatus().name())
+                .pessoa(PessoaConverter.toDTO(usuario.getPessoa()))
                 .build();
     }
 }

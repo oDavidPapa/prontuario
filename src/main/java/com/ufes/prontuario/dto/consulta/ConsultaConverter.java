@@ -6,6 +6,7 @@ import com.ufes.prontuario.dto.paciente.PacienteConverter;
 import com.ufes.prontuario.enums.TipoConsultaEnum;
 import com.ufes.prontuario.model.Consulta;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 public class ConsultaConverter {
@@ -13,9 +14,9 @@ public class ConsultaConverter {
     public static Consulta toEntity(ConsultaCadastroDTO consultaCadastroDTO) {
 
         var consulta = new Consulta();
-        consulta.setData(consultaCadastroDTO.getData());
-        consulta.setMotivo(consultaCadastroDTO.getMotivo());
+        consulta.setData(LocalDateTime.now());
         consulta.setTipo(TipoConsultaEnum.valueOf(consultaCadastroDTO.getTipo()));
+        consulta.setMotivo(consultaCadastroDTO.getMotivo());
 
         return consulta;
     }

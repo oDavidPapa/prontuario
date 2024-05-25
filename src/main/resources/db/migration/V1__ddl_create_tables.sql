@@ -1,12 +1,3 @@
-CREATE SEQUENCE IF NOT EXISTS seq_usuario;
-
-CREATE TABLE IF NOT EXISTS usuario (
-    id int8 PRIMARY KEY,
-    login VARCHAR(100) UNIQUE NOT NULL,
-    senha VARCHAR(255) NOT NULL,
-    role VARCHAR(20)
-);
-
 CREATE SEQUENCE IF NOT EXISTS seq_pessoa;
 
 CREATE TABLE IF NOT EXISTS pessoa (
@@ -14,9 +5,19 @@ CREATE TABLE IF NOT EXISTS pessoa (
     nome VARCHAR(255) NOT NULL,
     cpf VARCHAR(14) NOT NULL UNIQUE,
     sexo CHAR(1) NOT NULL,
-    data_nascimento DATE NOT NULL,
-    id_usuario int8,
-    FOREIGN KEY (id_usuario) REFERENCES usuario(id)
+    data_nascimento DATE NOT NULL
+);
+
+CREATE SEQUENCE IF NOT EXISTS seq_usuario;
+
+CREATE TABLE IF NOT EXISTS usuario (
+    id int8 PRIMARY KEY,
+    login VARCHAR(100) UNIQUE NOT NULL,
+    senha VARCHAR(255) NOT NULL,
+    role VARCHAR(20),
+    status VARCHAR(20),
+    id_pessoa int8 NOT NULL,
+    FOREIGN KEY (id_pessoa) REFERENCES pessoa(id)
 );
 
 CREATE SEQUENCE IF NOT EXISTS seq_contato;
@@ -27,7 +28,7 @@ CREATE TABLE IF NOT EXISTS contato (
     telefone VARCHAR(20),
     email VARCHAR(100) NOT NULL,
     tipo_contato varchar(20),
-    id_pessoa int8,
+    id_pessoa int8 NOT NULL,
     FOREIGN KEY (id_pessoa) REFERENCES pessoa(id)
 );
 

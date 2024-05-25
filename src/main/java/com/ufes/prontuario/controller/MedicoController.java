@@ -3,8 +3,6 @@ package com.ufes.prontuario.controller;
 import com.ufes.prontuario.dto.medico.MedicoCadastroDTO;
 import com.ufes.prontuario.dto.medico.MedicoConverter;
 import com.ufes.prontuario.dto.medico.MedicoDTO;
-import com.ufes.prontuario.dto.pessoa.PessoaCadastroDTO;
-import com.ufes.prontuario.dto.pessoa.PessoaConverter;
 import com.ufes.prontuario.service.MedicoService;
 import com.ufes.prontuario.util.BaseResponse;
 import lombok.RequiredArgsConstructor;

@@ -1,6 +1,7 @@
 package com.ufes.prontuario.model;
 
 import com.ufes.prontuario.enums.RoleEnum;
+import com.ufes.prontuario.enums.StatusEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,6 +34,13 @@ public class Usuario implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private RoleEnum role;
+
+    @Enumerated(EnumType.STRING)
+    private StatusEnum status;
+
+    @OneToOne
+    @JoinColumn(name = "id_pessoa")
+    private Pessoa pessoa;
 
     public Usuario(String login, String senha, RoleEnum role) {
         this.login = login;

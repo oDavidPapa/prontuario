@@ -8,7 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -18,7 +18,7 @@ public class ConsultaDTO {
 
     private Long id;
     private String motivo;
-    private LocalDate data;
+    private LocalDateTime data;
     private String tipo;
     private MedicoDTO medico;
     private PacienteDTO paciente;

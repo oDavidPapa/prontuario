@@ -4,7 +4,6 @@ import com.ufes.prontuario.dto.medico.MedicoCadastroDTO;
 import com.ufes.prontuario.dto.medico.MedicoConverter;
 import com.ufes.prontuario.exception.RecursoNaoEncontradoException;
 import com.ufes.prontuario.model.Medico;
-import com.ufes.prontuario.model.Paciente;
 import com.ufes.prontuario.repository.MedicoRepository;
 import com.ufes.prontuario.specification.BaseSpecification;
 import com.ufes.prontuario.util.PageUtils;

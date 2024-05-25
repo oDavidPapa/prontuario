@@ -1,11 +1,8 @@
 package com.ufes.prontuario.dto.pessoa;
 
-import com.ufes.prontuario.dto.usuario.UsuarioConverter;
 import com.ufes.prontuario.model.Pessoa;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-
-import java.util.Optional;
 
 @AllArgsConstructor
 public class PessoaConverter {
@@ -17,9 +14,6 @@ public class PessoaConverter {
                 .sexo(pessoa.getSexo())
                 .cpf(pessoa.getCpf())
                 .dataNascimento(pessoa.getDataNascimento())
-                .usuario(Optional.ofNullable(pessoa.getUsuario())
-                        .map(UsuarioConverter::toDTO)
-                        .orElse(null))
                 .build();
     }
 

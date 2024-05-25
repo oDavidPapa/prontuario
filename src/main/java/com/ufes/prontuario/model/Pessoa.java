@@ -32,7 +32,4 @@ public class Pessoa {
     @Column
     private LocalDate dataNascimento;
 
-    @OneToOne
-    @JoinColumn(name = "id_usuario")
-    private Usuario usuario;
 }

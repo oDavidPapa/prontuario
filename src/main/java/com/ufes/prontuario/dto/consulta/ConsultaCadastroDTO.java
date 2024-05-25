@@ -14,7 +14,6 @@ import java.time.LocalDate;
 public class ConsultaCadastroDTO {
 
     private String motivo;
-    private LocalDate data;
     private String tipo;
     private Long idMedico;
     private Long idPaciente;
