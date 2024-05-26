@@ -2,13 +2,10 @@ package com.ufes.prontuario.service;
 
 import com.ufes.prontuario.dto.consulta.ConsultaCadastroDTO;
 import com.ufes.prontuario.dto.consulta.ConsultaConverter;
-import com.ufes.prontuario.dto.contato.ContatoCadastroDTO;
 import com.ufes.prontuario.enums.TipoConsultaEnum;
 import com.ufes.prontuario.exception.RecursoNaoEncontradoException;
 import com.ufes.prontuario.model.Consulta;
-import com.ufes.prontuario.model.Contato;
 import com.ufes.prontuario.repository.ConsultaRepository;
-import com.ufes.prontuario.specification.BaseSpecification;
 import com.ufes.prontuario.specification.ConsultaSpecification;
 import com.ufes.prontuario.util.PageUtils;
 import lombok.AllArgsConstructor;
@@ -18,7 +15,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,7 +55,7 @@ public class ConsultaService implements IBaseService<ConsultaCadastroDTO, Consul
         return this.repository.findAll();
     }
 
-    public Consulta insert(ConsultaCadastroDTO consultaCadastroDTO) {
+    public Consulta inserir(ConsultaCadastroDTO consultaCadastroDTO) {
         return Optional.ofNullable(consultaCadastroDTO)
                 .map(this::validarInsert)
                 .map(this::prepareInsert)

@@ -1,5 +1,6 @@
 package com.ufes.prontuario.controller;
 
+import com.ufes.prontuario.dto.consulta.ConsultaCadastroDTO;
 import com.ufes.prontuario.dto.consulta.ConsultaConverter;
 import com.ufes.prontuario.dto.consulta.ConsultaDTO;
 import com.ufes.prontuario.service.ConsultaService;
@@ -44,5 +45,22 @@ public class ConsultaController {
                 .map(ConsultaConverter::toDTO)
                 .collect(Collectors.toList()),
                 consultas.getTotalElements());
+    }
+
+    @PostMapping
+    public BaseResponse<ConsultaDTO> insert(@RequestBody ConsultaCadastroDTO consultaCadastroDTO) {
+        var consultaDTO = Optional.ofNullable(this.service.inserir(consultaCadastroDTO))
+                .map(ConsultaConverter::toDTO).orElse(null);
+
+        return new BaseResponse<>(consultaDTO);
+    }
+
+
+    @PutMapping("/{id}")
+    public BaseResponse<ConsultaDTO> update(@PathVariable Long id, @RequestBody ConsultaCadastroDTO consultaCadastroDTO) {
+        var consultaDTO = Optional.ofNullable(this.service.update(id, consultaCadastroDTO))
+                .map(ConsultaConverter::toDTO).orElse(null);
+
+        return new BaseResponse<>(consultaDTO);
     }
 }
