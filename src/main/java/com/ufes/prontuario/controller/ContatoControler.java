@@ -57,4 +57,12 @@ public class ContatoControler {
 
         return new BaseResponse<>(contatoDTO);
     }
+
+
+    @DeleteMapping("/{id}")
+    public BaseResponse<Void> delete(@PathVariable Long id) {
+        this.service.delete(id);
+
+        return new BaseResponse<>(null);
+    }
 }

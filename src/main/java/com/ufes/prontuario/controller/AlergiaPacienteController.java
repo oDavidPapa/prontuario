@@ -10,10 +10,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/alergias-paciente")
+@RequestMapping("alergias-paciente")
 public class AlergiaPacienteController {
 
     private final AlergiaPacienteService service;
@@ -29,10 +30,12 @@ public class AlergiaPacienteController {
 
     @GetMapping
     public BaseResponse<AlergiaPacienteDTO> filter(@RequestParam Long idPaciente, Pageable pageable) {
-        var alergiasPaciente = this.service.filter(idPaciente, pageable)
-                .stream().map(AlergiaPacienteConverter::toDTO).toList();
+        var alergiasPaciente = this.service.filter(idPaciente, pageable);
 
-        return new BaseResponse<>(alergiasPaciente, alergiasPaciente.size());
+        return new BaseResponse<>(alergiasPaciente.getContent().stream()
+                .map(AlergiaPacienteConverter::toDTO)
+                .collect(Collectors.toList()),
+                alergiasPaciente.getTotalElements());
     }
 
     @PostMapping

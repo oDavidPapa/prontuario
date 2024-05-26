@@ -77,12 +77,12 @@ public class UsuarioService implements IBaseService<UsuarioCadastroDTO, Usuario>
 
     @Override
     public UsuarioCadastroDTO validarInsert(UsuarioCadastroDTO dtoCadastro) {
-        return null;
+        return dtoCadastro;
     }
 
     @Override
     public UsuarioCadastroDTO validarUpdate(UsuarioCadastroDTO dtoCadastro, Long id) {
-        return null;
+        return dtoCadastro;
     }
 
     @Override

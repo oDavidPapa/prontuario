@@ -1,10 +1,17 @@
 package com.ufes.prontuario.service;
 
 import com.ufes.prontuario.dto.medicamento.MedicamentoCadastroDTO;
+import com.ufes.prontuario.dto.medicamento.MedicamentoConverter;
 import com.ufes.prontuario.exception.RecursoNaoEncontradoException;
 import com.ufes.prontuario.model.Medicamento;
 import com.ufes.prontuario.repository.MedicamentoRepository;
+import com.ufes.prontuario.specification.BaseSpecification;
+import com.ufes.prontuario.util.PageUtils;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,6 +31,22 @@ public class MedicamentoService implements IBaseService<MedicamentoCadastroDTO, 
     public List<Medicamento> listar() {
         return this.repository.findAll();
     }
+
+
+    public Page<Medicamento> filter(Long id, String descricao, @Nullable Pageable pageable) {
+        var specification = this.prepareSpecification(id, descricao);
+
+        return repository.findAll(specification, PageUtils.preparePageable(pageable));
+    }
+
+    private Specification<Medicamento> prepareSpecification(Long id, String descricao) {
+        final var specification = new BaseSpecification<Medicamento>();
+
+        return specification
+                .and(specification.findById(id))
+                .and(specification.findLikeByColumn("descricao", descricao));
+    }
+
 
     public Medicamento inserir(MedicamentoCadastroDTO medicamentoCadastroDTO) {
         return Optional.ofNullable(medicamentoCadastroDTO)
@@ -53,12 +76,12 @@ public class MedicamentoService implements IBaseService<MedicamentoCadastroDTO, 
 
     @Override
     public MedicamentoCadastroDTO validarInsert(MedicamentoCadastroDTO dtoCadastro) {
-        return null;
+        return dtoCadastro;
     }
 
     @Override
     public MedicamentoCadastroDTO validarUpdate(MedicamentoCadastroDTO dtoCadastro, Long id) {
-        return null;
+        return dtoCadastro;
     }
 
     @Override
@@ -68,11 +91,14 @@ public class MedicamentoService implements IBaseService<MedicamentoCadastroDTO, 
 
     @Override
     public Medicamento prepareInsert(MedicamentoCadastroDTO dtoCadastro) {
-        return null;
+        return MedicamentoConverter.toEntity(dtoCadastro);
     }
 
     @Override
     public Medicamento prepareUpdate(MedicamentoCadastroDTO dtoCadastro, Long id) {
-        return null;
+        var medicamento =this.findById(id);
+        medicamento.setDescricao(dtoCadastro.getDescricao());
+
+        return medicamento;
     }
 }

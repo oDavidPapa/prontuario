@@ -1,6 +1,7 @@
 package com.ufes.prontuario.service;
 
 import com.ufes.prontuario.dto.prescricaomedicamento.PrescricaoConsultaMedicamentoCadastroDTO;
+import com.ufes.prontuario.dto.prescricaomedicamento.PrescricaoConsultaMedicamentoConverter;
 import com.ufes.prontuario.exception.RecursoNaoEncontradoException;
 import com.ufes.prontuario.model.PrescricaoConsultaMedicamento;
 import com.ufes.prontuario.repository.PrescricaoConsultaMedicamentoRepository;
@@ -15,6 +16,8 @@ import java.util.Optional;
 public class PrescricaoConsultaMedicamentoService implements IBaseService<PrescricaoConsultaMedicamentoCadastroDTO, PrescricaoConsultaMedicamento> {
 
     private final PrescricaoConsultaMedicamentoRepository repository;
+    private final PrescricaoService prescricaoService;
+    private final MedicamentoService medicamentoService;
 
     public PrescricaoConsultaMedicamento findById(Long id) {
         return this.repository.findById(id)
@@ -53,12 +56,12 @@ public class PrescricaoConsultaMedicamentoService implements IBaseService<Prescr
 
     @Override
     public PrescricaoConsultaMedicamentoCadastroDTO validarInsert(PrescricaoConsultaMedicamentoCadastroDTO dtoCadastro) {
-        return null;
+        return dtoCadastro;
     }
 
     @Override
     public PrescricaoConsultaMedicamentoCadastroDTO validarUpdate(PrescricaoConsultaMedicamentoCadastroDTO dtoCadastro, Long id) {
-        return null;
+        return dtoCadastro;
     }
 
     @Override
@@ -68,11 +71,21 @@ public class PrescricaoConsultaMedicamentoService implements IBaseService<Prescr
 
     @Override
     public PrescricaoConsultaMedicamento prepareInsert(PrescricaoConsultaMedicamentoCadastroDTO dtoCadastro) {
-        return null;
+        var prescricaoMedicamento = PrescricaoConsultaMedicamentoConverter.toEntity(dtoCadastro);
+        prescricaoMedicamento.setMedicamento(this.medicamentoService.findById(dtoCadastro.getIdMedicamento()));
+        prescricaoMedicamento.setPrescricao(this.prescricaoService.findById(dtoCadastro.getIdPrescricao()));
+
+        return prescricaoMedicamento;
     }
 
     @Override
     public PrescricaoConsultaMedicamento prepareUpdate(PrescricaoConsultaMedicamentoCadastroDTO dtoCadastro, Long id) {
-        return null;
+        var prescricaoMedicamento = this.findById(id);
+        prescricaoMedicamento.setDosagem(dtoCadastro.getDosagem());
+        prescricaoMedicamento.setInstrucaoUso(dtoCadastro.getInstrucaoUso());
+        prescricaoMedicamento.setMedicamento(this.medicamentoService.findById(dtoCadastro.getIdMedicamento()));
+        prescricaoMedicamento.setPrescricao(this.prescricaoService.findById(dtoCadastro.getIdPrescricao()));
+
+        return prescricaoMedicamento;
     }
 }

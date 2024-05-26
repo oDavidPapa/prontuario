@@ -1,6 +1,7 @@
 package com.ufes.prontuario.service;
 
 import com.ufes.prontuario.dto.diagnostico.DiagnosticoCadastroDTO;
+import com.ufes.prontuario.dto.diagnostico.DiagnosticoConverter;
 import com.ufes.prontuario.exception.RecursoNaoEncontradoException;
 import com.ufes.prontuario.model.Diagnostico;
 import com.ufes.prontuario.repository.DiagnosticoRepository;
@@ -15,6 +16,7 @@ import java.util.Optional;
 public class DiagnosticoService implements IBaseService<DiagnosticoCadastroDTO, Diagnostico> {
 
     private final DiagnosticoRepository repository;
+    private final ConsultaService consultaService;
 
     public Diagnostico findById(Long id) {
         return this.repository.findById(id)
@@ -53,12 +55,12 @@ public class DiagnosticoService implements IBaseService<DiagnosticoCadastroDTO, 
 
     @Override
     public DiagnosticoCadastroDTO validarInsert(DiagnosticoCadastroDTO dtoCadastro) {
-        return null;
+        return dtoCadastro;
     }
 
     @Override
     public DiagnosticoCadastroDTO validarUpdate(DiagnosticoCadastroDTO dtoCadastro, Long id) {
-        return null;
+        return dtoCadastro;
     }
 
     @Override
@@ -68,11 +70,19 @@ public class DiagnosticoService implements IBaseService<DiagnosticoCadastroDTO, 
 
     @Override
     public Diagnostico prepareInsert(DiagnosticoCadastroDTO dtoCadastro) {
-        return null;
+        var diagnostico = DiagnosticoConverter.toEntity(dtoCadastro);
+        diagnostico.setConsulta(consultaService.findById(dtoCadastro.getIdConsulta()));
+
+        return diagnostico;
     }
 
     @Override
     public Diagnostico prepareUpdate(DiagnosticoCadastroDTO dtoCadastro, Long id) {
-        return null;
+        var diagnostico = this.findById(id);
+
+        diagnostico.setDiagnostico(dtoCadastro.getDiagnostico());
+        diagnostico.setDescricao(dtoCadastro.getDescricao());
+
+        return diagnostico;
     }
 }

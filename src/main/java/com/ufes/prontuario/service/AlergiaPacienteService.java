@@ -1,6 +1,7 @@
 package com.ufes.prontuario.service;
 
 import com.ufes.prontuario.dto.alergiapaciente.AlergiaPacienteCadastroDTO;
+import com.ufes.prontuario.dto.alergiapaciente.AlergiaPacienteConverter;
 import com.ufes.prontuario.exception.RecursoNaoEncontradoException;
 import com.ufes.prontuario.model.AlergiaPaciente;
 import com.ufes.prontuario.repository.AlergiaPacienteRepository;
@@ -21,6 +22,7 @@ import java.util.Optional;
 public class AlergiaPacienteService implements IBaseService<AlergiaPacienteCadastroDTO, AlergiaPaciente> {
 
     private final AlergiaPacienteRepository repository;
+    private final PacienteService pacienteService;
 
     public AlergiaPaciente findById(Long id) {
         return this.repository.findById(id)
@@ -55,29 +57,29 @@ public class AlergiaPacienteService implements IBaseService<AlergiaPacienteCadas
     public AlergiaPaciente update(Long id, AlergiaPacienteCadastroDTO alergiaPacienteCadastroDTO) {
         return Optional.ofNullable(alergiaPacienteCadastroDTO)
                 .map(aDto -> validarUpdate(aDto, id))
-                .map(arquivo -> prepareUpdate(arquivo, id))
+                .map(alergia -> prepareUpdate(alergia, id))
                 .map(this.repository::save)
                 .orElseThrow();
     }
 
     public void delete(Long id) {
-        var arquivo = this.findById(id);
+        var alergia = this.findById(id);
 
-        Optional.ofNullable(arquivo)
-                .ifPresent(p -> {
-                    this.validarDelete(p);
-                    this.repository.delete(p);
+        Optional.ofNullable(alergia)
+                .ifPresent(a -> {
+                    this.validarDelete(a);
+                    this.repository.delete(a);
                 });
     }
 
     @Override
     public AlergiaPacienteCadastroDTO validarInsert(AlergiaPacienteCadastroDTO dtoCadastro) {
-        return null;
+        return dtoCadastro;
     }
 
     @Override
     public AlergiaPacienteCadastroDTO validarUpdate(AlergiaPacienteCadastroDTO dtoCadastro, Long id) {
-        return null;
+        return dtoCadastro;
     }
 
     @Override
@@ -87,11 +89,18 @@ public class AlergiaPacienteService implements IBaseService<AlergiaPacienteCadas
 
     @Override
     public AlergiaPaciente prepareInsert(AlergiaPacienteCadastroDTO dtoCadastro) {
-        return null;
+        var alergiaPaciente = AlergiaPacienteConverter.toEntity(dtoCadastro);
+        alergiaPaciente.setPaciente(pacienteService.findById(dtoCadastro.getIdPaciente()));
+
+        return alergiaPaciente;
     }
 
     @Override
     public AlergiaPaciente prepareUpdate(AlergiaPacienteCadastroDTO dtoCadastro, Long id) {
-        return null;
+        var alergiaPaciente = this.findById(id);
+        alergiaPaciente.setDescricao(dtoCadastro.getDescricao());
+        alergiaPaciente.setPaciente(this.pacienteService.findById(dtoCadastro.getIdPaciente()));
+
+        return alergiaPaciente;
     }
 }

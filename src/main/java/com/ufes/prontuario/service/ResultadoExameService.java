@@ -53,12 +53,12 @@ public class ResultadoExameService implements IBaseService<ResultadoExameCadastr
 
     @Override
     public ResultadoExameCadastroDTO validarInsert(ResultadoExameCadastroDTO dtoCadastro) {
-        return null;
+        return dtoCadastro;
     }
 
     @Override
     public ResultadoExameCadastroDTO validarUpdate(ResultadoExameCadastroDTO dtoCadastro, Long id) {
-        return null;
+        return dtoCadastro;
     }
 
     @Override

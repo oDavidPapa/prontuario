@@ -54,12 +54,12 @@ public class ArquivoService implements IBaseService<ArquivoCadastroDTO, Arquivo>
 
     @Override
     public ArquivoCadastroDTO validarInsert(ArquivoCadastroDTO dtoCadastro) {
-        return null;
+        return dtoCadastro;
     }
 
     @Override
     public ArquivoCadastroDTO validarUpdate(ArquivoCadastroDTO dtoCadastro, Long id) {
-        return null;
+        return dtoCadastro;
     }
 
     @Override

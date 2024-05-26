@@ -1,6 +1,7 @@
 package com.ufes.prontuario.service;
 
 import com.ufes.prontuario.dto.exame.ExameCadastroDTO;
+import com.ufes.prontuario.dto.exame.ExameConverter;
 import com.ufes.prontuario.exception.RecursoNaoEncontradoException;
 import com.ufes.prontuario.model.Exame;
 import com.ufes.prontuario.repository.ExameRepository;
@@ -15,6 +16,7 @@ import java.util.Optional;
 public class ExameService implements IBaseService<ExameCadastroDTO, Exame>{
 
     private final ExameRepository repository;
+    private final ConsultaService consultaService;
 
     public Exame findById(Long id) {
         return this.repository.findById(id)
@@ -53,12 +55,12 @@ public class ExameService implements IBaseService<ExameCadastroDTO, Exame>{
 
     @Override
     public ExameCadastroDTO validarInsert(ExameCadastroDTO dtoCadastro) {
-        return null;
+        return dtoCadastro;
     }
 
     @Override
     public ExameCadastroDTO validarUpdate(ExameCadastroDTO dtoCadastro, Long id) {
-        return null;
+        return dtoCadastro;
     }
 
     @Override
@@ -68,11 +70,17 @@ public class ExameService implements IBaseService<ExameCadastroDTO, Exame>{
 
     @Override
     public Exame prepareInsert(ExameCadastroDTO dtoCadastro) {
-        return null;
+        var exame = ExameConverter.toEntity(dtoCadastro);
+        exame.setConsulta(this.consultaService.findById(dtoCadastro.getIdConsulta()));
+
+        return exame;
     }
 
     @Override
     public Exame prepareUpdate(ExameCadastroDTO dtoCadastro, Long id) {
-        return null;
+        var exame = this.findById(id);
+        exame.setDescricao(dtoCadastro.getDescricao());
+
+        return exame;
     }
 }

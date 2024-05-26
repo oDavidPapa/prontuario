@@ -2,7 +2,9 @@ package com.ufes.prontuario.service;
 
 
 import com.ufes.prontuario.dto.agendaconsulta.AgendaConsultaCadastroDTO;
+import com.ufes.prontuario.dto.agendaconsulta.AgendaConsultaConverter;
 import com.ufes.prontuario.exception.RecursoNaoEncontradoException;
+import com.ufes.prontuario.model.Agenda;
 import com.ufes.prontuario.model.AgendaConsulta;
 import com.ufes.prontuario.repository.AgendaConsultaRepository;
 import lombok.AllArgsConstructor;
@@ -16,6 +18,9 @@ import java.util.Optional;
 public class AgendaConsultaService implements IBaseService<AgendaConsultaCadastroDTO, AgendaConsulta>{
 
     private final AgendaConsultaRepository repository;
+    private final MedicoService medicoService;
+    private final PacienteService pacienteService;
+    private final AgendaService agendaService;
 
     public AgendaConsulta findById(Long id) {
         return this.repository.findById(id)
@@ -55,12 +60,12 @@ public class AgendaConsultaService implements IBaseService<AgendaConsultaCadastr
 
     @Override
     public AgendaConsultaCadastroDTO validarInsert(AgendaConsultaCadastroDTO dtoCadastro) {
-        return null;
+        return dtoCadastro;
     }
 
     @Override
     public AgendaConsultaCadastroDTO validarUpdate(AgendaConsultaCadastroDTO dtoCadastro, Long id) {
-        return null;
+        return dtoCadastro;
     }
 
     @Override
@@ -70,11 +75,26 @@ public class AgendaConsultaService implements IBaseService<AgendaConsultaCadastr
 
     @Override
     public AgendaConsulta prepareInsert(AgendaConsultaCadastroDTO dtoCadastro) {
-        return null;
+        var agendaConsulta = AgendaConsultaConverter.toEntity(dtoCadastro);
+
+        var medico = this.medicoService.findById(dtoCadastro.getIdMedico());
+        var paciente = this.pacienteService.findById(dtoCadastro.getIdPaciente());
+        var agenda = this.agendaService.findById(dtoCadastro.getIdAgenda());
+
+        agendaConsulta.setMedico(medico);
+        agendaConsulta.setPaciente(paciente);
+        agendaConsulta.setAgenda(agenda);
+
+        return agendaConsulta;
     }
 
     @Override
     public AgendaConsulta prepareUpdate(AgendaConsultaCadastroDTO dtoCadastro, Long id) {
-        return null;
+        var agendaConsulta = this.findById(id);
+
+        agendaConsulta.setMedico(medicoService.findById(dtoCadastro.getIdMedico()));
+        agendaConsulta.setPaciente(pacienteService.findById(dtoCadastro.getIdPaciente()));
+
+        return agendaConsulta;
     }
 }

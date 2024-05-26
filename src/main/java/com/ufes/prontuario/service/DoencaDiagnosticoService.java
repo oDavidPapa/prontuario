@@ -1,6 +1,7 @@
 package com.ufes.prontuario.service;
 
 import com.ufes.prontuario.dto.doencadiagnostico.DoencaDiagnosticoCadastroDTO;
+import com.ufes.prontuario.dto.doencadiagnostico.DoencaDiagnosticoConverter;
 import com.ufes.prontuario.exception.RecursoNaoEncontradoException;
 import com.ufes.prontuario.model.DoencaDiagnostico;
 import com.ufes.prontuario.repository.DoencaDiagnosticoRepository;
@@ -15,6 +16,8 @@ import java.util.Optional;
 public class DoencaDiagnosticoService implements IBaseService<DoencaDiagnosticoCadastroDTO, DoencaDiagnostico>{
 
     private final DoencaDiagnosticoRepository repository;
+    private final DiagnosticoService diagnosticoService;
+    private final DoencaService doencaService;
 
     public DoencaDiagnostico findById(Long id) {
         return this.repository.findById(id)
@@ -53,12 +56,12 @@ public class DoencaDiagnosticoService implements IBaseService<DoencaDiagnosticoC
 
     @Override
     public DoencaDiagnosticoCadastroDTO validarInsert(DoencaDiagnosticoCadastroDTO dtoCadastro) {
-        return null;
+        return dtoCadastro;
     }
 
     @Override
     public DoencaDiagnosticoCadastroDTO validarUpdate(DoencaDiagnosticoCadastroDTO dtoCadastro, Long id) {
-        return null;
+        return dtoCadastro;
     }
 
     @Override
@@ -68,11 +71,19 @@ public class DoencaDiagnosticoService implements IBaseService<DoencaDiagnosticoC
 
     @Override
     public DoencaDiagnostico prepareInsert(DoencaDiagnosticoCadastroDTO dtoCadastro) {
-        return null;
+        var doencaDiagnostico = DoencaDiagnosticoConverter.toEntity(dtoCadastro);
+        doencaDiagnostico.setDiagnostico(this.diagnosticoService.findById(dtoCadastro.getIdDiagnostico()));
+        doencaDiagnostico.setDoenca(this.doencaService.findById(dtoCadastro.getIdDoenca()));
+
+        return doencaDiagnostico;
     }
 
     @Override
     public DoencaDiagnostico prepareUpdate(DoencaDiagnosticoCadastroDTO dtoCadastro, Long id) {
-        return null;
+        var doencaDiagnostico = this.findById(id);
+        doencaDiagnostico.setDiagnostico(this.diagnosticoService.findById(dtoCadastro.getIdDiagnostico()));
+        doencaDiagnostico.setDoenca(this.doencaService.findById(dtoCadastro.getIdDoenca()));
+
+        return doencaDiagnostico;
     }
 }

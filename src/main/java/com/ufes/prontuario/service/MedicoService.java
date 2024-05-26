@@ -85,7 +85,7 @@ public class MedicoService implements IBaseService<MedicoCadastroDTO, Medico> {
 
     @Override
     public MedicoCadastroDTO validarUpdate(MedicoCadastroDTO dtoCadastro, Long id) {
-        return null;
+        return dtoCadastro;
     }
 
     @Override

@@ -1,10 +1,16 @@
 package com.ufes.prontuario.service;
 
 import com.ufes.prontuario.dto.prescricao.PrescricaoCadastroDTO;
+import com.ufes.prontuario.dto.prescricao.PrescricaoConverter;
 import com.ufes.prontuario.exception.RecursoNaoEncontradoException;
 import com.ufes.prontuario.model.Prescricao;
 import com.ufes.prontuario.repository.PrescricaoRepository;
+import com.ufes.prontuario.specification.BaseSpecification;
+import com.ufes.prontuario.util.PageUtils;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +21,7 @@ import java.util.Optional;
 public class PrescricaoService implements IBaseService<PrescricaoCadastroDTO, Prescricao>{
 
     private final PrescricaoRepository repository;
+    private final ConsultaService consultaService;
 
     public Prescricao findById(Long id) {
         return this.repository.findById(id)
@@ -23,6 +30,20 @@ public class PrescricaoService implements IBaseService<PrescricaoCadastroDTO, Pr
 
     public List<Prescricao> listar() {
         return this.repository.findAll();
+    }
+
+    public Page<Prescricao> filter(Long idConsulta, Pageable pageable) {
+        var specification = this.prepareSpecification(idConsulta);
+
+        return this.repository.findAll(specification, PageUtils.preparePageable(pageable));
+    }
+
+    private Specification<Prescricao> prepareSpecification(Long idConsulta) {
+        final var specification = new BaseSpecification<Prescricao>();
+
+        return specification
+                .and(specification.findBySubColumnId( "consulta", "id", idConsulta));
+
     }
 
     public Prescricao inserir(PrescricaoCadastroDTO prescricaoCadastroDTO) {
@@ -53,12 +74,12 @@ public class PrescricaoService implements IBaseService<PrescricaoCadastroDTO, Pr
 
     @Override
     public PrescricaoCadastroDTO validarInsert(PrescricaoCadastroDTO dtoCadastro) {
-        return null;
+        return dtoCadastro;
     }
 
     @Override
     public PrescricaoCadastroDTO validarUpdate(PrescricaoCadastroDTO dtoCadastro, Long id) {
-        return null;
+        return dtoCadastro;
     }
 
     @Override
@@ -68,11 +89,14 @@ public class PrescricaoService implements IBaseService<PrescricaoCadastroDTO, Pr
 
     @Override
     public Prescricao prepareInsert(PrescricaoCadastroDTO dtoCadastro) {
-        return null;
+        var prescricao = PrescricaoConverter.toEntity(dtoCadastro);
+        prescricao.setConsulta(this.consultaService.findById(dtoCadastro.getIdConsulta()));
+        return prescricao;
     }
 
     @Override
     public Prescricao prepareUpdate(PrescricaoCadastroDTO dtoCadastro, Long id) {
-        return null;
+
+        return this.findById(id);
     }
 }

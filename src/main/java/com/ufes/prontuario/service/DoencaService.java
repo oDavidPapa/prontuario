@@ -1,6 +1,7 @@
 package com.ufes.prontuario.service;
 
 import com.ufes.prontuario.dto.doenca.DoencaCadastroDTO;
+import com.ufes.prontuario.dto.doenca.DoencaConverter;
 import com.ufes.prontuario.exception.RecursoNaoEncontradoException;
 import com.ufes.prontuario.model.Doenca;
 import com.ufes.prontuario.repository.DoencaRepository;
@@ -53,12 +54,12 @@ public class DoencaService implements IBaseService<DoencaCadastroDTO, Doenca>{
 
     @Override
     public DoencaCadastroDTO validarInsert(DoencaCadastroDTO dtoCadastro) {
-        return null;
+        return dtoCadastro;
     }
 
     @Override
     public DoencaCadastroDTO validarUpdate(DoencaCadastroDTO dtoCadastro, Long id) {
-        return null;
+        return dtoCadastro;
     }
 
     @Override
@@ -68,12 +69,16 @@ public class DoencaService implements IBaseService<DoencaCadastroDTO, Doenca>{
 
     @Override
     public Doenca prepareInsert(DoencaCadastroDTO dtoCadastro) {
-        return null;
+       return DoencaConverter.toEntity(dtoCadastro);
     }
 
     @Override
     public Doenca prepareUpdate(DoencaCadastroDTO dtoCadastro, Long id) {
-        return null;
+        var doenca = this.findById(id);
+        doenca.setDescricao(dtoCadastro.getDescricao());
+        doenca.setCid(dtoCadastro.getCid());
+
+        return doenca;
     }
 }
 

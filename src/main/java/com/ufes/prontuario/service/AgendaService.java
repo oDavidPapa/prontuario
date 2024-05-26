@@ -1,6 +1,7 @@
 package com.ufes.prontuario.service;
 
 import com.ufes.prontuario.dto.agenda.AgendaCadastroDTO;
+import com.ufes.prontuario.dto.agenda.AgendaConverter;
 import com.ufes.prontuario.exception.RecursoNaoEncontradoException;
 import com.ufes.prontuario.model.Agenda;
 import com.ufes.prontuario.repository.AgendaRepository;
@@ -53,12 +54,12 @@ public class AgendaService implements IBaseService<AgendaCadastroDTO, Agenda> {
 
     @Override
     public AgendaCadastroDTO validarInsert(AgendaCadastroDTO dtoCadastro) {
-        return null;
+        return dtoCadastro;
     }
 
     @Override
     public AgendaCadastroDTO validarUpdate(AgendaCadastroDTO dtoCadastro, Long id) {
-        return null;
+        return dtoCadastro;
     }
 
     @Override
@@ -68,11 +69,16 @@ public class AgendaService implements IBaseService<AgendaCadastroDTO, Agenda> {
 
     @Override
     public Agenda prepareInsert(AgendaCadastroDTO dtoCadastro) {
-        return null;
+        return AgendaConverter.toEntity(dtoCadastro);
     }
 
     @Override
     public Agenda prepareUpdate(AgendaCadastroDTO dtoCadastro, Long id) {
-        return null;
+        var agenda = this.findById(id);
+
+        agenda.setData(dtoCadastro.getData());
+        agenda.setDescricao(dtoCadastro.getDescricao());
+
+        return agenda;
     }
 }

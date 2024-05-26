@@ -4,7 +4,13 @@ import com.ufes.prontuario.dto.tratamento.TratamentoCadastroDTO;
 import com.ufes.prontuario.exception.RecursoNaoEncontradoException;
 import com.ufes.prontuario.model.Tratamento;
 import com.ufes.prontuario.repository.TratamentoRepository;
+import com.ufes.prontuario.specification.BaseSpecification;
+import com.ufes.prontuario.util.PageUtils;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +29,17 @@ public class TratamentoService implements IBaseService<TratamentoCadastroDTO, Tr
 
     public List<Tratamento> listar() {
         return this.repository.findAll();
+    }
+
+    public Page<Tratamento> filter(Long idConsulta, @Nullable Pageable pageable) {
+        var specification = this.prepareSpecification(idConsulta);
+
+        return repository.findAll(specification, PageUtils.preparePageable(pageable));
+    }
+
+    private Specification<Tratamento> prepareSpecification(Long idConsulta) {
+        final var specification = new BaseSpecification<Tratamento>();
+        return specification.and(specification.findBySubColumnId("consulta", "id", idConsulta));
     }
 
     public Tratamento inserir(TratamentoCadastroDTO tratamentoCadastroDTO) {
@@ -53,12 +70,12 @@ public class TratamentoService implements IBaseService<TratamentoCadastroDTO, Tr
 
     @Override
     public TratamentoCadastroDTO validarInsert(TratamentoCadastroDTO dtoCadastro) {
-        return null;
+        return dtoCadastro;
     }
 
     @Override
     public TratamentoCadastroDTO validarUpdate(TratamentoCadastroDTO dtoCadastro, Long id) {
-        return null;
+        return dtoCadastro;
     }
 
     @Override
