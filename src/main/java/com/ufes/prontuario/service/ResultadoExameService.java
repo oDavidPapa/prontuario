@@ -1,6 +1,7 @@
 package com.ufes.prontuario.service;
 
 import com.ufes.prontuario.dto.resultadoexame.ResultadoExameCadastroDTO;
+import com.ufes.prontuario.dto.resultadoexame.ResultadoExameConverter;
 import com.ufes.prontuario.exception.RecursoNaoEncontradoException;
 import com.ufes.prontuario.model.ResultadoExame;
 import com.ufes.prontuario.repository.ResultadoExameRepository;
@@ -15,6 +16,8 @@ import java.util.Optional;
 public class ResultadoExameService implements IBaseService<ResultadoExameCadastroDTO, ResultadoExame>{
 
     private final ResultadoExameRepository repository;
+    private final ExameService exameService;
+    private final ArquivoService arquivoService;
 
     public ResultadoExame findById(Long id) {
         return this.repository.findById(id)
@@ -68,11 +71,16 @@ public class ResultadoExameService implements IBaseService<ResultadoExameCadastr
 
     @Override
     public ResultadoExame prepareInsert(ResultadoExameCadastroDTO dtoCadastro) {
-        return null;
+
+        var resultadoExame = ResultadoExameConverter.toEntity(dtoCadastro);
+        resultadoExame.setArquivo(this.arquivoService.findById(dtoCadastro.getIdArquivo()));
+        resultadoExame.setExame(this.exameService.findById(dtoCadastro.getIdExame()));
+
+        return resultadoExame;
     }
 
     @Override
     public ResultadoExame prepareUpdate(ResultadoExameCadastroDTO dtoCadastro, Long id) {
-        return null;
+        return this.findById(id);
     }
 }

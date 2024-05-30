@@ -1,6 +1,7 @@
 package com.ufes.prontuario.service;
 
 import com.ufes.prontuario.dto.tratamento.TratamentoCadastroDTO;
+import com.ufes.prontuario.dto.tratamento.TratamentoConverter;
 import com.ufes.prontuario.exception.RecursoNaoEncontradoException;
 import com.ufes.prontuario.model.Tratamento;
 import com.ufes.prontuario.repository.TratamentoRepository;
@@ -21,6 +22,7 @@ import java.util.Optional;
 public class TratamentoService implements IBaseService<TratamentoCadastroDTO, Tratamento>{
 
     private final TratamentoRepository repository;
+    private final ConsultaService consultaService;
 
     public Tratamento findById(Long id) {
         return this.repository.findById(id)
@@ -85,11 +87,18 @@ public class TratamentoService implements IBaseService<TratamentoCadastroDTO, Tr
 
     @Override
     public Tratamento prepareInsert(TratamentoCadastroDTO dtoCadastro) {
-        return null;
+        var tratamento = TratamentoConverter.toEntity(dtoCadastro);
+        tratamento.setConsulta(this.consultaService.findById(dtoCadastro.getIdConsulta()));
+
+        return tratamento;
     }
 
     @Override
     public Tratamento prepareUpdate(TratamentoCadastroDTO dtoCadastro, Long id) {
-        return null;
+        var tratamento = this.findById(id);
+        tratamento.setTratamento(dtoCadastro.getTratamento());
+        tratamento.setDescricao(dtoCadastro.getDescricao());
+
+        return tratamento;
     }
 }
