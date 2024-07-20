@@ -5,7 +5,12 @@ import com.ufes.prontuario.dto.diagnostico.DiagnosticoConverter;
 import com.ufes.prontuario.exception.RecursoNaoEncontradoException;
 import com.ufes.prontuario.model.Diagnostico;
 import com.ufes.prontuario.repository.DiagnosticoRepository;
+import com.ufes.prontuario.specification.BaseSpecification;
+import com.ufes.prontuario.util.PageUtils;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,6 +30,21 @@ public class DiagnosticoService implements IBaseService<DiagnosticoCadastroDTO, 
 
     public List<Diagnostico> listar() {
         return this.repository.findAll();
+    }
+
+    public Page<Diagnostico> filter(Long idConsulta, String descricao, Pageable pageable) {
+        var specification = this.prepareSpecification(idConsulta, descricao);
+
+        return this.repository.findAll(specification, PageUtils.preparePageable(pageable));
+    }
+
+    private Specification<Diagnostico> prepareSpecification(Long idConsulta, String descricao) {
+        final var specification = new BaseSpecification<Diagnostico>();
+
+        return specification
+                .and(specification.findLikeByColumn("descricao", descricao))
+                .and(specification.findBySubColumnId( "consulta", "id", idConsulta));
+
     }
 
     public Diagnostico inserir(DiagnosticoCadastroDTO diagnosticoCadastroDTO) {

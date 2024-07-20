@@ -4,7 +4,6 @@ package com.ufes.prontuario.service;
 import com.ufes.prontuario.dto.agendaconsulta.AgendaConsultaCadastroDTO;
 import com.ufes.prontuario.dto.agendaconsulta.AgendaConsultaConverter;
 import com.ufes.prontuario.exception.RecursoNaoEncontradoException;
-import com.ufes.prontuario.model.Agenda;
 import com.ufes.prontuario.model.AgendaConsulta;
 import com.ufes.prontuario.repository.AgendaConsultaRepository;
 import lombok.AllArgsConstructor;

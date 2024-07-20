@@ -3,7 +3,6 @@ package com.ufes.prontuario.util;
 import com.ufes.prontuario.dto.BasePageDTO;
 import lombok.Data;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
