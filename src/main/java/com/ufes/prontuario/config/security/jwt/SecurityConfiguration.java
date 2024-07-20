@@ -1,4 +1,4 @@
-package com.ufes.prontuario.config.security;
+package com.ufes.prontuario.config.security.jwt;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

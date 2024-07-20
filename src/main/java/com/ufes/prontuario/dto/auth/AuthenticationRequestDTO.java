@@ -12,7 +12,4 @@ public class AuthenticationRequestDTO {
     private String login;
     @NonNull
     private String senha;
-    @NonNull
-    private String role;
-
 }

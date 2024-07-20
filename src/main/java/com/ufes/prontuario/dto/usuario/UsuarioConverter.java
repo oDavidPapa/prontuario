@@ -2,6 +2,7 @@ package com.ufes.prontuario.dto.usuario;
 
 import com.ufes.prontuario.dto.pessoa.PessoaConverter;
 import com.ufes.prontuario.enums.RoleEnum;
+import com.ufes.prontuario.enums.StatusEnum;
 import com.ufes.prontuario.model.Usuario;
 
 public class UsuarioConverter {
@@ -12,6 +13,7 @@ public class UsuarioConverter {
         usuario.setLogin(usuarioCadastroDTO.getLogin());
         usuario.setSenha(usuarioCadastroDTO.getSenha());
         usuario.setRole(RoleEnum.valueOf(usuarioCadastroDTO.getRole()));
+        usuario.setStatus(StatusEnum.ATIVO);
 
         return usuario;
     }

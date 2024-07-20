@@ -1,5 +1,6 @@
 package com.ufes.prontuario.dto.paciente;
 
+import com.ufes.prontuario.config.security.auditoria.Auditoria;
 import com.ufes.prontuario.dto.pessoa.PessoaConverter;
 import com.ufes.prontuario.model.Paciente;
 
@@ -17,6 +18,7 @@ public class PacienteConverter {
         return Paciente.builder()
                 .peso(pacienteCadastroDTO.getPeso())
                 .altura(pacienteCadastroDTO.getAltura())
+                .auditoria(new Auditoria())
                 .build();
     }
 

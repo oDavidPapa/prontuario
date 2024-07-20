@@ -11,7 +11,16 @@ public class AuthenticationConverter {
         return UsuarioCadastroDTO.builder()
                 .login(authenticationRequestDTO.getLogin())
                 .senha(authenticationRequestDTO.getSenha())
-                .role(authenticationRequestDTO.getRole())
                 .build();
+    }
+
+    public static UsuarioCadastroDTO registerToDTOCadastro(RegisterUserDTO registerUserDTO) {
+        return UsuarioCadastroDTO.builder()
+                .login(registerUserDTO.getLogin())
+                .senha(registerUserDTO.getSenha())
+                .role(registerUserDTO.getRole())
+                .idPessoa(registerUserDTO.getIdPessoa())
+                .build();
+
     }
 }

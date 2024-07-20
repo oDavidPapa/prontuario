@@ -1,5 +1,6 @@
 package com.ufes.prontuario.dto.medico;
 
+import com.ufes.prontuario.config.security.auditoria.Auditoria;
 import com.ufes.prontuario.dto.pessoa.PessoaConverter;
 import com.ufes.prontuario.model.Medico;
 import lombok.Builder;
@@ -12,6 +13,7 @@ public class MedicoConverter {
         var medico = new Medico();
         medico.setCrm(medicoCadastroDTO.getCrm());
         medico.setEspecialidade(medicoCadastroDTO.getEspecialidade());
+        medico.setAuditoria(new Auditoria());
 
         return medico;
     }

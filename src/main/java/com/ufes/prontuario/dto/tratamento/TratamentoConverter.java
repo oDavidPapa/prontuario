@@ -1,5 +1,6 @@
 package com.ufes.prontuario.dto.tratamento;
 
+import com.ufes.prontuario.config.security.auditoria.Auditoria;
 import com.ufes.prontuario.dto.consulta.ConsultaConverter;
 import com.ufes.prontuario.model.Tratamento;
 
@@ -10,6 +11,7 @@ public class TratamentoConverter {
         var tratamento = new Tratamento();
         tratamento.setTratamento(tratamentoCadastroDTO.getTratamento());
         tratamento.setDescricao(tratamentoCadastroDTO.getDescricao());
+        tratamento.setAuditoria(new Auditoria());
 
         return tratamento;
     }

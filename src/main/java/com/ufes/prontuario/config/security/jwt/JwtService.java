@@ -1,4 +1,4 @@
-package com.ufes.prontuario.config.security;
+package com.ufes.prontuario.config.security.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;

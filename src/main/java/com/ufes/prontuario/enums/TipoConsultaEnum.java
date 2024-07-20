@@ -4,5 +4,6 @@ public enum TipoConsultaEnum {
     RETORNO,
     EMERGENCIA,
     ROTINA,
-    PREVENTIVA
+    PREVENTIVA,
+    PRIMEIRA_CONSULTA
 }

@@ -30,7 +30,7 @@ public class ConsultaController {
 
     @GetMapping
     public BaseResponse<ConsultaDTO> filter(
-            @RequestParam Long idConsulta,
+            @RequestParam(required = false) Long idConsulta,
             @RequestParam(required = false) String nomePaciente,
             @RequestParam(required = false) String nomeMedico,
             @RequestParam(required = false) LocalDate dataInicio,

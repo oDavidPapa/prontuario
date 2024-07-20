@@ -12,7 +12,6 @@ public class BaseResponse<T> {
 
     private boolean success = true;
     private Object data;
-    private List<String> messages = new ArrayList<>();
 
     public BaseResponse() {
     }
@@ -23,9 +22,5 @@ public class BaseResponse<T> {
 
     public BaseResponse(List<T> data, long total) {
         this.data = new BasePageDTO<>(data, total);
-    }
-
-    public void addMessage(String message) {
-        this.messages.add(message);
     }
 }

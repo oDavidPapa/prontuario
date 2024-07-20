@@ -1,5 +1,6 @@
 package com.ufes.prontuario.dto.diagnostico;
 
+import com.ufes.prontuario.config.security.auditoria.Auditoria;
 import com.ufes.prontuario.dto.consulta.ConsultaConverter;
 import com.ufes.prontuario.model.Diagnostico;
 
@@ -10,7 +11,7 @@ public class DiagnosticoConverter {
         var diagnostico = new Diagnostico();
         diagnostico.setDiagnostico(diagnosticoCadastroDTO.getDiagnostico());
         diagnostico.setDescricao(diagnosticoCadastroDTO.getDescricao());
-
+        diagnostico.setAuditoria(new Auditoria());
         return diagnostico;
     }
 

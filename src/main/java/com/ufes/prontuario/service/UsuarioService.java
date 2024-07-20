@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 public class UsuarioService implements IBaseService<UsuarioCadastroDTO, Usuario> {
 
     private final UsuarioRepository repository;
+    private final PessoaService pessoaService;
 
     public Usuario findById(Long id) {
         return this.repository.findById(id)
@@ -33,6 +34,8 @@ public class UsuarioService implements IBaseService<UsuarioCadastroDTO, Usuario>
         usuarioCadastro.setSenha(encryptPass);
 
         var usuario = UsuarioConverter.toEntity(usuarioCadastro);
+        usuario.setPessoa(this.pessoaService.findById(usuarioCadastro.getIdPessoa()));
+
         return this.repository.save(usuario);
     }
 

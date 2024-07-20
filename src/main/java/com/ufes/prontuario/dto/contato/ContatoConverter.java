@@ -1,5 +1,6 @@
 package com.ufes.prontuario.dto.contato;
 
+import com.ufes.prontuario.config.security.auditoria.Auditoria;
 import com.ufes.prontuario.enums.TipoContatoEnum;
 import com.ufes.prontuario.model.Contato;
 import org.apache.commons.lang3.StringUtils;
@@ -13,7 +14,8 @@ public class ContatoConverter {
         contato.setEmail(contatoCadastroDTO.getEmail());
         contato.setTelefone(StringUtils.getDigits(contatoCadastroDTO.getTelefone()));
         contato.setTipoContato(TipoContatoEnum.valueOf(contatoCadastroDTO.getTipoContato()));
-
+        contato.setAuditoria(new Auditoria());
+        
         return contato;
     }
 

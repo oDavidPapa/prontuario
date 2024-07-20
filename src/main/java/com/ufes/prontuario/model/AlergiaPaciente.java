@@ -1,16 +1,21 @@
 package com.ufes.prontuario.model;
 
+import com.ufes.prontuario.config.security.auditoria.Auditoria;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.util.Objects;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "alergia_paciente")
 public class AlergiaPaciente {
 
@@ -25,4 +30,18 @@ public class AlergiaPaciente {
     @OneToOne
     @JoinColumn(name = "id_paciente")
     private Paciente paciente;
+
+    @Embedded
+    private Auditoria auditoria;
+
+    @PreUpdate
+    @PrePersist
+    private void createdBy() {
+        if(Objects.isNull(auditoria.getCreatedBy())) {
+            auditoria.setCreatedBy("system");
+        }
+        if(Objects.isNull(auditoria.getLastModifiedBy())) {
+            auditoria.setLastModifiedBy("system");
+        }
+    }
 }

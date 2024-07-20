@@ -1,5 +1,6 @@
 package com.ufes.prontuario.dto.prescricaomedicamento;
 
+import com.ufes.prontuario.config.security.auditoria.Auditoria;
 import com.ufes.prontuario.dto.medicamento.MedicamentoConverter;
 import com.ufes.prontuario.dto.prescricao.PrescricaoConverter;
 import com.ufes.prontuario.model.PrescricaoConsultaMedicamento;
@@ -21,6 +22,7 @@ public class PrescricaoConsultaMedicamentoConverter {
         var prescricaoConsultaMedicamento = new PrescricaoConsultaMedicamento();
         prescricaoConsultaMedicamento.setDosagem(prescricaoMedicamentoCadastroDTO.getDosagem());
         prescricaoConsultaMedicamento.setInstrucaoUso(prescricaoMedicamentoCadastroDTO.getInstrucaoUso());
+        prescricaoConsultaMedicamento.setAuditoria(new Auditoria());
 
         return prescricaoConsultaMedicamento;
     }

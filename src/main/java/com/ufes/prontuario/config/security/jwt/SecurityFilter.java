@@ -1,4 +1,4 @@
-package com.ufes.prontuario.config.security;
+package com.ufes.prontuario.config.security.jwt;
 
 import com.ufes.prontuario.service.UsuarioService;
 import jakarta.servlet.FilterChain;

@@ -25,7 +25,7 @@ public class PacienteService implements IBaseService<PacienteCadastroDTO, Pacien
 
     public Paciente findById(Long id) {
         return this.repository.findById(id)
-                .orElseThrow(() -> new RecursoNaoEncontradoException("Pessoa", id));
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Paciente", id));
     }
 
     public List<Paciente> listar() {

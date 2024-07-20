@@ -1,5 +1,6 @@
 package com.ufes.prontuario.dto.exame;
 
+import com.ufes.prontuario.config.security.auditoria.Auditoria;
 import com.ufes.prontuario.dto.consulta.ConsultaConverter;
 import com.ufes.prontuario.model.Exame;
 
@@ -9,7 +10,7 @@ public class ExameConverter {
 
         var exame = new Exame();
         exame.setDescricao(exameCadastroDTO.getDescricao());
-
+        exame.setAuditoria(new Auditoria());
         return exame;
     }
 

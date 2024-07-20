@@ -1,5 +1,6 @@
 package com.ufes.prontuario.dto.pessoa;
 
+import com.ufes.prontuario.config.security.auditoria.Auditoria;
 import com.ufes.prontuario.model.Pessoa;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -24,6 +25,7 @@ public class PessoaConverter {
         pessoa.setNome(pessoaCadastroDTO.getNome());
         pessoa.setSexo(pessoaCadastroDTO.getSexo());
         pessoa.setDataNascimento(pessoaCadastroDTO.getDataNascimento());
+        pessoa.setAuditoria(new Auditoria());
 
         return pessoa;
     }

@@ -1,5 +1,6 @@
 package com.ufes.prontuario.dto.resultadoexame;
 
+import com.ufes.prontuario.config.security.auditoria.Auditoria;
 import com.ufes.prontuario.dto.arquivo.ArquivoConverter;
 import com.ufes.prontuario.dto.exame.ExameConverter;
 import com.ufes.prontuario.model.ResultadoExame;
@@ -19,6 +20,7 @@ public class ResultadoExameConverter {
 
         var resultadoExame = new ResultadoExame();
         resultadoExame.setDescricao(resultadoExame.getDescricao());
+        resultadoExame.setAuditoria(new Auditoria());
 
         return resultadoExame;
     }

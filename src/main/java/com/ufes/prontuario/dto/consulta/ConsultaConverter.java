@@ -1,5 +1,6 @@
 package com.ufes.prontuario.dto.consulta;
 
+import com.ufes.prontuario.config.security.auditoria.Auditoria;
 import com.ufes.prontuario.dto.agendaconsulta.AgendaConsultaConverter;
 import com.ufes.prontuario.dto.medico.MedicoConverter;
 import com.ufes.prontuario.dto.paciente.PacienteConverter;
@@ -17,6 +18,7 @@ public class ConsultaConverter {
         consulta.setData(LocalDateTime.now());
         consulta.setTipo(TipoConsultaEnum.valueOf(consultaCadastroDTO.getTipo()));
         consulta.setMotivo(consultaCadastroDTO.getMotivo());
+        consulta.setAuditoria(new Auditoria());
 
         return consulta;
     }

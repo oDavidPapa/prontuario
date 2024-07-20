@@ -1,9 +1,10 @@
 package com.ufes.prontuario.controller;
 
-import com.ufes.prontuario.config.security.JwtService;
+import com.ufes.prontuario.config.security.jwt.JwtService;
 import com.ufes.prontuario.dto.auth.AuthenticationConverter;
 import com.ufes.prontuario.dto.auth.AuthenticationRequestDTO;
 import com.ufes.prontuario.dto.auth.AuthenticationResponseDTO;
+import com.ufes.prontuario.dto.auth.RegisterUserDTO;
 import com.ufes.prontuario.dto.usuario.UsuarioConverter;
 import com.ufes.prontuario.dto.usuario.UsuarioDTO;
 import com.ufes.prontuario.model.Usuario;
@@ -30,8 +31,8 @@ public class AuthenticationController {
     private final JwtService jwtService;
 
     @PostMapping("/registrar")
-    public ResponseEntity<AuthenticationResponseDTO> registrar(@RequestBody AuthenticationRequestDTO cadastro) {
-        var usuario = this.usuarioService.salvar(AuthenticationConverter.authToDTOCadastro(cadastro));
+    public ResponseEntity<AuthenticationResponseDTO> registrar(@RequestBody RegisterUserDTO cadastro) {
+        var usuario = this.usuarioService.salvar(AuthenticationConverter.registerToDTOCadastro(cadastro));
         var token = jwtService.generateToken(usuario);
 
         return ResponseEntity.ok(AuthenticationResponseDTO
