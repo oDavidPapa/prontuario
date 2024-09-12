@@ -21,6 +21,7 @@ public class ContatoConverter {
 
     public static ContatoDTO toDTO(Contato contato) {
         return ContatoDTO.builder()
+                .id(contato.getId())
                 .celular(contato.getCelular())
                 .email(contato.getEmail())
                 .telefone(contato.getTelefone())

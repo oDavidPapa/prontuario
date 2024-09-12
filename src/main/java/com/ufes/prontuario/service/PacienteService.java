@@ -106,6 +106,9 @@ public class PacienteService implements IBaseService<PacienteCadastroDTO, Pacien
         paciente.setAltura(dtoCadastro.getAltura());
         paciente.setPeso(dtoCadastro.getPeso());
 
+        pessoaService.update(paciente.getPessoa().getId(),
+                dtoCadastro.getPessoaCadastroDTO());
+
         return paciente;
     }
 }

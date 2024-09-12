@@ -11,6 +11,7 @@ public class PacienteConverter {
                 .id(paciente.getId())
                 .altura(paciente.getAltura())
                 .pessoa(PessoaConverter.toDTO(paciente.getPessoa()))
+                .peso(paciente.getPeso())
                 .build();
     }
 
