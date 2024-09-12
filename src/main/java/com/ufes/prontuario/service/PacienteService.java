@@ -12,7 +12,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,6 +51,7 @@ public class PacienteService implements IBaseService<PacienteCadastroDTO, Pacien
 
     }
 
+    @Transactional
     public Paciente inserir(PacienteCadastroDTO pacienteCadastroDTO) {
         return Optional.ofNullable(pacienteCadastroDTO)
                 .map(this::validarInsert)
@@ -77,6 +81,12 @@ public class PacienteService implements IBaseService<PacienteCadastroDTO, Pacien
 
     @Override
     public PacienteCadastroDTO validarInsert(PacienteCadastroDTO dtoCadastro) {
+        BigDecimal pesoFormatted = formatValue(dtoCadastro.getPeso().toString(), 2);
+        BigDecimal alturaFormatted = formatValue(dtoCadastro.getAltura().toString(), 2);
+
+        dtoCadastro.setPeso(pesoFormatted);
+        dtoCadastro.setAltura(alturaFormatted);
+
         return dtoCadastro;
     }
 
@@ -100,15 +110,35 @@ public class PacienteService implements IBaseService<PacienteCadastroDTO, Pacien
     }
 
     @Override
+    @Transactional
     public Paciente prepareUpdate(PacienteCadastroDTO dtoCadastro, Long id) {
 
         var paciente = this.findById(id);
-        paciente.setAltura(dtoCadastro.getAltura());
-        paciente.setPeso(dtoCadastro.getPeso());
+        BigDecimal pesoFormatted = formatValue(dtoCadastro.getPeso().toString(), 2);
+        BigDecimal alturaFormatted = formatValue(dtoCadastro.getAltura().toString(), 2);
+
+        paciente.setPeso(pesoFormatted);
+        paciente.setAltura(alturaFormatted);
+
 
         pessoaService.update(paciente.getPessoa().getId(),
                 dtoCadastro.getPessoaCadastroDTO());
 
         return paciente;
+    }
+
+    public static BigDecimal formatValue(String value, int decimalPlaces) {
+        if (value == null || value.isEmpty()) {
+            return BigDecimal.ZERO; // Ou tratamento adequado para valores nulos ou vazios
+        }
+
+        // Converte o valor para BigDecimal
+        BigDecimal decimalValue = new BigDecimal(value);
+
+        // Ajusta a escala conforme o número de casas decimais
+        BigDecimal formattedValue = decimalValue.divide(BigDecimal.TEN.pow(decimalPlaces));
+
+        // Define a escala e arredonda para o número de casas decimais especificado
+        return formattedValue.setScale(decimalPlaces, RoundingMode.HALF_UP);
     }
 }
