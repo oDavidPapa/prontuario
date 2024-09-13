@@ -22,11 +22,9 @@ public class Paciente {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_paciente")
     private Long id;
 
-    @Column(name = "peso", precision = 5, scale = 2)
-    private BigDecimal peso;
+    private String peso;
 
-    @Column(name = "altura", precision = 5, scale = 2)
-    private BigDecimal altura;
+    private String altura;
 
     @OneToOne
     @JoinColumn(name = "id_pessoa")

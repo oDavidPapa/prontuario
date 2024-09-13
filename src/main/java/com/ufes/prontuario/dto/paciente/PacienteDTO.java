@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 public class PacienteDTO {
 
     private Long id;
-    private BigDecimal peso;
-    private BigDecimal altura;
+    private String peso;
+    private String altura;
     private PessoaDTO pessoa;
 }
