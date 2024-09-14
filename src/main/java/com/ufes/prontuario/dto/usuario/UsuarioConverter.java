@@ -22,7 +22,6 @@ public class UsuarioConverter {
         return UsuarioDTO.builder()
                 .id(usuario.getId())
                 .login(usuario.getLogin())
-                .senha(usuario.getSenha())
                 .role(usuario.getRole().name())
                 .status(usuario.getStatus().name())
                 .pessoa(PessoaConverter.toDTO(usuario.getPessoa()))

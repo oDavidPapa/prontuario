@@ -1,5 +1,6 @@
 package com.ufes.prontuario.dto.auth;
 
+import com.ufes.prontuario.dto.pessoa.PessoaCadastroDTO;
 import lombok.*;
 
 @AllArgsConstructor
@@ -14,6 +15,7 @@ public class RegisterUserDTO {
     private String senha;
     @NonNull
     private String role;
-    @NonNull
+
     private Long idPessoa;
+    private PessoaCadastroDTO pessoaCadastroDTO;
 }

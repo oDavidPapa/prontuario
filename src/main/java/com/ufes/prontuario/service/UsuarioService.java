@@ -16,6 +16,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 @Service
 @RequiredArgsConstructor
 public class UsuarioService implements IBaseService<UsuarioCadastroDTO, Usuario> {
@@ -29,6 +31,11 @@ public class UsuarioService implements IBaseService<UsuarioCadastroDTO, Usuario>
     }
 
     public Usuario salvar(UsuarioCadastroDTO usuarioCadastro) {
+
+        if(Objects.nonNull(usuarioCadastro.getPessoaCadastro())) {
+            var pessoa = this.pessoaService.inserir(usuarioCadastro.getPessoaCadastro());
+            usuarioCadastro.setIdPessoa(pessoa.getId());
+        }
 
         var encryptPass = new BCryptPasswordEncoder().encode(usuarioCadastro.getSenha());
         usuarioCadastro.setSenha(encryptPass);

@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("contatos")
-public class ContatoControler {
+public class ContatoController {
 
     private final ContatoService service;
 

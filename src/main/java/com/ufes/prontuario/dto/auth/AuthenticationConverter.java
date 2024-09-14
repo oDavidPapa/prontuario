@@ -20,6 +20,7 @@ public class AuthenticationConverter {
                 .senha(registerUserDTO.getSenha())
                 .role(registerUserDTO.getRole())
                 .idPessoa(registerUserDTO.getIdPessoa())
+                .pessoaCadastro(registerUserDTO.getPessoaCadastroDTO())
                 .build();
 
     }

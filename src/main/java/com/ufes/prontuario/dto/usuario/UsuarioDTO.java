@@ -14,7 +14,6 @@ public class UsuarioDTO {
 
     private Long id;
     private String login;
-    private String senha;
     private String role;
     private String status;
     private PessoaDTO pessoa;
