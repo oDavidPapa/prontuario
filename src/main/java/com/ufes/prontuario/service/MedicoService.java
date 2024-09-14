@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -52,6 +53,7 @@ public class MedicoService implements IBaseService<MedicoCadastroDTO, Medico> {
         return this.repository.findAll();
     }
 
+    @Transactional
     public Medico inserir(MedicoCadastroDTO medicoCadastroDTO) {
         return Optional.ofNullable(medicoCadastroDTO)
                 .map(this::validarInsert)
@@ -60,6 +62,7 @@ public class MedicoService implements IBaseService<MedicoCadastroDTO, Medico> {
                 .orElseThrow();
     }
 
+    @Transactional
     public Medico update(Long id, MedicoCadastroDTO medicoCadastroDTO) {
         return Optional.ofNullable(medicoCadastroDTO)
                 .map(aDto -> validarUpdate(aDto, id))
