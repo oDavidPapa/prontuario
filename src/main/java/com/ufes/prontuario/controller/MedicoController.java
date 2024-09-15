@@ -36,12 +36,24 @@ public class MedicoController {
             @RequestParam(required = false) String crm,
             Pageable pageable) {
 
-        var pessoas = this.service.filter(id, nome, cpf, especialidade, crm, pageable);
+        var medicos = this.service.filter(id, nome, cpf, especialidade, crm, pageable);
 
-        return new BaseResponse<>(pessoas.getContent().stream()
+        return new BaseResponse<>(medicos.getContent().stream()
                 .map(MedicoConverter::toDTO)
                 .collect(Collectors.toList()),
-                pessoas.getTotalElements());
+                medicos.getTotalElements());
+    }
+
+    @GetMapping("/options")
+    public BaseResponse<MedicoDTO> findAll() {
+
+        var medicos = this.service.findAll();
+
+        return new BaseResponse<>(medicos.stream()
+                .map(MedicoConverter::toDTO)
+                .map(service::setContatoPrincial)
+                .collect(Collectors.toList()),
+                medicos.size());
     }
 
 

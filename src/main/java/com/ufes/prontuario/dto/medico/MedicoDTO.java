@@ -1,5 +1,6 @@
 package com.ufes.prontuario.dto.medico;
 
+import com.ufes.prontuario.dto.contato.ContatoDTO;
 import com.ufes.prontuario.dto.pessoa.PessoaDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,4 +17,5 @@ public class MedicoDTO {
     private String crm;
     private String especialidade;
     private PessoaDTO pessoa;
+    private ContatoDTO contato;
 }

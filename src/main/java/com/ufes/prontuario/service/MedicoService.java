@@ -1,7 +1,9 @@
 package com.ufes.prontuario.service;
 
+import com.ufes.prontuario.dto.contato.ContatoConverter;
 import com.ufes.prontuario.dto.medico.MedicoCadastroDTO;
 import com.ufes.prontuario.dto.medico.MedicoConverter;
+import com.ufes.prontuario.dto.medico.MedicoDTO;
 import com.ufes.prontuario.exception.RecursoNaoEncontradoException;
 import com.ufes.prontuario.model.Medico;
 import com.ufes.prontuario.repository.MedicoRepository;
@@ -23,6 +25,7 @@ public class MedicoService implements IBaseService<MedicoCadastroDTO, Medico> {
 
     private final MedicoRepository repository;
     private final PessoaService pessoaService;
+    private final ContatoService contatoService;
 
     public Medico findById(Long id) {
         return this.repository.findById(id)
@@ -34,6 +37,10 @@ public class MedicoService implements IBaseService<MedicoCadastroDTO, Medico> {
         var specification = this.prepareSpecification(id, nome, cpf, especialidade, crm);
 
         return this.repository.findAll(specification, PageUtils.preparePageable(pageable));
+    }
+
+    public List<Medico> findAll() {
+        return this.repository.findAll();
     }
 
     private Specification<Medico> prepareSpecification(
@@ -113,5 +120,11 @@ public class MedicoService implements IBaseService<MedicoCadastroDTO, Medico> {
         medico.setCrm(dtoCadastro.getCrm());
 
         return medico;
+    }
+
+    public MedicoDTO setContatoPrincial(MedicoDTO medicoDTO) {
+        var contato = contatoService.getContatoPrincipalByPessoa(medicoDTO.getPessoa().getId());
+        medicoDTO.setContato(ContatoConverter.toDTO(contato));
+        return  medicoDTO;
     }
 }

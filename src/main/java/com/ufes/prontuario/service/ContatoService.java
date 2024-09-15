@@ -99,6 +99,10 @@ public class ContatoService implements IBaseService<ContatoCadastroDTO, Contato>
         return contato;
     }
 
+    public Contato getContatoPrincipalByPessoa(Long idPessoa) {
+        return this.repository.findByPessoaIdAndTipoContato(idPessoa, TipoContatoEnum.PRINCIPAL);
+    }
+
     @Override
     public Contato prepareUpdate(ContatoCadastroDTO dtoCadastro, Long id) {
         var contato = this.findById(id);
