@@ -30,6 +30,8 @@ public class UsuarioService implements IBaseService<UsuarioCadastroDTO, Usuario>
     private final UsuarioRepository repository;
     private final PessoaService pessoaService;
     private final ContatoService contatoService;
+    private final MedicoService medicoService;
+
 
     public Usuario findById(Long id) {
         return this.repository.findById(id)
@@ -57,6 +59,30 @@ public class UsuarioService implements IBaseService<UsuarioCadastroDTO, Usuario>
         return this.repository.save(usuario);
     }
 
+    @Transactional
+    public Usuario update(Long id, UsuarioCadastroDTO usuarioCadastro) {
+
+        var pessoa = this.pessoaService.update(usuarioCadastro.getIdPessoa(), usuarioCadastro.getPessoaCadastro());
+
+        var contatoCadastro = usuarioCadastro.getContatoCadastro();
+        var contato = this.contatoService.getContatoPrincipalByPessoa(pessoa.getId());
+
+        if(Objects.nonNull(contato)) {
+            this.contatoService.update(contato.getId(), contatoCadastro);
+        } else {
+            contatoCadastro.setIdPessoa(pessoa.getId());
+            this.contatoService.inserir(contatoCadastro);
+        }
+
+        var usuario = this.findById(id);
+        usuario.setLogin(usuarioCadastro.getLogin());
+        usuario.setRole(usuario.getRole());
+
+        usuario.setPessoa(pessoa);
+
+        return this.repository.save(usuario);
+    }
+
     public Page<Usuario> filter(
             Long id, String login, String nome, Pageable pageable) {
         var specification = this.prepareSpecification(id, login, nome);
@@ -68,24 +94,28 @@ public class UsuarioService implements IBaseService<UsuarioCadastroDTO, Usuario>
         return this.repository.findByPessoaId(idPessoa);
     }
 
-    public UsuarioDTO setContatoUsuario(UsuarioDTO usuarioDTO) {
+    public UsuarioDTO completeDTO(UsuarioDTO usuarioDTO) {
+
         var contato = this.contatoService.getContatoPrincipalByPessoa(usuarioDTO.getPessoa().getId());
-        usuarioDTO.setContato(ContatoConverter.toDTO(contato));
+        if(Objects.nonNull(contato)) {
+            usuarioDTO.setContato(ContatoConverter.toDTO(contato));
+        }
+
+        if (RoleEnum.MEDICO.name().equals(usuarioDTO.getRole())) {
+            var medico = this.medicoService.getMedicoByPessoaId(usuarioDTO.getPessoa().getId());
+            usuarioDTO.setEspecialidade(medico.getEspecialidade());
+            usuarioDTO.setCrm(medico.getCrm());
+        }
+
         return usuarioDTO;
     }
 
 
-    public Usuario ativar(Long idUsuario) {
+    public Usuario alterarStatus(Long idUsuario) {
         var usuario = this.findById(idUsuario);
-        usuario.setStatus(StatusEnum.ATIVO);
+        var status = StatusEnum.ATIVO.equals(usuario.getStatus()) ? StatusEnum.INATIVO : StatusEnum.ATIVO;
 
-        return this.repository.save(usuario);
-    }
-
-    public Usuario inativar(Long idUsuario) {
-        var usuario = this.findById(idUsuario);
-        usuario.setStatus(StatusEnum.INATIVO);
-
+        usuario.setStatus(status);
         return this.repository.save(usuario);
     }
 

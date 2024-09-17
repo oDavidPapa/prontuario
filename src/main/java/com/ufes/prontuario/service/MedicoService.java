@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -124,7 +125,13 @@ public class MedicoService implements IBaseService<MedicoCadastroDTO, Medico> {
 
     public MedicoDTO setContatoPrincial(MedicoDTO medicoDTO) {
         var contato = contatoService.getContatoPrincipalByPessoa(medicoDTO.getPessoa().getId());
-        medicoDTO.setContato(ContatoConverter.toDTO(contato));
-        return  medicoDTO;
+        if (Objects.nonNull(contato)) {
+            medicoDTO.setContato(ContatoConverter.toDTO(contato));
+        }
+        return medicoDTO;
+    }
+
+    public Medico getMedicoByPessoaId(Long idPessoa) {
+        return this.repository.findByPessoaId(idPessoa);
     }
 }

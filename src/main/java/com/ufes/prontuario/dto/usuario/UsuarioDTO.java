@@ -20,4 +20,7 @@ public class UsuarioDTO {
     private PessoaDTO pessoa;
     private ContatoDTO contato;
 
+    private String especialidade;
+    private String crm;
+
 }

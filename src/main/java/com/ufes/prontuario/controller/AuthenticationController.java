@@ -78,28 +78,30 @@ public class AuthenticationController {
     }
 
 
+
     @GetMapping("/{id}")
     public BaseResponse<UsuarioDTO> findById(@PathVariable Long id) {
         var usuario = this.usuarioService.findById(id);
 
         return new BaseResponse<>(Optional.ofNullable(usuario)
                 .map(UsuarioConverter::toDTO)
-                .map(usuarioService::setContatoUsuario)
+                .map(usuarioService::completeDTO)
                 .orElse(null));
     }
 
-    @PatchMapping("/inativar/{idUsuario}")
-    public BaseResponse<UsuarioDTO> inativarUsuario(@PathVariable Long idUsuario) {
-        var usuario = this.usuarioService.inativar(idUsuario);
+    @PutMapping("/{id}")
+    public BaseResponse<UsuarioDTO> update(@PathVariable Long id, @RequestBody RegisterUserDTO cadastro) {
+        var usuario = this.usuarioService.update(id, AuthenticationConverter.registerToDTOCadastro(cadastro));
 
         return new BaseResponse<>(Optional.ofNullable(usuario)
                 .map(UsuarioConverter::toDTO)
+                .map(usuarioService::completeDTO)
                 .orElse(null));
     }
 
-    @PatchMapping("/ativar/{idUsuario}")
-    public BaseResponse<UsuarioDTO> ativarUsuario(@PathVariable Long idUsuario) {
-        var usuario = this.usuarioService.ativar(idUsuario);
+    @PatchMapping("/alterar-status/{id}")
+    public BaseResponse<UsuarioDTO> inativarUsuario(@PathVariable Long id) {
+        var usuario = this.usuarioService.alterarStatus(id);
 
         return new BaseResponse<>(Optional.ofNullable(usuario)
                 .map(UsuarioConverter::toDTO)

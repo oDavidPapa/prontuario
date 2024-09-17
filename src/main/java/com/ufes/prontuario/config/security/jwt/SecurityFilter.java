@@ -28,7 +28,6 @@ public class SecurityFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain) throws ServletException, IOException {
 
         var token = this.recoverToken(request);
-
         if(token != null){
             var login = jwtService.validateToken(token);
             var user = usuarioService.findByLogin(login);
