@@ -1,5 +1,6 @@
 package com.ufes.prontuario.dto.usuario;
 
+import com.ufes.prontuario.dto.contato.ContatoDTO;
 import com.ufes.prontuario.dto.pessoa.PessoaDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,4 +18,6 @@ public class UsuarioDTO {
     private String role;
     private String status;
     private PessoaDTO pessoa;
+    private ContatoDTO contato;
+
 }

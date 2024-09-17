@@ -21,6 +21,7 @@ public class AuthenticationConverter {
                 .role(registerUserDTO.getRole())
                 .idPessoa(registerUserDTO.getIdPessoa())
                 .pessoaCadastro(registerUserDTO.getPessoaCadastroDTO())
+                .contatoCadastro(registerUserDTO.getContatoCadastroDTO())
                 .build();
 
     }

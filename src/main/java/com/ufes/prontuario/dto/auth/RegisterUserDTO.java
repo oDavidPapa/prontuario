@@ -1,5 +1,6 @@
 package com.ufes.prontuario.dto.auth;
 
+import com.ufes.prontuario.dto.contato.ContatoCadastroDTO;
 import com.ufes.prontuario.dto.pessoa.PessoaCadastroDTO;
 import lombok.*;
 
@@ -18,4 +19,6 @@ public class RegisterUserDTO {
 
     private Long idPessoa;
     private PessoaCadastroDTO pessoaCadastroDTO;
+    private ContatoCadastroDTO contatoCadastroDTO;
+
 }

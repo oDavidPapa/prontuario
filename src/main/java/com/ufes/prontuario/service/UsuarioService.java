@@ -1,7 +1,10 @@
 package com.ufes.prontuario.service;
 
+import com.ufes.prontuario.dto.contato.ContatoConverter;
 import com.ufes.prontuario.dto.usuario.UsuarioCadastroDTO;
 import com.ufes.prontuario.dto.usuario.UsuarioConverter;
+import com.ufes.prontuario.dto.usuario.UsuarioDTO;
+import com.ufes.prontuario.enums.RoleEnum;
 import com.ufes.prontuario.enums.StatusEnum;
 import com.ufes.prontuario.exception.RecursoNaoEncontradoException;
 import com.ufes.prontuario.model.Usuario;
@@ -15,7 +18,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.management.relation.Role;
 import java.util.Objects;
 
 @Service
@@ -24,17 +29,23 @@ public class UsuarioService implements IBaseService<UsuarioCadastroDTO, Usuario>
 
     private final UsuarioRepository repository;
     private final PessoaService pessoaService;
+    private final ContatoService contatoService;
 
     public Usuario findById(Long id) {
         return this.repository.findById(id)
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Usuario", id));
     }
 
+    @Transactional
     public Usuario salvar(UsuarioCadastroDTO usuarioCadastro) {
 
-        if(Objects.nonNull(usuarioCadastro.getPessoaCadastro())) {
+        if(RoleEnum.ADMINISTRATIVO.name().equals(usuarioCadastro.getRole())) {
             var pessoa = this.pessoaService.inserir(usuarioCadastro.getPessoaCadastro());
             usuarioCadastro.setIdPessoa(pessoa.getId());
+
+            var contatoCadastro = usuarioCadastro.getContatoCadastro();
+            contatoCadastro.setIdPessoa(pessoa.getId());
+            this.contatoService.inserir(contatoCadastro);
         }
 
         var encryptPass = new BCryptPasswordEncoder().encode(usuarioCadastro.getSenha());
@@ -56,6 +67,13 @@ public class UsuarioService implements IBaseService<UsuarioCadastroDTO, Usuario>
     public Usuario findByPessoa(Long idPessoa) {
         return this.repository.findByPessoaId(idPessoa);
     }
+
+    public UsuarioDTO setContatoUsuario(UsuarioDTO usuarioDTO) {
+        var contato = this.contatoService.getContatoPrincipalByPessoa(usuarioDTO.getPessoa().getId());
+        usuarioDTO.setContato(ContatoConverter.toDTO(contato));
+        return usuarioDTO;
+    }
+
 
     public Usuario ativar(Long idUsuario) {
         var usuario = this.findById(idUsuario);

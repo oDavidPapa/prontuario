@@ -10,4 +10,5 @@ import lombok.*;
 public class AuthenticationResponseDTO {
 
     private String token;
+    private Long id;
 }

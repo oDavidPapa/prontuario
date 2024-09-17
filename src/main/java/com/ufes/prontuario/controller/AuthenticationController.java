@@ -36,7 +36,10 @@ public class AuthenticationController {
         var token = jwtService.generateToken(usuario);
 
         return ResponseEntity.ok(AuthenticationResponseDTO
-                .builder().token(token).build());
+                .builder()
+                .token(token)
+                .id(usuario.getId())
+                .build());
     }
 
     @PostMapping("/autenticar")
@@ -66,7 +69,7 @@ public class AuthenticationController {
     }
 
     @GetMapping("/pessoa/{idPessoa}")
-    public BaseResponse<UsuarioDTO> findByPessoa(Long idPessoa) {
+    public BaseResponse<UsuarioDTO> findByPessoa(@PathVariable Long idPessoa) {
         var usuario = this.usuarioService.findByPessoa(idPessoa);
 
         return new BaseResponse<>(Optional.ofNullable(usuario)
@@ -74,8 +77,19 @@ public class AuthenticationController {
                 .orElse(null));
     }
 
+
+    @GetMapping("/{id}")
+    public BaseResponse<UsuarioDTO> findById(@PathVariable Long id) {
+        var usuario = this.usuarioService.findById(id);
+
+        return new BaseResponse<>(Optional.ofNullable(usuario)
+                .map(UsuarioConverter::toDTO)
+                .map(usuarioService::setContatoUsuario)
+                .orElse(null));
+    }
+
     @PatchMapping("/inativar/{idUsuario}")
-    public BaseResponse<UsuarioDTO> inativarUsuario(Long idUsuario) {
+    public BaseResponse<UsuarioDTO> inativarUsuario(@PathVariable Long idUsuario) {
         var usuario = this.usuarioService.inativar(idUsuario);
 
         return new BaseResponse<>(Optional.ofNullable(usuario)
@@ -84,7 +98,7 @@ public class AuthenticationController {
     }
 
     @PatchMapping("/ativar/{idUsuario}")
-    public BaseResponse<UsuarioDTO> ativarUsuario(Long idUsuario) {
+    public BaseResponse<UsuarioDTO> ativarUsuario(@PathVariable Long idUsuario) {
         var usuario = this.usuarioService.ativar(idUsuario);
 
         return new BaseResponse<>(Optional.ofNullable(usuario)

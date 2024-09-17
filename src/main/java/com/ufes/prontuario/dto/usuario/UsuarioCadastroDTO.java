@@ -1,5 +1,6 @@
 package com.ufes.prontuario.dto.usuario;
 
+import com.ufes.prontuario.dto.contato.ContatoCadastroDTO;
 import com.ufes.prontuario.dto.pessoa.PessoaCadastroDTO;
 import com.ufes.prontuario.dto.pessoa.PessoaDTO;
 import lombok.*;
@@ -18,4 +19,5 @@ public class UsuarioCadastroDTO {
 
     private Long idPessoa;
     private PessoaCadastroDTO pessoaCadastro;
+    private ContatoCadastroDTO contatoCadastro;
 }
