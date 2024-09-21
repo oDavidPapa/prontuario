@@ -1,7 +1,9 @@
 package com.ufes.prontuario.service;
 
+import com.ufes.prontuario.dto.contato.ContatoConverter;
 import com.ufes.prontuario.dto.paciente.PacienteCadastroDTO;
 import com.ufes.prontuario.dto.paciente.PacienteConverter;
+import com.ufes.prontuario.dto.paciente.PacienteDTO;
 import com.ufes.prontuario.exception.RecursoNaoEncontradoException;
 import com.ufes.prontuario.model.Paciente;
 import com.ufes.prontuario.repository.PacienteRepository;
@@ -25,6 +27,8 @@ public class PacienteService implements IBaseService<PacienteCadastroDTO, Pacien
 
     private final PacienteRepository repository;
     private final PessoaService pessoaService;
+    private final ContatoService contatoService;
+
 
     public Paciente findById(Long id) {
         return this.repository.findById(id)
@@ -39,6 +43,17 @@ public class PacienteService implements IBaseService<PacienteCadastroDTO, Pacien
         var specification = this.prepareSpecification(id, nome, cpf);
 
         return this.repository.findAll(specification, PageUtils.preparePageable(pageable));
+    }
+
+    public List<Paciente> findAll() {
+        return this.repository.findAll();
+    }
+
+
+    public PacienteDTO completeDTO(PacienteDTO pacienteDTO) {
+        var contato = this.contatoService.getContatoPrincipalByPessoa(pacienteDTO.getPessoa().getId());
+        pacienteDTO.setContato(ContatoConverter.toDTO(contato));
+        return pacienteDTO;
     }
 
     private Specification<Paciente> prepareSpecification(Long id, String nome, String cpf) {

@@ -1,8 +1,11 @@
 package com.ufes.prontuario.controller;
 
+import com.ufes.prontuario.dto.medico.MedicoConverter;
+import com.ufes.prontuario.dto.medico.MedicoDTO;
 import com.ufes.prontuario.dto.paciente.PacienteCadastroDTO;
 import com.ufes.prontuario.dto.paciente.PacienteConverter;
 import com.ufes.prontuario.dto.paciente.PacienteDTO;
+import com.ufes.prontuario.model.Paciente;
 import com.ufes.prontuario.service.PacienteService;
 import com.ufes.prontuario.util.BaseResponse;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -54,5 +58,17 @@ public class PacienteController {
                 .map(PacienteConverter::toDTO).orElse(null);
 
         return new BaseResponse<>(pacienteDTO);
+    }
+
+    @GetMapping("/options")
+    public BaseResponse<PacienteDTO> findAll() {
+
+        var pacientes = this.service.findAll();
+
+        return new BaseResponse<>(pacientes.stream()
+                .map(PacienteConverter::toDTO)
+                .map(this.service::completeDTO)
+                .collect(Collectors.toList()),
+                pacientes.size());
     }
 }
