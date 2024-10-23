@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -25,6 +26,7 @@ public class ConsultaService implements IBaseService<ConsultaCadastroDTO, Consul
     private ConsultaRepository repository;
     private MedicoService medicoService;
     private PacienteService pacienteService;
+    private UsuarioService usuarioService;
 
     public Consulta findById(Long id) {
         return this.repository.findById(id)
@@ -55,7 +57,9 @@ public class ConsultaService implements IBaseService<ConsultaCadastroDTO, Consul
         return this.repository.findAll();
     }
 
-    public Consulta inserir(ConsultaCadastroDTO consultaCadastroDTO) {
+    public Consulta inserir(ConsultaCadastroDTO consultaCadastroDTO, Authentication auth) {
+        consultaCadastroDTO.setLoginMedico(auth.getName());
+
         return Optional.ofNullable(consultaCadastroDTO)
                 .map(this::validarInsert)
                 .map(this::prepareInsert)
@@ -90,7 +94,9 @@ public class ConsultaService implements IBaseService<ConsultaCadastroDTO, Consul
     public Consulta prepareInsert(ConsultaCadastroDTO dtoCadastro) {
         var consulta = ConsultaConverter.toEntity(dtoCadastro);
 
-        var medico = medicoService.findById(dtoCadastro.getIdMedico());
+        var usuario = usuarioService.findByUsuarioLogin(dtoCadastro.getLoginMedico());
+        var medico = medicoService.getMedicoByPessoaId(usuario.getPessoa().getId());
+
         var paciente = pacienteService.findById(dtoCadastro.getIdPaciente());
 
         consulta.setPaciente(paciente);

@@ -17,4 +17,5 @@ public class ConsultaCadastroDTO {
     private Long idPaciente;
     private Long idConsulta;
     private Long idAgendaConsulta;
+    private String loginMedico;
 }

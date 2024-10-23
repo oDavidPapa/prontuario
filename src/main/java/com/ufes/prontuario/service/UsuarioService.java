@@ -38,6 +38,10 @@ public class UsuarioService implements IBaseService<UsuarioCadastroDTO, Usuario>
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Usuario", id));
     }
 
+    public Usuario findByUsuarioLogin(String login) {
+        return this.repository.findByUsuarioLogin(login);
+    }
+
     @Transactional
     public Usuario salvar(UsuarioCadastroDTO usuarioCadastro) {
 

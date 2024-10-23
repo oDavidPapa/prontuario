@@ -7,6 +7,7 @@ import com.ufes.prontuario.service.ConsultaService;
 import com.ufes.prontuario.util.BaseResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -48,8 +49,8 @@ public class ConsultaController {
     }
 
     @PostMapping
-    public BaseResponse<ConsultaDTO> insert(@RequestBody ConsultaCadastroDTO consultaCadastroDTO) {
-        var consultaDTO = Optional.ofNullable(this.service.inserir(consultaCadastroDTO))
+    public BaseResponse<ConsultaDTO> insert(@RequestBody ConsultaCadastroDTO consultaCadastroDTO, Authentication auth) {
+        var consultaDTO = Optional.ofNullable(this.service.inserir(consultaCadastroDTO, auth))
                 .map(ConsultaConverter::toDTO).orElse(null);
 
         return new BaseResponse<>(consultaDTO);
