@@ -26,7 +26,7 @@ public class Consulta {
     private Long id;
 
     @Column
-    private String motivo;
+    private String anamnese;
 
     @Column
     private LocalDateTime data;

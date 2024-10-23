@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 public class ConsultaDTO {
 
     private Long id;
-    private String motivo;
+    private String anamnese;
     private LocalDateTime data;
     private String tipo;
     private MedicoDTO medico;

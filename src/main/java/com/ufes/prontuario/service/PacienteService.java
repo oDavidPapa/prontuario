@@ -54,7 +54,7 @@ public class PacienteService implements IBaseService<PacienteCadastroDTO, Pacien
         var contato = this.contatoService.getContatoPrincipalByPessoa(pacienteDTO.getPessoa().getId());
         pacienteDTO.setContato(ContatoConverter.toDTO(contato));
         return pacienteDTO;
-    }
+    }       
 
     private Specification<Paciente> prepareSpecification(Long id, String nome, String cpf) {
         final var specification = new BaseSpecification<Paciente>();

@@ -104,7 +104,7 @@ public class ConsultaService implements IBaseService<ConsultaCadastroDTO, Consul
         var consulta = this.findById(id);
 
         consulta.setTipo(TipoConsultaEnum.valueOf(dtoCadastro.getTipo()));
-        consulta.setMotivo(dtoCadastro.getMotivo());
+        consulta.setAnamnese(dtoCadastro.getAnamnese());
         consulta.setPaciente(pacienteService.findById(dtoCadastro.getIdPaciente()));
 
         return consulta;

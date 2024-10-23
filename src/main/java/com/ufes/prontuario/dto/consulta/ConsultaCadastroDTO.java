@@ -11,7 +11,7 @@ import lombok.Setter;
 @Builder
 public class ConsultaCadastroDTO {
 
-    private String motivo;
+    private String anamnese;
     private String tipo;
     private Long idMedico;
     private Long idPaciente;

@@ -17,7 +17,7 @@ public class ConsultaConverter {
         var consulta = new Consulta();
         consulta.setData(LocalDateTime.now());
         consulta.setTipo(TipoConsultaEnum.valueOf(consultaCadastroDTO.getTipo()));
-        consulta.setMotivo(consultaCadastroDTO.getMotivo());
+        consulta.setAnamnese(consultaCadastroDTO.getAnamnese());
         consulta.setAuditoria(new Auditoria());
 
         return consulta;
@@ -27,7 +27,7 @@ public class ConsultaConverter {
         return ConsultaDTO.builder()
                 .id(consulta.getId())
                 .data(consulta.getData())
-                .motivo(consulta.getMotivo())
+                .anamnese(consulta.getAnamnese())
                 .tipo(consulta.getTipo().name())
                 .agendaConsulta(Optional.ofNullable(consulta.getAgendaConsulta())
                         .map(AgendaConsultaConverter::toDTO)
