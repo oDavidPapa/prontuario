@@ -20,6 +20,7 @@ public class ConsultaDTO {
     private String anamnese;
     private LocalDateTime data;
     private String tipo;
+    private String tipoEnum;
     private MedicoDTO medico;
     private PacienteDTO paciente;
     private ConsultaDTO consulta;
