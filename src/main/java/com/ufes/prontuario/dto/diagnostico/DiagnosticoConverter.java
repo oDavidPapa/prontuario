@@ -10,7 +10,6 @@ public class DiagnosticoConverter {
 
         var diagnostico = new Diagnostico();
         diagnostico.setDiagnostico(diagnosticoCadastroDTO.getDiagnostico());
-        diagnostico.setDescricao(diagnosticoCadastroDTO.getDescricao());
         diagnostico.setAuditoria(new Auditoria());
         return diagnostico;
     }
@@ -18,9 +17,8 @@ public class DiagnosticoConverter {
     public static DiagnosticoDTO toDTO(Diagnostico diagnostico) {
         return DiagnosticoDTO.builder()
                 .id(diagnostico.getId())
-                .descricao(diagnostico.getDescricao())
                 .diagnostico(diagnostico.getDiagnostico())
-                .consultaDTO(ConsultaConverter.toDTO(diagnostico.getConsulta()))
+                .idConsulta(diagnostico.getConsulta().getId())
                 .build();
     }
 }

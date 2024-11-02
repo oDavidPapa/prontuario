@@ -13,7 +13,6 @@ import lombok.Setter;
 public class DiagnosticoDTO {
 
     private Long id;
-    private String descricao;
     private String diagnostico;
-    private ConsultaDTO consultaDTO;
+    private Long idConsulta;
 }

@@ -27,6 +27,14 @@ public class DiagnosticoController {
         return new BaseResponse<>(diagnosticoDTO);
     }
 
+    @GetMapping("/consulta/{idConsulta}")
+    public BaseResponse<DiagnosticoDTO> findByConsultaId(@PathVariable Long idConsulta) {
+        var diagnosticoDTO = Optional.ofNullable(service.findByIdConsulta(idConsulta))
+                .map(DiagnosticoConverter::toDTO).orElse(null);
+
+        return new BaseResponse<>(diagnosticoDTO);
+    }
+
     @GetMapping
     public BaseResponse<DiagnosticoDTO> filter(
             @RequestParam Long idConsulta,

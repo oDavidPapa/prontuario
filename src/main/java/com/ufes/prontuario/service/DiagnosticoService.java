@@ -28,6 +28,11 @@ public class DiagnosticoService implements IBaseService<DiagnosticoCadastroDTO, 
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Diagnostico", id));
     }
 
+    public Diagnostico findByIdConsulta(Long idConsulta) {
+        return this.repository.findByConsultaId(idConsulta);
+
+    }
+
     public List<Diagnostico> listar() {
         return this.repository.findAll();
     }
@@ -101,7 +106,6 @@ public class DiagnosticoService implements IBaseService<DiagnosticoCadastroDTO, 
         var diagnostico = this.findById(id);
 
         diagnostico.setDiagnostico(dtoCadastro.getDiagnostico());
-        diagnostico.setDescricao(dtoCadastro.getDescricao());
 
         return diagnostico;
     }

@@ -11,7 +11,6 @@ import lombok.Setter;
 @Builder
 public class DiagnosticoCadastroDTO {
 
-    private String descricao;
     private String diagnostico;
     private Long idConsulta;
 }

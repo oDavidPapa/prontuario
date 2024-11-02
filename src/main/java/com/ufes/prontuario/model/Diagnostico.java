@@ -24,9 +24,6 @@ public class Diagnostico {
     private Long id;
 
     @Column
-    private String descricao;
-
-    @Column
     private String diagnostico;
 
     @OneToOne
