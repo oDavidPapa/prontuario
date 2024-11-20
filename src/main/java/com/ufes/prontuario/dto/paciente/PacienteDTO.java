@@ -1,6 +1,7 @@
 package com.ufes.prontuario.dto.paciente;
 
 import com.ufes.prontuario.dto.contato.ContatoDTO;
+import com.ufes.prontuario.dto.endereco.EnderecoDTO;
 import com.ufes.prontuario.dto.pessoa.PessoaDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,4 +21,5 @@ public class PacienteDTO {
     private String altura;
     private PessoaDTO pessoa;
     private ContatoDTO contato;
+    private EnderecoDTO endereco;
 }

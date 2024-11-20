@@ -1,9 +1,12 @@
 package com.ufes.prontuario.dto.pessoa;
 
 import com.ufes.prontuario.config.security.auditoria.Auditoria;
+import com.ufes.prontuario.dto.endereco.EnderecoConverter;
 import com.ufes.prontuario.model.Pessoa;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.Optional;
 
 @AllArgsConstructor
 public class PessoaConverter {

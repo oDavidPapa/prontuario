@@ -1,11 +1,13 @@
 package com.ufes.prontuario.service;
 
 import com.ufes.prontuario.dto.contato.ContatoConverter;
+import com.ufes.prontuario.dto.endereco.EnderecoConverter;
 import com.ufes.prontuario.dto.paciente.PacienteCadastroDTO;
 import com.ufes.prontuario.dto.paciente.PacienteConverter;
 import com.ufes.prontuario.dto.paciente.PacienteDTO;
 import com.ufes.prontuario.exception.RecursoNaoEncontradoException;
 import com.ufes.prontuario.model.Paciente;
+import com.ufes.prontuario.repository.EnderecoRepository;
 import com.ufes.prontuario.repository.PacienteRepository;
 import com.ufes.prontuario.specification.BaseSpecification;
 import com.ufes.prontuario.util.PageUtils;
@@ -19,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -28,6 +31,7 @@ public class PacienteService implements IBaseService<PacienteCadastroDTO, Pacien
     private final PacienteRepository repository;
     private final PessoaService pessoaService;
     private final ContatoService contatoService;
+    private final EnderecoSerivce enderecoSerivce;
 
 
     public Paciente findById(Long id) {
@@ -52,7 +56,16 @@ public class PacienteService implements IBaseService<PacienteCadastroDTO, Pacien
 
     public PacienteDTO completeDTO(PacienteDTO pacienteDTO) {
         var contato = this.contatoService.getContatoPrincipalByPessoa(pacienteDTO.getPessoa().getId());
-        pacienteDTO.setContato(ContatoConverter.toDTO(contato));
+        var endereco = this.enderecoSerivce.findByPessoaId(pacienteDTO.getPessoa().getId());
+
+        if(Objects.nonNull(contato)){
+            pacienteDTO.setContato(ContatoConverter.toDTO(contato));
+        }
+
+        if(Objects.nonNull(endereco)){
+            pacienteDTO.setEndereco(EnderecoConverter.toDTO(endereco));
+        }
+
         return pacienteDTO;
     }       
 

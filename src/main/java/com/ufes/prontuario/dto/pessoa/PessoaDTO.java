@@ -1,5 +1,6 @@
 package com.ufes.prontuario.dto.pessoa;
 
+import com.ufes.prontuario.dto.endereco.EnderecoDTO;
 import com.ufes.prontuario.dto.usuario.UsuarioDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
