@@ -1,0 +1,7 @@
+DROP SEQUENCE seq_doenca;
+
+CREATE SEQUENCE IF NOT EXISTS seq_cid;
+ALTER TABLE IF EXISTS doenca RENAME TO cid;
+
+ALTER TABLE cid
+    RENAME COLUMN cid TO codigo;

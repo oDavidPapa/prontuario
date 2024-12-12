@@ -9,9 +9,9 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @Builder
-public class DoencaDTO {
+public class CidCadastroDTO {
 
-    private Long id;
     private String descricao;
-    private String cid;
+    private String codigo;
+    private Long idDiagnostico;
 }

@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Objects;
 
@@ -15,20 +14,20 @@ import java.util.Objects;
 @Getter
 @Setter
 @Entity
-@EntityListeners(AuditingEntityListener.class)
-@Table(name = "doenca_diagnostico")
-public class DoencaDiagnostico {
+public class Cid {
 
     @Id
-    @SequenceGenerator(name = "seq_doenca_diagnostico", sequenceName = "seq_doenca_diagnostico", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_doenca_diagnostico")
+    @SequenceGenerator(name = "seq_cid", sequenceName = "seq_cid", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_cid")
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "id_doenca")
-    private Cid doenca;
+    @Column
+    private String descricao;
 
-    @OneToOne
+    @Column
+    private String codigo;
+
+    @ManyToOne
     @JoinColumn(name = "id_diagnostico")
     private Diagnostico diagnostico;
 

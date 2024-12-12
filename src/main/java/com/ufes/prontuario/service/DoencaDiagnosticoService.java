@@ -17,7 +17,7 @@ public class DoencaDiagnosticoService implements IBaseService<DoencaDiagnosticoC
 
     private final DoencaDiagnosticoRepository repository;
     private final DiagnosticoService diagnosticoService;
-    private final DoencaService doencaService;
+    private final CidService cidService;
 
     public DoencaDiagnostico findById(Long id) {
         return this.repository.findById(id)
@@ -73,7 +73,7 @@ public class DoencaDiagnosticoService implements IBaseService<DoencaDiagnosticoC
     public DoencaDiagnostico prepareInsert(DoencaDiagnosticoCadastroDTO dtoCadastro) {
         var doencaDiagnostico = DoencaDiagnosticoConverter.toEntity(dtoCadastro);
         doencaDiagnostico.setDiagnostico(this.diagnosticoService.findById(dtoCadastro.getIdDiagnostico()));
-        doencaDiagnostico.setDoenca(this.doencaService.findById(dtoCadastro.getIdDoenca()));
+        doencaDiagnostico.setDoenca(this.cidService.findById(dtoCadastro.getIdDoenca()));
 
         return doencaDiagnostico;
     }
@@ -82,7 +82,7 @@ public class DoencaDiagnosticoService implements IBaseService<DoencaDiagnosticoC
     public DoencaDiagnostico prepareUpdate(DoencaDiagnosticoCadastroDTO dtoCadastro, Long id) {
         var doencaDiagnostico = this.findById(id);
         doencaDiagnostico.setDiagnostico(this.diagnosticoService.findById(dtoCadastro.getIdDiagnostico()));
-        doencaDiagnostico.setDoenca(this.doencaService.findById(dtoCadastro.getIdDoenca()));
+        doencaDiagnostico.setDoenca(this.cidService.findById(dtoCadastro.getIdDoenca()));
 
         return doencaDiagnostico;
     }

@@ -2,7 +2,7 @@ package com.ufes.prontuario.dto.doencadiagnostico;
 
 import com.ufes.prontuario.config.security.auditoria.Auditoria;
 import com.ufes.prontuario.dto.diagnostico.DiagnosticoConverter;
-import com.ufes.prontuario.dto.doenca.DoencaConverter;
+import com.ufes.prontuario.dto.doenca.CidConverter;
 import com.ufes.prontuario.model.DoencaDiagnostico;
 
 public class DoencaDiagnosticoConverter {
@@ -17,7 +17,7 @@ public class DoencaDiagnosticoConverter {
         return DoencaDiagnosticoDTO.builder()
                 .id(doencaDiagnostico.getId())
                 .diagnostico(DiagnosticoConverter.toDTO(doencaDiagnostico.getDiagnostico()))
-                .doenca(DoencaConverter.toDTO(doencaDiagnostico.getDoenca()))
+                .doenca(CidConverter.toDTO(doencaDiagnostico.getDoenca()))
                 .build();
     }
 }
