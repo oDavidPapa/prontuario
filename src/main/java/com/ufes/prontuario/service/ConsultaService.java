@@ -9,6 +9,7 @@ import com.ufes.prontuario.repository.ConsultaRepository;
 import com.ufes.prontuario.specification.ConsultaSpecification;
 import com.ufes.prontuario.util.PageUtils;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -23,10 +24,27 @@ import java.util.Optional;
 @Service
 public class ConsultaService implements IBaseService<ConsultaCadastroDTO, Consulta> {
 
-    private ConsultaRepository repository;
+    private final ConsultaRepository repository;
+
     private MedicoService medicoService;
     private PacienteService pacienteService;
     private UsuarioService usuarioService;
+
+    @Autowired
+    public void setUsuarioService(UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
+    }
+
+    @Autowired
+    public void setPacienteService(PacienteService pacienteService) {
+        this.pacienteService = pacienteService;
+    }
+
+    @Autowired
+    public void setMedicoService(MedicoService medicoService) {
+        this.medicoService = medicoService;
+    }
+
 
     public Consulta findById(Long id) {
         return this.repository.findById(id)
@@ -49,8 +67,8 @@ public class ConsultaService implements IBaseService<ConsultaCadastroDTO, Consul
                 .and(specification.findByDataFim(dataFim))
                 .and(specification.findById(idConsulta))
                 .and(specification.findLikeByColumn("tipoConsulta", tipoConsulta))
-                .and(specification.findLikeBySubColumn( "pessoa", "nome", nomePaciente))
-                .and(specification.findLikeBySubColumn( "medico", "nome", nomeMedico));
+                .and(specification.findLikeBySubSubColumn("paciente", "pessoa", "nome", nomePaciente))
+                .and(specification.findLikeBySubSubColumn( "medico" ,"pessoa", "nome", nomeMedico));
     }
 
     public List<Consulta> listar() {
@@ -60,11 +78,15 @@ public class ConsultaService implements IBaseService<ConsultaCadastroDTO, Consul
     public Consulta inserir(ConsultaCadastroDTO consultaCadastroDTO, Authentication auth) {
         consultaCadastroDTO.setLoginMedico(auth.getName());
 
-        return Optional.ofNullable(consultaCadastroDTO)
+        return Optional.of(consultaCadastroDTO)
                 .map(this::validarInsert)
                 .map(this::prepareInsert)
                 .map(repository::save)
                 .orElseThrow();
+    }
+
+    public Consulta save(Consulta consulta) {
+        return repository.save(consulta);
     }
 
     public Consulta update(Long id, ConsultaCadastroDTO consultaCadastroDTO) {
@@ -96,7 +118,6 @@ public class ConsultaService implements IBaseService<ConsultaCadastroDTO, Consul
 
         var usuario = usuarioService.findByUsuarioLogin(dtoCadastro.getLoginMedico());
         var medico = medicoService.getMedicoByPessoaId(usuario.getPessoa().getId());
-
         var paciente = pacienteService.findById(dtoCadastro.getIdPaciente());
 
         consulta.setPaciente(paciente);

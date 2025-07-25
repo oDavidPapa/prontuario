@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -15,5 +16,5 @@ public class AgendaDTO {
 
     private Long id;
     private String descricao;
-    private LocalDate data;
+    private LocalDateTime data;
 }

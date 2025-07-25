@@ -76,7 +76,7 @@ public class AgendaService implements IBaseService<AgendaCadastroDTO, Agenda> {
     public Agenda prepareUpdate(AgendaCadastroDTO dtoCadastro, Long id) {
         var agenda = this.findById(id);
 
-        agenda.setData(dtoCadastro.getData());
+        agenda.setDataAgendamento(dtoCadastro.getDataAgendamento());
         agenda.setDescricao(dtoCadastro.getDescricao());
 
         return agenda;

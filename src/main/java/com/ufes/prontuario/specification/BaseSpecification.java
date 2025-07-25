@@ -1,5 +1,6 @@
 package com.ufes.prontuario.specification;
 
+import com.ufes.prontuario.model.Consulta;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
@@ -8,6 +9,7 @@ import lombok.NonNull;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.Nullable;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 public class BaseSpecification<T> implements Specification<T> {
@@ -42,9 +44,15 @@ public class BaseSpecification<T> implements Specification<T> {
                 .orElse(null);
     }
 
-    public Specification<T> findLikeBySubColumn(String column, String campo,  @Nullable String nome) {
+    public Specification<T> findLikeBySubColumn(String column, String campo, @Nullable String nome) {
         return Optional.ofNullable(nome)
-                .map(s -> prepareLikeSubSpecification(column,campo, s))
+                .map(s -> prepareLikeSubSpecification(column, campo, s))
+                .orElse(null);
+    }
+
+    public Specification<T> findLikeBySubSubColumn(String column, String subColumn, String campo, @Nullable String nome) {
+        return Optional.ofNullable(nome)
+                .map(s -> prepareLikeSubSpecification(column, subColumn, campo, s))
                 .orElse(null);
     }
 
@@ -71,6 +79,14 @@ public class BaseSpecification<T> implements Specification<T> {
                 .get(campoName)), "%" + value.toLowerCase() + "%");
     }
 
+    @NonNull
+    protected Specification<T> prepareLikeSubSpecification(@NonNull String columnName, @NonNull String subColumn, @NonNull String campoName,
+                                                           @NonNull String value) {
+        return (root, query, builder) -> builder.like(builder.lower(root.join(columnName).join(subColumn)
+                .get(campoName)), "%" + value.toLowerCase() + "%");
+    }
+
+
     public Specification<T> findBySubColumnId(@Nullable String columnName, String campoName, Long valor) {
         return Optional.ofNullable(valor)
                 .map(id -> prepareEqualSubSpecification(columnName, campoName, id))
@@ -82,5 +98,20 @@ public class BaseSpecification<T> implements Specification<T> {
     protected Specification<T> prepareEqualSubSpecification(
             @NonNull String columnName, @NonNull String campoName, @NonNull Long value) {
         return (root, query, builder) -> builder.equal(root.join(columnName).get(campoName), value);
+    }
+
+
+    public Specification<T> findByDataInicio(@Nullable LocalDate data, String campoNome) {
+        return Optional.ofNullable(data)
+                .map(d -> (Specification<T>) (root, query, builder) -> builder
+                        .greaterThanOrEqualTo(root.get(campoNome), d))
+                .orElse(null);
+    }
+
+    public Specification<T> findByDataFim(@Nullable LocalDate data, String campoNome) {
+        return Optional.ofNullable(data)
+                .map(d -> (Specification<T>) (root, query, builder) -> builder
+                        .lessThanOrEqualTo(root.get(campoNome), d))
+                .orElse(null);
     }
 }

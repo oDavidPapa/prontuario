@@ -8,7 +8,7 @@ public class AgendaConverter {
 
         var agenda = new Agenda();
         agenda.setDescricao(agendaCadastroDTO.getDescricao());
-        agenda.setData(agendaCadastroDTO.getData());
+        agenda.setDataAgendamento(agendaCadastroDTO.getDataAgendamento());
 
         return agenda;
     }
@@ -17,7 +17,7 @@ public class AgendaConverter {
         return AgendaDTO.builder()
                 .id(agenda.getId())
                 .descricao(agenda.getDescricao())
-                .data(agenda.getData())
+                .data(agenda.getDataAgendamento())
                 .build();
     }
 }

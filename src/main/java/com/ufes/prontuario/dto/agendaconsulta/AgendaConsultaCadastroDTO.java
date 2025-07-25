@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -13,5 +15,9 @@ public class AgendaConsultaCadastroDTO {
 
     private Long idPaciente;
     private Long idMedico;
-    private Long idAgenda;
+    private String tipoConsulta;
+
+    private LocalDateTime dataAgendamentoConsulta;
+    private String descricao;
+
 }

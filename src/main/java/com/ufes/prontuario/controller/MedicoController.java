@@ -4,6 +4,7 @@ import com.ufes.prontuario.dto.medico.MedicoCadastroDTO;
 import com.ufes.prontuario.dto.medico.MedicoConverter;
 import com.ufes.prontuario.dto.medico.MedicoDTO;
 import com.ufes.prontuario.service.MedicoService;
+import com.ufes.prontuario.service.PessoaService;
 import com.ufes.prontuario.util.BaseResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 public class MedicoController {
 
     private final MedicoService service;
+    private final PessoaService pessoaService;
 
     @GetMapping("/{id}")
     public BaseResponse<MedicoDTO> findById(@PathVariable Long id) {
@@ -68,8 +70,11 @@ public class MedicoController {
     @PutMapping("/{id}")
     public BaseResponse<MedicoDTO> update(@PathVariable Long id, @RequestBody MedicoCadastroDTO medicoCadastroDTO) {
         var medicoDTO = Optional.ofNullable(this.service.update(id, medicoCadastroDTO))
-                .map(MedicoConverter::toDTO).orElse(null);
-
+                .map(MedicoConverter::toDTO).orElseThrow();
+        var pessoaCadastroDTO = medicoCadastroDTO.getPessoaCadastroDTO();
+        if(medicoDTO.getPessoa() != null) {
+            pessoaService.update(medicoDTO.getPessoa().getId(), pessoaCadastroDTO);
+        }
         return new BaseResponse<>(medicoDTO);
     }
 }

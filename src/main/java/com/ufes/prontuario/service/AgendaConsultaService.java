@@ -1,25 +1,62 @@
 package com.ufes.prontuario.service;
 
 
+import com.ufes.prontuario.dto.agenda.AgendaCadastroDTO;
 import com.ufes.prontuario.dto.agendaconsulta.AgendaConsultaCadastroDTO;
 import com.ufes.prontuario.dto.agendaconsulta.AgendaConsultaConverter;
+import com.ufes.prontuario.dto.consulta.ConsultaCadastroDTO;
+import com.ufes.prontuario.enums.TipoConsultaEnum;
 import com.ufes.prontuario.exception.RecursoNaoEncontradoException;
 import com.ufes.prontuario.model.AgendaConsulta;
+import com.ufes.prontuario.model.Consulta;
+import com.ufes.prontuario.model.Pessoa;
 import com.ufes.prontuario.repository.AgendaConsultaRepository;
+import com.ufes.prontuario.specification.BaseSpecification;
+import com.ufes.prontuario.specification.ConsultaSpecification;
+import com.ufes.prontuario.util.PageUtils;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class AgendaConsultaService implements IBaseService<AgendaConsultaCadastroDTO, AgendaConsulta>{
+public class AgendaConsultaService implements IBaseService<AgendaConsultaCadastroDTO, AgendaConsulta> {
 
     private final AgendaConsultaRepository repository;
-    private final MedicoService medicoService;
-    private final PacienteService pacienteService;
-    private final AgendaService agendaService;
+
+    private MedicoService medicoService;
+    private PacienteService pacienteService;
+    private AgendaService agendaService;
+    private ConsultaService consultaService;
+
+    @Autowired
+    public void setPacienteService(PacienteService pacienteService) {
+        this.pacienteService = pacienteService;
+    }
+
+    @Autowired
+    public void setMedicoService(MedicoService medicoService) {
+        this.medicoService = medicoService;
+    }
+
+    @Autowired
+    public void setAgendaService(AgendaService agendaService) {
+        this.agendaService = agendaService;
+    }
+
+    @Autowired
+    public void setConsultaService(ConsultaService consultaService) {
+        this.consultaService = consultaService;
+    }
 
     public AgendaConsulta findById(Long id) {
         return this.repository.findById(id)
@@ -30,6 +67,24 @@ public class AgendaConsultaService implements IBaseService<AgendaConsultaCadastr
         return this.repository.findAll();
     }
 
+    public Page<AgendaConsulta> filter(String nomePaciente,
+                                       String nomeMedico, LocalDate dataInicio, LocalDate dataFim, Pageable pageable) {
+        var specification = this.prepareSpecification(nomePaciente, nomeMedico, dataInicio, dataFim);
+
+        return this.repository.findAll(specification, PageUtils.preparePageable(pageable));
+    }
+
+    private Specification<AgendaConsulta> prepareSpecification(String nomePaciente, String nomeMedico, LocalDate dataInicio, LocalDate dataFim) {
+        final var specification = new BaseSpecification<AgendaConsulta>();
+
+        return specification
+                .and(specification.findByDataInicio(dataInicio, "dataAgendamento"))
+                .and(specification.findByDataFim(dataFim, "dataAgendamento"))
+                .and(specification.findLikeBySubSubColumn("paciente", "pessoa", "nome", nomePaciente))
+                .and(specification.findLikeBySubSubColumn("medico", "pessoa", "nome", nomeMedico));
+    }
+
+    @Transactional
     public AgendaConsulta inserir(AgendaConsultaCadastroDTO agendaConsultaCadastroDTO) {
         return Optional.ofNullable(agendaConsultaCadastroDTO)
                 .map(this::validarInsert)
@@ -38,10 +93,27 @@ public class AgendaConsultaService implements IBaseService<AgendaConsultaCadastr
                 .orElseThrow();
     }
 
+    @Transactional
+    public Long createConsulta(Long id, Authentication auth) {
+        var agendaConsutla = this.findById(id);
+
+        var consultaCadastro = ConsultaCadastroDTO.builder()
+                .idAgendaConsulta(agendaConsutla.getId())
+                .tipo(agendaConsutla.getTipoConsulta().name())
+                .idPaciente(agendaConsutla.getPaciente().getId())
+                .idMedico(agendaConsutla.getMedico().getId())
+                .build();
+
+        var consulta = consultaService.inserir(consultaCadastro, auth);
+        consulta.setAgendaConsulta(agendaConsutla);
+        this.consultaService.save(consulta);
+        return consulta.getId();
+    }
+
     public AgendaConsulta update(Long id, AgendaConsultaCadastroDTO agendaConsultaCadastroDTO) {
         return Optional.ofNullable(agendaConsultaCadastroDTO)
                 .map(acDto -> validarUpdate(acDto, id))
-                .map(agendaConsulta -> prepareUpdate(agendaConsulta ,id))
+                .map(agendaConsulta -> prepareUpdate(agendaConsulta, id))
                 .map(this.repository::save)
                 .orElseThrow();
     }
@@ -74,15 +146,21 @@ public class AgendaConsultaService implements IBaseService<AgendaConsultaCadastr
 
     @Override
     public AgendaConsulta prepareInsert(AgendaConsultaCadastroDTO dtoCadastro) {
+        var agendaCadastro = AgendaCadastroDTO.builder()
+                .dataAgendamento(dtoCadastro.getDataAgendamentoConsulta())
+                .descricao(dtoCadastro.getDescricao())
+                .build();
+        var agenda = agendaService.inserir(agendaCadastro);
+
         var agendaConsulta = AgendaConsultaConverter.toEntity(dtoCadastro);
 
         var medico = this.medicoService.findById(dtoCadastro.getIdMedico());
         var paciente = this.pacienteService.findById(dtoCadastro.getIdPaciente());
-        var agenda = this.agendaService.findById(dtoCadastro.getIdAgenda());
 
         agendaConsulta.setMedico(medico);
         agendaConsulta.setPaciente(paciente);
         agendaConsulta.setAgenda(agenda);
+        agendaConsulta.setTipoConsulta(TipoConsultaEnum.valueOf(dtoCadastro.getTipoConsulta()));
 
         return agendaConsulta;
     }

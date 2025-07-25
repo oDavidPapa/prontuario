@@ -1,6 +1,7 @@
 package com.ufes.prontuario.model;
 
 import com.ufes.prontuario.config.security.auditoria.Auditoria;
+import com.ufes.prontuario.enums.TipoConsultaEnum;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -34,8 +35,12 @@ public class AgendaConsulta {
     @JoinColumn(name = "id_agenda")
     private Agenda agenda;
 
+    @Enumerated(EnumType.STRING)
+    private TipoConsultaEnum tipoConsulta;
+
     @Embedded
     private Auditoria auditoria;
+
 
     @PreUpdate
     @PrePersist
