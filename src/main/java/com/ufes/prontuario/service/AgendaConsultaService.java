@@ -8,11 +8,8 @@ import com.ufes.prontuario.dto.consulta.ConsultaCadastroDTO;
 import com.ufes.prontuario.enums.TipoConsultaEnum;
 import com.ufes.prontuario.exception.RecursoNaoEncontradoException;
 import com.ufes.prontuario.model.AgendaConsulta;
-import com.ufes.prontuario.model.Consulta;
-import com.ufes.prontuario.model.Pessoa;
 import com.ufes.prontuario.repository.AgendaConsultaRepository;
 import com.ufes.prontuario.specification.BaseSpecification;
-import com.ufes.prontuario.specification.ConsultaSpecification;
 import com.ufes.prontuario.util.PageUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -147,7 +144,7 @@ public class AgendaConsultaService implements IBaseService<AgendaConsultaCadastr
     @Override
     public AgendaConsulta prepareInsert(AgendaConsultaCadastroDTO dtoCadastro) {
         var agendaCadastro = AgendaCadastroDTO.builder()
-                .dataAgendamento(dtoCadastro.getDataAgendamentoConsulta())
+                .dataAgendamento(dtoCadastro.getDataAgendamento())
                 .descricao(dtoCadastro.getDescricao())
                 .build();
         var agenda = agendaService.inserir(agendaCadastro);

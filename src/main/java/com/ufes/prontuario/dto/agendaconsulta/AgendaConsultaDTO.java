@@ -15,11 +15,12 @@ import lombok.Setter;
 @Builder
 public class AgendaConsultaDTO {
 
+    private Long id;
     private AgendaDTO agenda;
     private PacienteDTO paciente;
     private MedicoDTO medico;
     private String tipoConsultaDescricao;
     private String tipoConsulta;
-
-
+    private String dataConsulta;
+    private String descricao;
 }

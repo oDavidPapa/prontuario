@@ -17,7 +17,7 @@ public class AgendaConsultaCadastroDTO {
     private Long idMedico;
     private String tipoConsulta;
 
-    private LocalDateTime dataAgendamentoConsulta;
+    private LocalDateTime dataAgendamento;
     private String descricao;
 
 }
