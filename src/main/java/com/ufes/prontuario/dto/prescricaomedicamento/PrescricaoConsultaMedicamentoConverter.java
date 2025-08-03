@@ -11,17 +11,18 @@ public class PrescricaoConsultaMedicamentoConverter {
         return PrescricaoConsultaMedicamentoDTO.builder()
                 .id(prescricaoConsultaMedicamento.getId())
                 .prescricao(PrescricaoConverter.toDTO(prescricaoConsultaMedicamento.getPrescricao()))
-                .medicamento(MedicamentoConverter.toDTO(prescricaoConsultaMedicamento.getMedicamento()))
-                .dosagem(prescricaoConsultaMedicamento.getDosagem())
+                .medicamento(prescricaoConsultaMedicamento.getMedicamento())
                 .instrucaoUso(prescricaoConsultaMedicamento.getInstrucaoUso())
+                .observacao(prescricaoConsultaMedicamento.getObservacao())
                 .build();
     }
 
     public static PrescricaoConsultaMedicamento toEntity(PrescricaoConsultaMedicamentoCadastroDTO prescricaoMedicamentoCadastroDTO) {
 
         var prescricaoConsultaMedicamento = new PrescricaoConsultaMedicamento();
-        prescricaoConsultaMedicamento.setDosagem(prescricaoMedicamentoCadastroDTO.getDosagem());
+        prescricaoConsultaMedicamento.setMedicamento(prescricaoMedicamentoCadastroDTO.getMedicamento());
         prescricaoConsultaMedicamento.setInstrucaoUso(prescricaoMedicamentoCadastroDTO.getInstrucaoUso());
+        prescricaoConsultaMedicamento.setObservacao(prescricaoMedicamentoCadastroDTO.getObservacao());
         prescricaoConsultaMedicamento.setAuditoria(new Auditoria());
 
         return prescricaoConsultaMedicamento;

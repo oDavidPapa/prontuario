@@ -4,6 +4,7 @@ import com.ufes.prontuario.dto.prescricao.PrescricaoCadastroDTO;
 import com.ufes.prontuario.dto.prescricao.PrescricaoConverter;
 import com.ufes.prontuario.exception.RecursoNaoEncontradoException;
 import com.ufes.prontuario.model.Prescricao;
+import com.ufes.prontuario.model.Tratamento;
 import com.ufes.prontuario.repository.PrescricaoRepository;
 import com.ufes.prontuario.specification.BaseSpecification;
 import com.ufes.prontuario.util.PageUtils;
@@ -44,6 +45,10 @@ public class PrescricaoService implements IBaseService<PrescricaoCadastroDTO, Pr
         return specification
                 .and(specification.findBySubColumnId( "consulta", "id", idConsulta));
 
+    }
+
+    public Prescricao findByIdConsulta(Long idConsulta) {
+        return this.repository.findByConsultaId(idConsulta);
     }
 
     public Prescricao inserir(PrescricaoCadastroDTO prescricaoCadastroDTO) {
@@ -96,7 +101,8 @@ public class PrescricaoService implements IBaseService<PrescricaoCadastroDTO, Pr
 
     @Override
     public Prescricao prepareUpdate(PrescricaoCadastroDTO dtoCadastro, Long id) {
-
-        return this.findById(id);
+        var prescricao = this.findById(id);
+        prescricao.setDescricao(dtoCadastro.getDescricao());
+        return prescricao;
     }
 }

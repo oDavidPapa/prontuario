@@ -14,8 +14,8 @@ import lombok.Setter;
 public class PrescricaoConsultaMedicamentoDTO {
 
     private Long id;
-    private String dosagem;
+    private String medicamento;
     private String instrucaoUso;
+    private String observacao;
     private PrescricaoDTO prescricao;
-    private MedicamentoDTO medicamento;
 }

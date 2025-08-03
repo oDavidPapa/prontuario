@@ -26,9 +26,6 @@ public class Tratamento {
     @Column
     private String tratamento;
 
-    @Column
-    private String descricao;
-
     @OneToOne
     @JoinColumn(name = "id_consulta")
     private Consulta consulta;

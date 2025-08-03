@@ -14,4 +14,5 @@ public class PrescricaoDTO {
 
     private Long id;
     private ConsultaDTO consultaDTO;
+    private String descricao;
 }

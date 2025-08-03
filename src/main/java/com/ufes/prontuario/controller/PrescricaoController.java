@@ -3,6 +3,8 @@ package com.ufes.prontuario.controller;
 import com.ufes.prontuario.dto.prescricao.PrescricaoCadastroDTO;
 import com.ufes.prontuario.dto.prescricao.PrescricaoConverter;
 import com.ufes.prontuario.dto.prescricao.PrescricaoDTO;
+import com.ufes.prontuario.dto.tratamento.TratamentoConverter;
+import com.ufes.prontuario.dto.tratamento.TratamentoDTO;
 import com.ufes.prontuario.service.PrescricaoService;
 import com.ufes.prontuario.util.BaseResponse;
 import lombok.RequiredArgsConstructor;
@@ -48,6 +50,13 @@ public class PrescricaoController {
         return new BaseResponse<>(medicamentoDTO);
     }
 
+    @GetMapping("/consulta/{idConsulta}")
+    public BaseResponse<PrescricaoDTO> findByConsultaId(@PathVariable Long idConsulta) {
+        var prescricaoDTO = Optional.ofNullable(service.findByIdConsulta(idConsulta))
+                .map(PrescricaoConverter::toDTO).orElse(null);
+
+        return new BaseResponse<>(prescricaoDTO);
+    }
 
     @DeleteMapping("/{id}")
     public BaseResponse<Void> delete(@PathVariable Long id) {

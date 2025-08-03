@@ -17,7 +17,6 @@ public class PrescricaoConsultaMedicamentoService implements IBaseService<Prescr
 
     private final PrescricaoConsultaMedicamentoRepository repository;
     private final PrescricaoService prescricaoService;
-    private final MedicamentoService medicamentoService;
 
     public PrescricaoConsultaMedicamento findById(Long id) {
         return this.repository.findById(id)
@@ -27,6 +26,11 @@ public class PrescricaoConsultaMedicamentoService implements IBaseService<Prescr
     public List<PrescricaoConsultaMedicamento> listar() {
         return this.repository.findAll();
     }
+
+    public List<PrescricaoConsultaMedicamento> findAllByPrescricao(Long idPrescricao) {
+        return this.repository.findAllByPrescricaoId(idPrescricao);
+    }
+
 
     public PrescricaoConsultaMedicamento inserir(PrescricaoConsultaMedicamentoCadastroDTO prescricaoConsultaMedicamentoCadastroDTO) {
         return Optional.ofNullable(prescricaoConsultaMedicamentoCadastroDTO)
@@ -72,7 +76,6 @@ public class PrescricaoConsultaMedicamentoService implements IBaseService<Prescr
     @Override
     public PrescricaoConsultaMedicamento prepareInsert(PrescricaoConsultaMedicamentoCadastroDTO dtoCadastro) {
         var prescricaoMedicamento = PrescricaoConsultaMedicamentoConverter.toEntity(dtoCadastro);
-        prescricaoMedicamento.setMedicamento(this.medicamentoService.findById(dtoCadastro.getIdMedicamento()));
         prescricaoMedicamento.setPrescricao(this.prescricaoService.findById(dtoCadastro.getIdPrescricao()));
 
         return prescricaoMedicamento;
@@ -81,9 +84,9 @@ public class PrescricaoConsultaMedicamentoService implements IBaseService<Prescr
     @Override
     public PrescricaoConsultaMedicamento prepareUpdate(PrescricaoConsultaMedicamentoCadastroDTO dtoCadastro, Long id) {
         var prescricaoMedicamento = this.findById(id);
-        prescricaoMedicamento.setDosagem(dtoCadastro.getDosagem());
         prescricaoMedicamento.setInstrucaoUso(dtoCadastro.getInstrucaoUso());
-        prescricaoMedicamento.setMedicamento(this.medicamentoService.findById(dtoCadastro.getIdMedicamento()));
+        prescricaoMedicamento.setMedicamento(dtoCadastro.getMedicamento());
+        prescricaoMedicamento.setObservacao(dtoCadastro.getObservacao());
         prescricaoMedicamento.setPrescricao(this.prescricaoService.findById(dtoCadastro.getIdPrescricao()));
 
         return prescricaoMedicamento;

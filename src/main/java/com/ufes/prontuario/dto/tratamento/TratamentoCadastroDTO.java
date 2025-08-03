@@ -12,6 +12,5 @@ import lombok.Setter;
 public class TratamentoCadastroDTO {
 
     private String tratamento;
-    private String descricao;
     private Long idConsulta;
 }

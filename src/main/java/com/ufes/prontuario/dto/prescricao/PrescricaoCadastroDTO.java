@@ -12,4 +12,5 @@ import lombok.Setter;
 public class PrescricaoCadastroDTO {
 
     private Long idConsulta;
+    private String descricao;
 }

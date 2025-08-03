@@ -10,7 +10,6 @@ public class TratamentoConverter {
 
         var tratamento = new Tratamento();
         tratamento.setTratamento(tratamentoCadastroDTO.getTratamento());
-        tratamento.setDescricao(tratamentoCadastroDTO.getDescricao());
         tratamento.setAuditoria(new Auditoria());
 
         return tratamento;
@@ -20,7 +19,6 @@ public class TratamentoConverter {
         return TratamentoDTO.builder()
                 .id(tratamento.getId())
                 .tratamento(tratamento.getTratamento())
-                .descricao(tratamento.getDescricao())
                 .consulta(ConsultaConverter.toDTO(tratamento.getConsulta()))
                 .build();
     }

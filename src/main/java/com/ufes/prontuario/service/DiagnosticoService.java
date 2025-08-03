@@ -30,7 +30,6 @@ public class DiagnosticoService implements IBaseService<DiagnosticoCadastroDTO, 
 
     public Diagnostico findByIdConsulta(Long idConsulta) {
         return this.repository.findByConsultaId(idConsulta);
-
     }
 
     public List<Diagnostico> listar() {

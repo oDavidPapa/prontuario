@@ -14,6 +14,5 @@ public class TratamentoDTO {
 
     private Long id;
     private String tratamento;
-    private String descricao;
     private ConsultaDTO consulta;
 }

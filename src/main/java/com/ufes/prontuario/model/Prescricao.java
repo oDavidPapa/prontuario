@@ -1,16 +1,14 @@
 package com.ufes.prontuario.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @Entity
+@Builder
 public class Prescricao {
 
     @Id
@@ -21,4 +19,7 @@ public class Prescricao {
     @OneToOne
     @JoinColumn(name = "id_consulta")
     private Consulta consulta;
+
+    @Column
+    private String descricao;
 }

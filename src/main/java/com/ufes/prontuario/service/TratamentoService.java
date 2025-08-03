@@ -3,6 +3,7 @@ package com.ufes.prontuario.service;
 import com.ufes.prontuario.dto.tratamento.TratamentoCadastroDTO;
 import com.ufes.prontuario.dto.tratamento.TratamentoConverter;
 import com.ufes.prontuario.exception.RecursoNaoEncontradoException;
+import com.ufes.prontuario.model.Diagnostico;
 import com.ufes.prontuario.model.Tratamento;
 import com.ufes.prontuario.repository.TratamentoRepository;
 import com.ufes.prontuario.specification.BaseSpecification;
@@ -37,6 +38,10 @@ public class TratamentoService implements IBaseService<TratamentoCadastroDTO, Tr
         var specification = this.prepareSpecification(idConsulta);
 
         return repository.findAll(specification, PageUtils.preparePageable(pageable));
+    }
+
+    public Tratamento findByIdConsulta(Long idConsulta) {
+        return this.repository.findByConsultaId(idConsulta);
     }
 
     private Specification<Tratamento> prepareSpecification(Long idConsulta) {
@@ -97,7 +102,6 @@ public class TratamentoService implements IBaseService<TratamentoCadastroDTO, Tr
     public Tratamento prepareUpdate(TratamentoCadastroDTO dtoCadastro, Long id) {
         var tratamento = this.findById(id);
         tratamento.setTratamento(dtoCadastro.getTratamento());
-        tratamento.setDescricao(dtoCadastro.getDescricao());
 
         return tratamento;
     }

@@ -1,5 +1,7 @@
 package com.ufes.prontuario.controller;
 
+import com.ufes.prontuario.dto.diagnostico.DiagnosticoConverter;
+import com.ufes.prontuario.dto.diagnostico.DiagnosticoDTO;
 import com.ufes.prontuario.dto.tratamento.TratamentoCadastroDTO;
 import com.ufes.prontuario.dto.tratamento.TratamentoConverter;
 import com.ufes.prontuario.dto.tratamento.TratamentoDTO;
@@ -52,6 +54,15 @@ public class TratamentoController {
 
         return new BaseResponse<>(tratamentoDTO);
     }
+
+    @GetMapping("/consulta/{idConsulta}")
+    public BaseResponse<TratamentoDTO> findByConsultaId(@PathVariable Long idConsulta) {
+        var tratamentoDTO = Optional.ofNullable(service.findByIdConsulta(idConsulta))
+                .map(TratamentoConverter::toDTO).orElse(null);
+
+        return new BaseResponse<>(tratamentoDTO);
+    }
+
 
     @DeleteMapping("/{id}")
     public BaseResponse<Void> delete(@PathVariable Long id) {

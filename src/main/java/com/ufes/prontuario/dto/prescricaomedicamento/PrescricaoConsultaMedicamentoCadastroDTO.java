@@ -11,8 +11,8 @@ import lombok.Setter;
 @Builder
 public class PrescricaoConsultaMedicamentoCadastroDTO {
 
-    private String dosagem;
+    private String medicamento;
     private String instrucaoUso;
     private Long idPrescricao;
-    private Long idMedicamento;
+    private String observacao;
 }

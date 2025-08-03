@@ -25,19 +25,17 @@ public class PrescricaoConsultaMedicamento {
     private Long id;
 
     @Column
-    private String dosagem;
+    private String medicamento;
+
+    @Column
+    private String observacao;
 
     @Column(name = "instrucao_uso")
     private String instrucaoUso;
 
-
     @OneToOne
     @JoinColumn(name = "id_prescricao")
     private Prescricao prescricao;
-
-    @OneToOne
-    @JoinColumn(name = "id_medicamento")
-    private Medicamento medicamento;
 
     @Embedded
     private Auditoria auditoria;
