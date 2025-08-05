@@ -21,7 +21,17 @@ public class Arquivo {
     @Column
     private String nome;
 
-    @Column
+    @Column(name = "arquivo", columnDefinition = "bytea")
     @Lob
     private byte[] arquivo;
+
+    @Column
+    private String descricao;
+
+    @Column
+    private String tipo;
+
+    @OneToOne
+    @JoinColumn(name = "id_consulta")
+    private Consulta consulta;
 }

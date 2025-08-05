@@ -13,5 +13,7 @@ public class ArquivoDTO {
 
     private Long id;
     private String nome;
-    private byte[] arquivo;
+    private String descricao;
+    private String tipo;
+    private Long idConsulta;
 }

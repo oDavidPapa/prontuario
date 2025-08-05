@@ -27,6 +27,10 @@ public class ExameService implements IBaseService<ExameCadastroDTO, Exame>{
         return this.repository.findAll();
     }
 
+    public List<Exame> findAllByConsulta(Long idConsulta) {
+        return this.repository.findAllByConsultaId(idConsulta);
+    }
+
     public Exame inserir(ExameCadastroDTO exameCadastroDTO) {
         return Optional.ofNullable(exameCadastroDTO)
                 .map(this::validarInsert)

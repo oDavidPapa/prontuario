@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
@@ -12,5 +13,7 @@ import lombok.Setter;
 public class ArquivoCadastroDTO {
 
     private String nome;
-    private byte[] arquivo;
+    private MultipartFile arquivo;
+    private Long idConsulta;
+    private String descricao;
 }

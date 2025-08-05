@@ -2,13 +2,17 @@ package com.ufes.prontuario.dto.arquivo;
 
 import com.ufes.prontuario.model.Arquivo;
 
+import java.io.IOException;
+
 public class ArquivoConverter {
 
-    public static Arquivo toEntity(ArquivoCadastroDTO arquivoCadastroDTO) {
+    public static Arquivo toEntity(ArquivoCadastroDTO arquivoCadastroDTO) throws IOException {
 
         var arquivo = new Arquivo();
-        arquivo.setArquivo(arquivo.getArquivo());
-        arquivo.setNome(arquivo.getNome());
+        arquivo.setArquivo(arquivoCadastroDTO.getArquivo().getBytes());
+        arquivo.setNome(arquivoCadastroDTO.getNome());
+        arquivo.setDescricao(arquivoCadastroDTO.getDescricao());
+        arquivo.setTipo(arquivoCadastroDTO.getArquivo().getContentType());
 
         return arquivo;
     }
@@ -16,7 +20,8 @@ public class ArquivoConverter {
     public static ArquivoDTO toDTO(Arquivo arquivo) {
         return ArquivoDTO.builder()
                 .id(arquivo.getId())
-                .arquivo(arquivo.getArquivo())
+                .tipo(arquivo.getTipo())
+                .idConsulta(arquivo.getConsulta().getId())
                 .nome(arquivo.getNome())
                 .build();
     }

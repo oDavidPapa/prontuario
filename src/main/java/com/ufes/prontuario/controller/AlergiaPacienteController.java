@@ -19,7 +19,6 @@ public class AlergiaPacienteController {
 
     private final AlergiaPacienteService service;
 
-
     @GetMapping("/{id}")
     public BaseResponse<AlergiaPacienteDTO> findById(@PathVariable Long id) {
         var alergiaPacienteDTO = Optional.ofNullable(service.findById(id))
