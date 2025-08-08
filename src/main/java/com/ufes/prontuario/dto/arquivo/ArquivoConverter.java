@@ -20,6 +20,7 @@ public class ArquivoConverter {
     public static ArquivoDTO toDTO(Arquivo arquivo) {
         return ArquivoDTO.builder()
                 .id(arquivo.getId())
+                .descricao(arquivo.getDescricao())
                 .tipo(arquivo.getTipo())
                 .idConsulta(arquivo.getConsulta().getId())
                 .nome(arquivo.getNome())

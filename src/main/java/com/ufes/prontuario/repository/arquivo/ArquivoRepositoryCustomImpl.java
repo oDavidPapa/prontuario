@@ -6,6 +6,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -62,6 +63,7 @@ public class ArquivoRepositoryCustomImpl implements ArquivoRepositoryCustom {
         }
     }
 
+    @Transactional
     @Override
     public boolean deleteById(Long id) {
         String sql = "DELETE FROM arquivo WHERE id = :id";
