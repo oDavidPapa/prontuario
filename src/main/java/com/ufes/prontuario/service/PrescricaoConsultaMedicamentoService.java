@@ -32,6 +32,11 @@ public class PrescricaoConsultaMedicamentoService implements IBaseService<Prescr
     }
 
 
+    public List<PrescricaoConsultaMedicamento> findAllByConsulta(Long idConsulta) {
+        return this.repository.findAllByPrescricaoConsultaId(idConsulta);
+    }
+
+
     public PrescricaoConsultaMedicamento inserir(PrescricaoConsultaMedicamentoCadastroDTO prescricaoConsultaMedicamentoCadastroDTO) {
         return Optional.ofNullable(prescricaoConsultaMedicamentoCadastroDTO)
                 .map(this::validarInsert)

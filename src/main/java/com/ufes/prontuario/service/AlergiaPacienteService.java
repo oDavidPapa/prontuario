@@ -33,6 +33,9 @@ public class AlergiaPacienteService implements IBaseService<AlergiaPacienteCadas
         return this.repository.findAll();
     }
 
+    public List<AlergiaPaciente> findAllByPaciente(Long idPaciente) {
+        return this.repository.findAllByPacienteId(idPaciente);
+    }
 
     public Page<AlergiaPaciente> filter(Long idPaciente, @Nullable Pageable pageable) {
         var specification = this.prepareSpecification(idPaciente);

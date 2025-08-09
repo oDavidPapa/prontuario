@@ -10,4 +10,7 @@ import java.util.List;
 public interface PrescricaoConsultaMedicamentoRepository extends JpaRepository<PrescricaoConsultaMedicamento, Long> {
 
     List<PrescricaoConsultaMedicamento> findAllByPrescricaoId(Long idPrescricao);
+
+    List<PrescricaoConsultaMedicamento> findAllByPrescricaoConsultaId(Long idConsulta);
+
 }
