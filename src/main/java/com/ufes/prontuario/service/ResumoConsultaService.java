@@ -1,11 +1,8 @@
 package com.ufes.prontuario.service;
 
-import com.ufes.prontuario.dto.resumoconsulta.DadosConsultaDTO;
-import com.ufes.prontuario.dto.resumoconsulta.DadosPacienteDTO;
-import com.ufes.prontuario.dto.resumoconsulta.ResumoConsultaDTO;
+import com.ufes.prontuario.dto.resumoconsulta.*;
 import com.ufes.prontuario.model.AlergiaPaciente;
 import com.ufes.prontuario.model.Exame;
-import com.ufes.prontuario.model.PrescricaoConsultaMedicamento;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -33,11 +30,12 @@ public class ResumoConsultaService {
         var paciente = consulta.getPaciente();
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-       var dataConsulta = consulta.getData().format(formatter);
+        var dataConsulta = consulta.getDataConsulta().format(formatter);
 
         var dadosConsultaDTO = DadosConsultaDTO.builder()
+                .idConsulta(consulta.getId())
                 .tipo(consulta.getTipo().getDescricao())
-                .medico(medico.getPessoa().getNome() +" / " + medico.getCrm())
+                .medico(medico.getPessoa().getNome() + " / " + medico.getCrm())
                 .especialidade(medico.getEspecialidade())
                 .dataHora(dataConsulta)
                 .build();
@@ -50,12 +48,38 @@ public class ResumoConsultaService {
                 .sexo(paciente.getPessoa().getSexo() == 'M' ? "Masculino" : "Feminino")
                 .build();
 
-        var diagnostico = diagnosticoService.findById(idConsulta);
-        var cids = cidService.findByDiagnostico(diagnostico.getId());
-        var prescricoes = prescricaoConsultaMedicamentoService.findAllByConsulta(idConsulta).stream().map(PrescricaoConsultaMedicamento::getMedicamento).toList();
+        var diagnostico = diagnosticoService.findByIdConsulta(idConsulta);
+        if (diagnostico != null) {
+
+            resumoConsulta.setDiagnostico(diagnostico.getDiagnostico());
+            var cids = cidService.findByDiagnostico(diagnostico.getId()).stream()
+                    .map(cid -> DadosCIDDTO.builder()
+                            .codigo(cid.getCodigo())
+                            .descricao(cid.getDescricao())
+                            .build()).toList();
+            resumoConsulta.setCids(cids);
+
+        }
+
+        var prescricoes = prescricaoConsultaMedicamentoService.findAllByConsulta(idConsulta).stream()
+                .map(pm -> DadosPrescricaoDTO.builder()
+                        .medicamento(pm.getMedicamento())
+                        .instrucoes(pm.getInstrucaoUso())
+                        .build()).collect(Collectors.toList());
         var tratamento = tratamentoService.findByIdConsulta(idConsulta);
+
+        if (tratamento != null) {
+            resumoConsulta.setTratamento(tratamento.getTratamento());
+        }
+
         var alergias = alergiaPacienteService.findAllByPaciente(paciente.getId()).stream().map(AlergiaPaciente::getDescricao).toList();
         var examesSolicitados = exameService.findAllByConsulta(idConsulta).stream().map(Exame::getDescricao).toList();
+
+        resumoConsulta.setDadosConsulta(dadosConsultaDTO);
+        resumoConsulta.setDadosPaciente(dadosPaciente);
+        resumoConsulta.setPrescricoes(prescricoes);
+        resumoConsulta.setExamesSolicitados(examesSolicitados);
+        resumoConsulta.setAlergias(alergias);
 
         return resumoConsulta;
     }

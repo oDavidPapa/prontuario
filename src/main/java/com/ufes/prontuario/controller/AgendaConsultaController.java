@@ -50,10 +50,11 @@ public class AgendaConsultaController {
             @RequestParam(required = false) String nomeMedico,
             @RequestParam(required = false) LocalDate dataInicio,
             @RequestParam(required = false) LocalDate dataFim,
+            @RequestParam(required = false) String cpfPaciente,
             Pageable pageable) {
 
         var agendas = this.service.filter(
-                nomePaciente, nomeMedico, dataInicio, dataFim, pageable);
+                nomePaciente, nomeMedico, dataInicio, dataFim, cpfPaciente, pageable);
 
         return new BaseResponse<>(agendas.getContent().stream()
                 .map(AgendaConsultaConverter::toDTO)

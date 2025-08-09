@@ -1,7 +1,5 @@
 package com.ufes.prontuario.controller;
 
-import com.ufes.prontuario.dto.endereco.EnderecoConverter;
-import com.ufes.prontuario.dto.endereco.EnderecoDTO;
 import com.ufes.prontuario.dto.resumoconsulta.ResumoConsultaDTO;
 import com.ufes.prontuario.service.ResumoConsultaService;
 import com.ufes.prontuario.util.BaseResponse;
@@ -10,8 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor

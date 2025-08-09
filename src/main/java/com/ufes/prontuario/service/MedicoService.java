@@ -8,6 +8,7 @@ import com.ufes.prontuario.exception.RecursoNaoEncontradoException;
 import com.ufes.prontuario.model.Medico;
 import com.ufes.prontuario.repository.MedicoRepository;
 import com.ufes.prontuario.specification.BaseSpecification;
+import com.ufes.prontuario.util.CodeUtils;
 import com.ufes.prontuario.util.PageUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -53,7 +54,7 @@ public class MedicoService implements IBaseService<MedicoCadastroDTO, Medico> {
                 .and(specification.findLikeByColumn("especialidade", especialidade))
                 .and(specification.findLikeByColumn("crm", crm))
                 .and(specification.findLikeBySubColumn("pessoa", "nome", nome))
-                .and(specification.findLikeBySubColumn("pessoa", "cpf", cpf));
+                .and(specification.findLikeBySubColumn("pessoa", "cpf", CodeUtils.getDigtsOnly(cpf)));
 
     }
 

@@ -12,9 +12,9 @@ import java.util.List;
 @NoArgsConstructor
 public class ResumoConsultaDTO {
 
-    private DadosPacienteDTO dadosPaciente;
     private DadosConsultaDTO dadosConsulta;
-    private List<CidDTO> cids;
+    private DadosPacienteDTO dadosPaciente;
+    private List<DadosCIDDTO> cids;
     private List<DadosPrescricaoDTO> prescricoes;
     private String tratamento;
     private List<String> examesSolicitados;

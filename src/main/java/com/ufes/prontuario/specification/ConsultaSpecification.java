@@ -12,14 +12,14 @@ public class ConsultaSpecification extends BaseSpecification<Consulta> {
     public Specification<Consulta> findByDataInicio(@Nullable LocalDate data) {
         return Optional.ofNullable(data)
                 .map(d -> (Specification<Consulta>) (root, query, builder) -> builder
-                        .greaterThanOrEqualTo(root.get("data"), d))
+                        .greaterThanOrEqualTo(root.get("dataConsulta"), d))
                 .orElse(null);
     }
 
     public Specification<Consulta> findByDataFim(@Nullable LocalDate data) {
         return Optional.ofNullable(data)
                 .map(d -> (Specification<Consulta>) (root, query, builder) -> builder
-                        .lessThanOrEqualTo(root.get("data"), d))
+                        .lessThanOrEqualTo(root.get("dataConsulta"), d))
                 .orElse(null);
     }
 }

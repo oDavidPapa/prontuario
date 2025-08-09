@@ -15,7 +15,7 @@ public class ConsultaConverter {
     public static Consulta toEntity(ConsultaCadastroDTO consultaCadastroDTO) {
 
         var consulta = new Consulta();
-        consulta.setData(LocalDateTime.now());
+        consulta.setDataConsulta(LocalDateTime.now());
         consulta.setTipo(TipoConsultaEnum.valueOf(consultaCadastroDTO.getTipo()));
         consulta.setAnamnese(consultaCadastroDTO.getAnamnese());
         consulta.setAuditoria(new Auditoria());
@@ -26,7 +26,7 @@ public class ConsultaConverter {
     public static ConsultaDTO toDTO(Consulta consulta) {
         return ConsultaDTO.builder()
                 .id(consulta.getId())
-                .data(consulta.getData())
+                .data(consulta.getDataConsulta())
                 .anamnese(consulta.getAnamnese())
                 .tipo(consulta.getTipo().getDescricao())
                 .tipoEnum(consulta.getTipo().name())

@@ -1,5 +1,6 @@
 package com.ufes.prontuario.dto.resumoconsulta;
 
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -7,7 +8,7 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class DadosPrescricaoDTO {
-    private String medicamento;
-    private String instrucoes;
+public class DadosCIDDTO {
+    private String descricao;
+    private String codigo;
 }

@@ -29,7 +29,7 @@ public class Consulta {
     private String anamnese;
 
     @Column
-    private LocalDateTime data;
+    private LocalDateTime dataConsulta;
 
     @Enumerated(EnumType.STRING)
     private TipoConsultaEnum tipo;

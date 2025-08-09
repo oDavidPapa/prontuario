@@ -10,6 +10,7 @@ import com.ufes.prontuario.exception.RecursoNaoEncontradoException;
 import com.ufes.prontuario.model.AgendaConsulta;
 import com.ufes.prontuario.repository.AgendaConsultaRepository;
 import com.ufes.prontuario.specification.BaseSpecification;
+import com.ufes.prontuario.util.CodeUtils;
 import com.ufes.prontuario.util.PageUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,19 +66,20 @@ public class AgendaConsultaService implements IBaseService<AgendaConsultaCadastr
     }
 
     public Page<AgendaConsulta> filter(String nomePaciente,
-                                       String nomeMedico, LocalDate dataInicio, LocalDate dataFim, Pageable pageable) {
-        var specification = this.prepareSpecification(nomePaciente, nomeMedico, dataInicio, dataFim);
+                                       String nomeMedico, LocalDate dataInicio, LocalDate dataFim, String cpfPaciente, Pageable pageable) {
+        var specification = this.prepareSpecification(nomePaciente, nomeMedico, dataInicio, dataFim, cpfPaciente);
 
         return this.repository.findAll(specification, PageUtils.preparePageable(pageable));
     }
 
-    private Specification<AgendaConsulta> prepareSpecification(String nomePaciente, String nomeMedico, LocalDate dataInicio, LocalDate dataFim) {
+    private Specification<AgendaConsulta> prepareSpecification(String nomePaciente, String nomeMedico, LocalDate dataInicio, LocalDate dataFim, String cpfPaciente) {
         final var specification = new BaseSpecification<AgendaConsulta>();
 
         return specification
-                .and(specification.findByDataInicio(dataInicio, "dataAgendamento"))
-                .and(specification.findByDataFim(dataFim, "dataAgendamento"))
+                .and(specification.subColumnfindByDataInicio(dataInicio,"agenda", "dataAgendamento"))
+                .and(specification.subColumnfindByDataFim(dataFim, "agenda", "dataAgendamento"))
                 .and(specification.findLikeBySubSubColumn("paciente", "pessoa", "nome", nomePaciente))
+                .and(specification.findLikeBySubSubColumn("paciente", "pessoa", "cpf", CodeUtils.getDigtsOnly(cpfPaciente)))
                 .and(specification.findLikeBySubSubColumn("medico", "pessoa", "nome", nomeMedico));
     }
 

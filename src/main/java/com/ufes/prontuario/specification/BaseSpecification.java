@@ -1,10 +1,7 @@
 package com.ufes.prontuario.specification;
 
 import com.ufes.prontuario.model.Consulta;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.*;
 import lombok.NonNull;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.Nullable;
@@ -112,6 +109,24 @@ public class BaseSpecification<T> implements Specification<T> {
         return Optional.ofNullable(data)
                 .map(d -> (Specification<T>) (root, query, builder) -> builder
                         .lessThanOrEqualTo(root.get(campoNome), d))
+                .orElse(null);
+    }
+
+    public Specification<T> subColumnfindByDataInicio(@Nullable LocalDate data, String subColumn, String campoNome) {
+        return Optional.ofNullable(data)
+                .map(d -> (Specification<T>) (root, query, builder) -> {
+                    Join<Object, Object> join = root.join(subColumn);
+                    return builder.greaterThanOrEqualTo(join.get(campoNome), d);
+                })
+                .orElse(null);
+    }
+
+    public Specification<T> subColumnfindByDataFim(@Nullable LocalDate data, String subColumn, String campoNome) {
+        return Optional.ofNullable(data)
+                .map(d -> (Specification<T>) (root, query, builder) -> {
+                    Join<Object, Object> join = root.join(subColumn);
+                    return builder.lessThanOrEqualTo(join.get(campoNome), d);
+                })
                 .orElse(null);
     }
 }

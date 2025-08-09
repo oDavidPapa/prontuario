@@ -36,11 +36,11 @@ public class ConsultaController {
             @RequestParam(required = false) String nomeMedico,
             @RequestParam(required = false) LocalDate dataInicio,
             @RequestParam(required = false) LocalDate dataFim,
-            @RequestParam(required = false) String tipoConsulta,
+            @RequestParam(required = false) String cpfPaciente,
             Pageable pageable) {
 
         var consultas = this.service.filter(idConsulta,
-                nomePaciente, nomeMedico, dataInicio, dataFim, tipoConsulta, pageable);
+                nomePaciente, nomeMedico, dataInicio, dataFim, cpfPaciente, pageable);
 
         return new BaseResponse<>(consultas.getContent().stream()
                 .map(ConsultaConverter::toDTO)

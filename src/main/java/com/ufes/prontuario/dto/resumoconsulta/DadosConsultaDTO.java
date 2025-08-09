@@ -8,6 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class DadosConsultaDTO {
+    private Long idConsulta;
     private String tipo;
     private String medico;
     private String especialidade;
