@@ -1,10 +1,7 @@
 package com.ufes.prontuario.controller;
 
 import com.ufes.prontuario.config.security.jwt.JwtService;
-import com.ufes.prontuario.dto.auth.AuthenticationConverter;
-import com.ufes.prontuario.dto.auth.AuthenticationRequestDTO;
-import com.ufes.prontuario.dto.auth.AuthenticationResponseDTO;
-import com.ufes.prontuario.dto.auth.RegisterUserDTO;
+import com.ufes.prontuario.dto.auth.*;
 import com.ufes.prontuario.dto.usuario.UsuarioConverter;
 import com.ufes.prontuario.dto.usuario.UsuarioDTO;
 import com.ufes.prontuario.model.Usuario;
@@ -15,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,6 +50,13 @@ public class AuthenticationController {
                 .builder().token(token).build());
     }
 
+    @PostMapping("/alterar-senha")
+    public BaseResponse<Void> alterarSenha(@RequestBody AlteracaoSenhaDTO alteracaoSenhaDTO, Authentication auth) {
+        String username = auth.getName();
+        usuarioService.alterarSenha(alteracaoSenhaDTO.getCurrentPassword(), alteracaoSenhaDTO.getNewPassword(), username);
+        return new BaseResponse<>(null);
+    }
+
 
     @GetMapping
     public BaseResponse<UsuarioDTO> filter(
@@ -76,8 +81,6 @@ public class AuthenticationController {
                 .map(UsuarioConverter::toDTO)
                 .orElse(null));
     }
-
-
 
     @GetMapping("/{id}")
     public BaseResponse<UsuarioDTO> findById(@PathVariable Long id) {

@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -98,6 +99,7 @@ public class UsuarioService implements IBaseService<UsuarioCadastroDTO, Usuario>
         return this.repository.findByPessoaId(idPessoa);
     }
 
+
     public UsuarioDTO completeDTO(UsuarioDTO usuarioDTO) {
 
         var contato = this.contatoService.getContatoPrincipalByPessoa(usuarioDTO.getPessoa().getId());
@@ -131,6 +133,21 @@ public class UsuarioService implements IBaseService<UsuarioCadastroDTO, Usuario>
                 .and(specification.findById(id))
                 .and(specification.findLikeBySubColumn("pessoa", "nome", nome))
                 .and(specification.findLikeByColumn("login", login));
+    }
+
+    @Transactional
+    public void alterarSenha(String senhaAntiga, String senhaNova, String login) {
+        var usuario = this.repository.findByUsuarioLogin(login);
+        if (usuario == null) {
+            throw new UsernameNotFoundException("Erro ao tentar alterar senha");
+        }
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        if (!passwordEncoder.matches(senhaAntiga, usuario.getPassword())) {
+            throw new UsernameNotFoundException("Erro ao tentar alterar senha");
+        }
+        String novaSenhaEncriptada = passwordEncoder.encode(senhaNova);
+        usuario.setSenha(novaSenhaEncriptada);
+        this.repository.save(usuario);
     }
 
     public UserDetails findByLogin(String login) {
