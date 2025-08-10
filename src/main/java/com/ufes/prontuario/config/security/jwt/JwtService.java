@@ -36,6 +36,7 @@ public class JwtService {
                     .withIssuer("auth-prontuario")
                     .withSubject(usuario.getLogin())
                     .withClaim("roles", roles)
+                    .withClaim("nome", usuario.getPessoa().getNome())
                     .withExpiresAt(genExpirationDate())
                     .sign(algorithm);
 
