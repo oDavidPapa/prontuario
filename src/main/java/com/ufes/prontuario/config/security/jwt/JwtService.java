@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,9 +26,16 @@ public class JwtService {
     public String generateToken(Usuario usuario) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
+
+            List<String> roles = usuario.getAuthorities()
+                    .stream()
+                    .map(auth -> auth.getAuthority())
+                    .collect(Collectors.toList());
+
             return JWT.create()
                     .withIssuer("auth-prontuario")
                     .withSubject(usuario.getLogin())
+                    .withClaim("roles", roles)
                     .withExpiresAt(genExpirationDate())
                     .sign(algorithm);
 
@@ -48,6 +57,7 @@ public class JwtService {
         }
     }
 
+    // TODO: alterar tempo de expiração;
     private Instant genExpirationDate() {
         return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
     }
