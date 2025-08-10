@@ -167,10 +167,14 @@ public class AgendaConsultaService implements IBaseService<AgendaConsultaCadastr
     @Override
     public AgendaConsulta prepareUpdate(AgendaConsultaCadastroDTO dtoCadastro, Long id) {
         var agendaConsulta = this.findById(id);
+        var agenda = agendaConsulta.getAgenda();
+
+        agenda.setDataAgendamento(dtoCadastro.getDataAgendamento());
+        agenda.setDescricao(dtoCadastro.getDescricao());
+        this.agendaService.save(agenda);
 
         agendaConsulta.setMedico(medicoService.findById(dtoCadastro.getIdMedico()));
         agendaConsulta.setPaciente(pacienteService.findById(dtoCadastro.getIdPaciente()));
-
         return agendaConsulta;
     }
 }

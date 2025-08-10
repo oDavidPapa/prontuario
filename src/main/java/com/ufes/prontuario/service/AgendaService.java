@@ -34,6 +34,10 @@ public class AgendaService implements IBaseService<AgendaCadastroDTO, Agenda> {
                 .orElseThrow();
     }
 
+    public void save(Agenda agenda) {
+        this.repository.save(agenda);
+    }
+
     public Agenda update(Long id, AgendaCadastroDTO agendaCadastroDTO) {
         return Optional.ofNullable(agendaCadastroDTO)
                 .map(aDto -> validarUpdate(aDto, id))

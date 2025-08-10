@@ -43,6 +43,14 @@ public class AgendaConsultaController {
         return new BaseResponse<>(agendaConsultaDTO);
     }
 
+    @PutMapping("/{id}")
+    public BaseResponse<AgendaConsultaDTO> update(@PathVariable Long id, @RequestBody AgendaConsultaCadastroDTO agendaConsultaCadastroDTO) {
+        var agendaConsultaDTO = Optional.ofNullable(this.service.update(id, agendaConsultaCadastroDTO))
+                .map(AgendaConsultaConverter::toDTO).orElse(null);
+
+        return new BaseResponse<>(agendaConsultaDTO);
+    }
+
 
     @GetMapping
     public BaseResponse<AgendaConsultaDTO> filter(
