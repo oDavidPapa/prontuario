@@ -29,7 +29,7 @@ public class SecurityConfiguration {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/actuator/health").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/auth/autenticar", "/api/auth/registrar").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/autenticar", "/api/auth/registrar", "/api/auth/recuperar-senha").permitAll()
                         .requestMatchers(HttpMethod.PATCH, "/api/auth/alterar-status/**").hasRole("ADMINISTRATIVO")
                         .requestMatchers(HttpMethod.PATCH, "/api/auth/alterar-senha").hasAnyRole("ADMINISTRATIVO", "MEDICO")
                         .requestMatchers(HttpMethod.GET, "/pessoas/**", "/pacientes/**", "/contatos/**", "/medicos/**", "/consultas/**", "/alergias-paciente/**", "/tratamentos/**", "/diagnosticos/**", "/agenda-consulta/**").hasAnyRole("MEDICO","ADMINISTRATIVO")

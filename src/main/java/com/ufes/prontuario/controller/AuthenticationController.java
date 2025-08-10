@@ -57,6 +57,11 @@ public class AuthenticationController {
         return new BaseResponse<>(null);
     }
 
+    @PostMapping("/recuperar-senha")
+    public BaseResponse<Void> recuperarSenha(@RequestBody RecuperacaoSenhaDTO recuperacaoSenhaDTO) {
+        usuarioService.recuperarSenha(recuperacaoSenhaDTO);
+        return new BaseResponse<>(null);
+    }
 
     @GetMapping
     public BaseResponse<UsuarioDTO> filter(

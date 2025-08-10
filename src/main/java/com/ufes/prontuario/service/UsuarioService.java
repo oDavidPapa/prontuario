@@ -1,5 +1,6 @@
 package com.ufes.prontuario.service;
 
+import com.ufes.prontuario.dto.auth.RecuperacaoSenhaDTO;
 import com.ufes.prontuario.dto.contato.ContatoConverter;
 import com.ufes.prontuario.dto.usuario.UsuarioCadastroDTO;
 import com.ufes.prontuario.dto.usuario.UsuarioConverter;
@@ -10,6 +11,7 @@ import com.ufes.prontuario.exception.RecursoNaoEncontradoException;
 import com.ufes.prontuario.model.Usuario;
 import com.ufes.prontuario.repository.UsuarioRepository;
 import com.ufes.prontuario.specification.BaseSpecification;
+import com.ufes.prontuario.util.CodeUtils;
 import com.ufes.prontuario.util.PageUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -32,6 +34,7 @@ public class UsuarioService implements IBaseService<UsuarioCadastroDTO, Usuario>
     private final PessoaService pessoaService;
     private final ContatoService contatoService;
     private final MedicoService medicoService;
+    private final EmailService emailService;
 
 
     public Usuario findById(Long id) {
@@ -46,7 +49,7 @@ public class UsuarioService implements IBaseService<UsuarioCadastroDTO, Usuario>
     @Transactional
     public Usuario salvar(UsuarioCadastroDTO usuarioCadastro) {
 
-        if(RoleEnum.ADMINISTRATIVO.name().equals(usuarioCadastro.getRole())) {
+        if (RoleEnum.ADMINISTRATIVO.name().equals(usuarioCadastro.getRole())) {
             var pessoa = this.pessoaService.inserir(usuarioCadastro.getPessoaCadastro());
             usuarioCadastro.setIdPessoa(pessoa.getId());
 
@@ -72,7 +75,7 @@ public class UsuarioService implements IBaseService<UsuarioCadastroDTO, Usuario>
         var contatoCadastro = usuarioCadastro.getContatoCadastro();
         var contato = this.contatoService.getContatoPrincipalByPessoa(pessoa.getId());
 
-        if(Objects.nonNull(contato)) {
+        if (Objects.nonNull(contato)) {
             this.contatoService.update(contato.getId(), contatoCadastro);
         } else {
             contatoCadastro.setIdPessoa(pessoa.getId());
@@ -103,7 +106,7 @@ public class UsuarioService implements IBaseService<UsuarioCadastroDTO, Usuario>
     public UsuarioDTO completeDTO(UsuarioDTO usuarioDTO) {
 
         var contato = this.contatoService.getContatoPrincipalByPessoa(usuarioDTO.getPessoa().getId());
-        if(Objects.nonNull(contato)) {
+        if (Objects.nonNull(contato)) {
             usuarioDTO.setContato(ContatoConverter.toDTO(contato));
         }
 
@@ -141,13 +144,30 @@ public class UsuarioService implements IBaseService<UsuarioCadastroDTO, Usuario>
         if (usuario == null) {
             throw new UsernameNotFoundException("Erro ao tentar alterar senha");
         }
+        setNovaSenha(true, senhaAntiga, senhaNova, usuario);
+    }
+
+    private void setNovaSenha(boolean verificaSenhaAntiga, String senhaAntiga, String senhaNova, Usuario usuario) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        if (!passwordEncoder.matches(senhaAntiga, usuario.getPassword())) {
+        if (verificaSenhaAntiga && !passwordEncoder.matches(senhaAntiga, usuario.getPassword())) {
             throw new UsernameNotFoundException("Erro ao tentar alterar senha");
         }
         String novaSenhaEncriptada = passwordEncoder.encode(senhaNova);
         usuario.setSenha(novaSenhaEncriptada);
         this.repository.save(usuario);
+    }
+
+    @Transactional
+    public void recuperarSenha(RecuperacaoSenhaDTO recuperacaoSenhaDTO) {
+        var usuario = this.repository.findFirstUsuarioByEmail(recuperacaoSenhaDTO.getEmail());
+        var novaSenha = CodeUtils.gerarSenhaAlfanumerica(6);
+        this.setNovaSenha(false, "", novaSenha, usuario);
+
+        if (Objects.nonNull(usuario)) {
+            String assunto = "Recuperação de Senha";
+            String texto = String.format("Olá,\n\nSua nova senha temporária é: %s\nPor favor, altere-a após o login.", novaSenha);
+            emailService.enviarEmail(recuperacaoSenhaDTO.getEmail(), assunto, texto);
+        }
     }
 
     public UserDetails findByLogin(String login) {
@@ -178,4 +198,5 @@ public class UsuarioService implements IBaseService<UsuarioCadastroDTO, Usuario>
     public Usuario prepareUpdate(UsuarioCadastroDTO dtoCadastro, Long id) {
         return null;
     }
+
 }
