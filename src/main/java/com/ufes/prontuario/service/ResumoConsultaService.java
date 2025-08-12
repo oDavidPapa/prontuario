@@ -4,6 +4,7 @@ import com.ufes.prontuario.dto.resumoconsulta.*;
 import com.ufes.prontuario.model.AlergiaPaciente;
 import com.ufes.prontuario.model.Exame;
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
+@Log4j2
 public class ResumoConsultaService {
     private final ConsultaService consultaService;
     private final DiagnosticoService diagnosticoService;
@@ -24,6 +26,7 @@ public class ResumoConsultaService {
 
 
     public ResumoConsultaDTO getResumoConsulta(Long idConsulta) {
+        log.info("Carregando resumo de consulta id={}", idConsulta);
         var resumoConsulta = new ResumoConsultaDTO();
         var consulta = consultaService.findById(idConsulta);
         var medico = consulta.getMedico();

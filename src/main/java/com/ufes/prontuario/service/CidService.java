@@ -7,6 +7,7 @@ import com.ufes.prontuario.model.Cid;
 import com.ufes.prontuario.model.Diagnostico;
 import com.ufes.prontuario.repository.CidRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,12 +15,14 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @Service
+@Log4j2
 public class CidService implements IBaseService<CidCadastroDTO, Cid>{
 
     private final CidRepository repository;
     private final DiagnosticoService diagnosticService;
 
     public Cid findById(Long id) {
+        log.info("Buscando CID id={}", id);
         return this.repository.findById(id)
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Cid", id));
     }
@@ -29,10 +32,12 @@ public class CidService implements IBaseService<CidCadastroDTO, Cid>{
     }
 
     public List<Cid> findByDiagnostico(Long idDiagnostico) {
+        log.info("Buscando CID by Diagnostico id={}", idDiagnostico);
         return this.repository.findAllByDiagnosticoId(idDiagnostico);
     }
 
     public Cid inserir(CidCadastroDTO cidCadastroDTO) {
+        log.info("Inserindo CID...");
         return Optional.ofNullable(cidCadastroDTO)
                 .map(this::validarInsert)
                 .map(this::prepareInsert)
@@ -41,6 +46,8 @@ public class CidService implements IBaseService<CidCadastroDTO, Cid>{
     }
 
     public Cid update(Long id, CidCadastroDTO cidCadastroDTO) {
+        log.info("Update CID id={}", id);
+
         return Optional.ofNullable(cidCadastroDTO)
                 .map(dDto -> validarUpdate(dDto, id))
                 .map(cid -> prepareUpdate(cid ,id))
@@ -49,6 +56,7 @@ public class CidService implements IBaseService<CidCadastroDTO, Cid>{
     }
 
     public void delete(Long id) {
+        log.info("Delete CID id={}", id);
         var cid = this.findById(id);
 
         Optional.ofNullable(cid)

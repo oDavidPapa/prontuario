@@ -13,6 +13,7 @@ import com.ufes.prontuario.specification.BaseSpecification;
 import com.ufes.prontuario.util.CodeUtils;
 import com.ufes.prontuario.util.PageUtils;
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +28,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
+@Log4j2
 public class AgendaConsultaService implements IBaseService<AgendaConsultaCadastroDTO, AgendaConsulta> {
 
     private final AgendaConsultaRepository repository;
@@ -110,6 +112,7 @@ public class AgendaConsultaService implements IBaseService<AgendaConsultaCadastr
     }
 
     public AgendaConsulta update(Long id, AgendaConsultaCadastroDTO agendaConsultaCadastroDTO) {
+        log.info("Update agenda consulta id={}", id);
         return Optional.ofNullable(agendaConsultaCadastroDTO)
                 .map(acDto -> validarUpdate(acDto, id))
                 .map(agendaConsulta -> prepareUpdate(agendaConsulta, id))

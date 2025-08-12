@@ -7,6 +7,7 @@ import com.ufes.prontuario.exception.RecursoNaoEncontradoException;
 import com.ufes.prontuario.model.Arquivo;
 import com.ufes.prontuario.repository.arquivo.ArquivoRepositoryCustom;
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,12 +17,14 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @Service
+@Log4j2
 public class ArquivoService implements IBaseService<ArquivoCadastroDTO, Arquivo> {
 
     private final ArquivoRepositoryCustom arquivoRepositoryCustom;
     private final ConsultaService consultaService;
 
     public Arquivo salvarArquivo(ArquivoCadastroDTO dto) throws IOException {
+        log.info("Salvando arquivo");
         return arquivoRepositoryCustom.insertAndReturnArquivo(
                 dto.getNome(),
                 dto.getArquivo().getBytes(),
@@ -32,6 +35,7 @@ public class ArquivoService implements IBaseService<ArquivoCadastroDTO, Arquivo>
     }
 
     public Arquivo upload(MultipartFile arquivo, String nome, String descricao, Long idConsulta) {
+        log.info("Upload arquivo nome={}", nome);
         try {
             var arquivoCadatroDTO = ArquivoCadastroDTO.builder()
                     .arquivo(arquivo)
@@ -46,12 +50,14 @@ public class ArquivoService implements IBaseService<ArquivoCadastroDTO, Arquivo>
     }
 
     public void deletarPorId(Long id) {
+        log.info("Deletando arquivo id={}", id);
         if (!arquivoRepositoryCustom.deleteById(id)) {
             throw new RecursoNaoEncontradoException("Arquivo", id);
         }
     }
 
     public Arquivo findById(Long id) {
+        log.info("Buscando arquivo id={}", id);
         return arquivoRepositoryCustom.findById(id)
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Arquivo", id));
     }

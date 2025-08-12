@@ -2,10 +2,7 @@ package com.ufes.prontuario.dto.pessoa;
 
 import com.ufes.prontuario.dto.endereco.EnderecoDTO;
 import com.ufes.prontuario.dto.usuario.UsuarioDTO;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 
@@ -13,6 +10,7 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @Builder
+@NoArgsConstructor
 public class PessoaDTO {
 
     private Long id;

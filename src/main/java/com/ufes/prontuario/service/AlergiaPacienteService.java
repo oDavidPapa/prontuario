@@ -8,6 +8,7 @@ import com.ufes.prontuario.repository.AlergiaPacienteRepository;
 import com.ufes.prontuario.specification.BaseSpecification;
 import com.ufes.prontuario.util.PageUtils;
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -19,12 +20,14 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @Service
+@Log4j2
 public class AlergiaPacienteService implements IBaseService<AlergiaPacienteCadastroDTO, AlergiaPaciente> {
 
     private final AlergiaPacienteRepository repository;
     private final PacienteService pacienteService;
 
     public AlergiaPaciente findById(Long id) {
+        log.info("Buscando alergia paciente id={}", id);
         return this.repository.findById(id)
                 .orElseThrow(() -> new RecursoNaoEncontradoException("AlergiaPaciente", id));
     }
@@ -34,10 +37,12 @@ public class AlergiaPacienteService implements IBaseService<AlergiaPacienteCadas
     }
 
     public List<AlergiaPaciente> findAllByPaciente(Long idPaciente) {
+        log.info("Buscando alergias by paciente id={}", idPaciente);
         return this.repository.findAllByPacienteId(idPaciente);
     }
 
     public Page<AlergiaPaciente> filter(Long idPaciente, @Nullable Pageable pageable) {
+        log.info("Listagem alergias paciente idPaciente={}", idPaciente);
         var specification = this.prepareSpecification(idPaciente);
 
         return repository.findAll(specification, PageUtils.preparePageable(pageable));
@@ -50,6 +55,8 @@ public class AlergiaPacienteService implements IBaseService<AlergiaPacienteCadas
     }
 
     public AlergiaPaciente inserir(AlergiaPacienteCadastroDTO alergiaPacienteCadastroDTO) {
+        log.info("Inserir Alergia paciente...");
+
         return Optional.ofNullable(alergiaPacienteCadastroDTO)
                 .map(this::validarInsert)
                 .map(this::prepareInsert)
@@ -58,6 +65,8 @@ public class AlergiaPacienteService implements IBaseService<AlergiaPacienteCadas
     }
 
     public AlergiaPaciente update(Long id, AlergiaPacienteCadastroDTO alergiaPacienteCadastroDTO) {
+        log.info("Update Alergia paciente id={}", id);
+
         return Optional.ofNullable(alergiaPacienteCadastroDTO)
                 .map(aDto -> validarUpdate(aDto, id))
                 .map(alergia -> prepareUpdate(alergia, id))
@@ -66,6 +75,7 @@ public class AlergiaPacienteService implements IBaseService<AlergiaPacienteCadas
     }
 
     public void delete(Long id) {
+        log.info("Delete Alergia paciente id={}", id);
         var alergia = this.findById(id);
 
         Optional.ofNullable(alergia)

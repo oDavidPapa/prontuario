@@ -13,6 +13,7 @@ import com.ufes.prontuario.specification.BaseSpecification;
 import com.ufes.prontuario.util.CodeUtils;
 import com.ufes.prontuario.util.PageUtils;
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -27,6 +28,7 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @Service
+@Log4j2
 public class PacienteService implements IBaseService<PacienteCadastroDTO, Paciente> {
 
     private final PacienteRepository repository;
@@ -36,8 +38,14 @@ public class PacienteService implements IBaseService<PacienteCadastroDTO, Pacien
 
 
     public Paciente findById(Long id) {
+        log.info("Buscando paciente id={}", id);
         return this.repository.findById(id)
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Paciente", id));
+    }
+
+    public Paciente findByConsultaId(Long idConsulta) {
+        log.info("Buscando paciente by consulta id={}", idConsulta);
+        return this.repository.findByConsultaId(idConsulta);
     }
 
     public List<Paciente> listar() {
@@ -82,6 +90,8 @@ public class PacienteService implements IBaseService<PacienteCadastroDTO, Pacien
 
     @Transactional
     public Paciente inserir(PacienteCadastroDTO pacienteCadastroDTO) {
+        log.info("Inserindo paciente...");
+
         return Optional.ofNullable(pacienteCadastroDTO)
                 .map(this::validarInsert)
                 .map(this::prepareInsert)
@@ -90,6 +100,7 @@ public class PacienteService implements IBaseService<PacienteCadastroDTO, Pacien
     }
 
     public Paciente update(Long id, PacienteCadastroDTO pacienteCadastroDTO) {
+        log.info("Update paciente id={}", id);
         return Optional.ofNullable(pacienteCadastroDTO)
                 .map(pDto -> validarUpdate(pDto, id))
                 .map(paciente -> prepareUpdate(paciente, id))
@@ -98,6 +109,7 @@ public class PacienteService implements IBaseService<PacienteCadastroDTO, Pacien
     }
 
     public void delete(Long id) {
+        log.info("Delete paciente id={}", id);
         var paciente = this.findById(id);
 
         Optional.ofNullable(paciente)

@@ -8,6 +8,7 @@ import com.ufes.prontuario.repository.PessoaRepository;
 import com.ufes.prontuario.specification.BaseSpecification;
 import com.ufes.prontuario.util.PageUtils;
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -18,6 +19,7 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @Service
+@Log4j2
 public class PessoaService implements IBaseService<PessoaCadastroDTO, Pessoa>{
 
     private final PessoaRepository repository;
@@ -30,8 +32,8 @@ public class PessoaService implements IBaseService<PessoaCadastroDTO, Pessoa>{
     public List<Pessoa> listar() {
         return this.repository.findAll();
     }
-
     public Pessoa inserir(PessoaCadastroDTO pessoaCadastroDTO) {
+        log.info("Inserindo Pessoa...");
         return Optional.ofNullable(pessoaCadastroDTO)
                 .map(this::validarInsert)
                 .map(this::prepareInsert)
@@ -40,6 +42,7 @@ public class PessoaService implements IBaseService<PessoaCadastroDTO, Pessoa>{
     }
 
     public Page<Pessoa> filter(Long id, String nome, String cpf, Pageable pageable) {
+        log.info("Filtrando Pessoas...");
         var specification = this.prepareSpecification(id, nome, cpf);
 
         return this.repository.findAll(specification, PageUtils.preparePageable(pageable));
@@ -56,6 +59,7 @@ public class PessoaService implements IBaseService<PessoaCadastroDTO, Pessoa>{
     }
 
     public Pessoa update(Long id, PessoaCadastroDTO pessoaCadastroDTO) {
+        log.info("Update Pessoa id: {}", id);
         return Optional.ofNullable(pessoaCadastroDTO)
                 .map(pDto -> validarUpdate(pDto, id))
                 .map(pessoa -> prepareUpdate(pessoa ,id))

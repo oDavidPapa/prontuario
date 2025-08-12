@@ -6,6 +6,7 @@ import com.ufes.prontuario.exception.RecursoNaoEncontradoException;
 import com.ufes.prontuario.model.Agenda;
 import com.ufes.prontuario.repository.AgendaRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @Service
+@Log4j2
 public class AgendaService implements IBaseService<AgendaCadastroDTO, Agenda> {
 
     private final AgendaRepository repository;
@@ -27,6 +29,7 @@ public class AgendaService implements IBaseService<AgendaCadastroDTO, Agenda> {
     }
 
     public Agenda inserir(AgendaCadastroDTO agendaCadastroDTO) {
+        log.info("Inserir agenda...");
         return Optional.ofNullable(agendaCadastroDTO)
                 .map(this::validarInsert)
                 .map(this::prepareInsert)
@@ -39,6 +42,7 @@ public class AgendaService implements IBaseService<AgendaCadastroDTO, Agenda> {
     }
 
     public Agenda update(Long id, AgendaCadastroDTO agendaCadastroDTO) {
+        log.info("Update agenda id={}", id);
         return Optional.ofNullable(agendaCadastroDTO)
                 .map(aDto -> validarUpdate(aDto, id))
                 .map(agenda -> prepareUpdate(agenda ,id))
@@ -47,6 +51,7 @@ public class AgendaService implements IBaseService<AgendaCadastroDTO, Agenda> {
     }
 
     public void delete(Long id) {
+        log.info("Delete agenda id={}", id);
         var agenda = this.findById(id);
 
         Optional.ofNullable(agenda)

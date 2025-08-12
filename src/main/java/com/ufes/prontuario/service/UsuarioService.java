@@ -14,6 +14,7 @@ import com.ufes.prontuario.specification.BaseSpecification;
 import com.ufes.prontuario.util.CodeUtils;
 import com.ufes.prontuario.util.PageUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -28,6 +29,7 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class UsuarioService implements IBaseService<UsuarioCadastroDTO, Usuario> {
 
     private final UsuarioRepository repository;
@@ -38,17 +40,20 @@ public class UsuarioService implements IBaseService<UsuarioCadastroDTO, Usuario>
 
 
     public Usuario findById(Long id) {
+        log.info("Buscando usuario  id={}", id);
+
         return this.repository.findById(id)
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Usuario", id));
     }
 
     public Usuario findByUsuarioLogin(String login) {
+        log.info("Buscando usuario  by login= {}", login);
         return this.repository.findByUsuarioLogin(login);
     }
 
     @Transactional
     public Usuario salvar(UsuarioCadastroDTO usuarioCadastro) {
-
+        log.info("Salvando usuaário...");
         if (RoleEnum.ADMINISTRATIVO.name().equals(usuarioCadastro.getRole())) {
             var pessoa = this.pessoaService.inserir(usuarioCadastro.getPessoaCadastro());
             usuarioCadastro.setIdPessoa(pessoa.getId());
@@ -69,7 +74,7 @@ public class UsuarioService implements IBaseService<UsuarioCadastroDTO, Usuario>
 
     @Transactional
     public Usuario update(Long id, UsuarioCadastroDTO usuarioCadastro) {
-
+        log.info("Update usuario id={}", id);
         var pessoa = this.pessoaService.update(usuarioCadastro.getIdPessoa(), usuarioCadastro.getPessoaCadastro());
 
         var contatoCadastro = usuarioCadastro.getContatoCadastro();
@@ -121,6 +126,7 @@ public class UsuarioService implements IBaseService<UsuarioCadastroDTO, Usuario>
 
 
     public Usuario alterarStatus(Long idUsuario) {
+        log.info("Alterando status usuario id={}", idUsuario);
         var usuario = this.findById(idUsuario);
         var status = StatusEnum.ATIVO.equals(usuario.getStatus()) ? StatusEnum.INATIVO : StatusEnum.ATIVO;
 
@@ -140,8 +146,11 @@ public class UsuarioService implements IBaseService<UsuarioCadastroDTO, Usuario>
 
     @Transactional
     public void alterarSenha(String senhaAntiga, String senhaNova, String login) {
+        log.info("Alterando senha usuario login={}", login);
+
         var usuario = this.repository.findByUsuarioLogin(login);
         if (usuario == null) {
+            log.error("Usuario não encontrado.");
             throw new UsernameNotFoundException("Erro ao tentar alterar senha");
         }
         setNovaSenha(true, senhaAntiga, senhaNova, usuario);
@@ -159,6 +168,8 @@ public class UsuarioService implements IBaseService<UsuarioCadastroDTO, Usuario>
 
     @Transactional
     public void recuperarSenha(RecuperacaoSenhaDTO recuperacaoSenhaDTO) {
+        log.info("Recuperando senha do usuario...");
+
         var usuario = this.repository.findFirstUsuarioByEmail(recuperacaoSenhaDTO.getEmail());
         var novaSenha = CodeUtils.gerarSenhaAlfanumerica(6);
         this.setNovaSenha(false, "", novaSenha, usuario);

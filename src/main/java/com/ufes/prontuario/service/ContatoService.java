@@ -9,6 +9,7 @@ import com.ufes.prontuario.repository.ContatoRepository;
 import com.ufes.prontuario.specification.BaseSpecification;
 import com.ufes.prontuario.util.PageUtils;
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,12 +21,14 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @Service
+@Log4j2
 public class ContatoService implements IBaseService<ContatoCadastroDTO, Contato> {
 
     private final ContatoRepository repository;
     private final PessoaService pessoaService;
 
     public Contato findById(Long id) {
+        log.info("Buscando contato id={}", id);
         return this.repository.findById(id)
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Contato", id));
     }
@@ -45,11 +48,12 @@ public class ContatoService implements IBaseService<ContatoCadastroDTO, Contato>
 
         return specification
                 .and(specification.findLikeByColumn("tipoContato", tipoContato))
-                .and(specification.findBySubColumnId( "pessoa", "id", idPessoa));
+                .and(specification.findBySubColumnId("pessoa", "id", idPessoa));
 
     }
 
     public Contato inserir(ContatoCadastroDTO contatoCadastroDTO) {
+        log.info("Inserindo contato...");
         return Optional.ofNullable(contatoCadastroDTO)
                 .map(this::validarInsert)
                 .map(this::prepareInsert)
@@ -58,14 +62,16 @@ public class ContatoService implements IBaseService<ContatoCadastroDTO, Contato>
     }
 
     public Contato update(Long id, ContatoCadastroDTO contatoCadastroDTO) {
+        log.info("Update contato id={}", id);
         return Optional.ofNullable(contatoCadastroDTO)
                 .map(aDto -> validarUpdate(aDto, id))
-                .map(contato -> prepareUpdate(contato ,id))
+                .map(contato -> prepareUpdate(contato, id))
                 .map(this.repository::save)
                 .orElseThrow();
     }
 
     public void delete(Long id) {
+        log.info("Delete contato id={}", id);
         var contato = this.findById(id);
 
         Optional.ofNullable(contato)

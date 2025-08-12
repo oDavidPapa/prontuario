@@ -11,6 +11,7 @@ import com.ufes.prontuario.specification.BaseSpecification;
 import com.ufes.prontuario.util.CodeUtils;
 import com.ufes.prontuario.util.PageUtils;
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -23,6 +24,7 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @Service
+@Log4j2
 public class MedicoService implements IBaseService<MedicoCadastroDTO, Medico> {
 
     private final MedicoRepository repository;
@@ -30,6 +32,7 @@ public class MedicoService implements IBaseService<MedicoCadastroDTO, Medico> {
     private final ContatoService contatoService;
 
     public Medico findById(Long id) {
+        log.info("Buscando medico id={}", id);
         return this.repository.findById(id)
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Medico", id));
     }
@@ -64,6 +67,7 @@ public class MedicoService implements IBaseService<MedicoCadastroDTO, Medico> {
 
     @Transactional
     public Medico inserir(MedicoCadastroDTO medicoCadastroDTO) {
+        log.info("Insert medico... ");
         return Optional.ofNullable(medicoCadastroDTO)
                 .map(this::validarInsert)
                 .map(this::prepareInsert)
@@ -73,6 +77,7 @@ public class MedicoService implements IBaseService<MedicoCadastroDTO, Medico> {
 
     @Transactional
     public Medico update(Long id, MedicoCadastroDTO medicoCadastroDTO) {
+        log.info("Update medico id={}", id);
         return Optional.ofNullable(medicoCadastroDTO)
                 .map(aDto -> validarUpdate(aDto, id))
                 .map(medico -> prepareUpdate(medico, id))
@@ -81,6 +86,7 @@ public class MedicoService implements IBaseService<MedicoCadastroDTO, Medico> {
     }
 
     public void delete(Long id) {
+        log.info("Delete medico id={}", id);
         var medico = this.findById(id);
 
         Optional.ofNullable(medico)

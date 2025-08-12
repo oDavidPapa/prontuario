@@ -10,6 +10,7 @@ import com.ufes.prontuario.specification.ConsultaSpecification;
 import com.ufes.prontuario.util.CodeUtils;
 import com.ufes.prontuario.util.PageUtils;
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +24,7 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @Service
+@Log4j2
 public class ConsultaService implements IBaseService<ConsultaCadastroDTO, Consulta> {
 
     private final ConsultaRepository repository;
@@ -48,12 +50,14 @@ public class ConsultaService implements IBaseService<ConsultaCadastroDTO, Consul
 
 
     public Consulta findById(Long id) {
+        log.info("Buscando consulta ID={} ", id);
         return this.repository.findById(id)
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Consulta", id));
     }
 
     public Page<Consulta> filter(Long idConsulta, String nomePaciente,
            String nomeMedico, LocalDate dataInicio, LocalDate dataFim, String cpfPaciente ,Pageable pageable) {
+        log.info("Listando consultas...");
         var specification = this.prepareSpecification(idConsulta, nomePaciente, nomeMedico, dataInicio, dataFim, cpfPaciente);
 
         return this.repository.findAll(specification, PageUtils.preparePageable(pageable));
@@ -77,6 +81,7 @@ public class ConsultaService implements IBaseService<ConsultaCadastroDTO, Consul
     }
 
     public Consulta inserir(ConsultaCadastroDTO consultaCadastroDTO, Authentication auth) {
+        log.info("Inserindo consulta...");
         consultaCadastroDTO.setLoginMedico(auth.getName());
 
         return Optional.of(consultaCadastroDTO)
@@ -87,10 +92,13 @@ public class ConsultaService implements IBaseService<ConsultaCadastroDTO, Consul
     }
 
     public Consulta save(Consulta consulta) {
+        log.info("Save consulta...");
         return repository.save(consulta);
     }
 
     public Consulta update(Long id, ConsultaCadastroDTO consultaCadastroDTO) {
+        log.info("Update consulta ID={} ", id);
+
         return Optional.ofNullable(consultaCadastroDTO)
                 .map(cDto -> validarUpdate(cDto, id))
                 .map(consulta -> prepareUpdate(consulta ,id))

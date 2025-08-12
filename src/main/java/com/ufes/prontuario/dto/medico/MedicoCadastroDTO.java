@@ -1,15 +1,13 @@
 package com.ufes.prontuario.dto.medico;
 
 import com.ufes.prontuario.dto.pessoa.PessoaCadastroDTO;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @Builder
+@NoArgsConstructor
 public class MedicoCadastroDTO {
 
     private String crm;

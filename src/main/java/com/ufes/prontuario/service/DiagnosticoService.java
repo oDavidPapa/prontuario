@@ -8,6 +8,7 @@ import com.ufes.prontuario.repository.DiagnosticoRepository;
 import com.ufes.prontuario.specification.BaseSpecification;
 import com.ufes.prontuario.util.PageUtils;
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -18,17 +19,20 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @Service
+@Log4j2
 public class DiagnosticoService implements IBaseService<DiagnosticoCadastroDTO, Diagnostico> {
 
     private final DiagnosticoRepository repository;
     private final ConsultaService consultaService;
 
     public Diagnostico findById(Long id) {
+        log.info("Buscando Diagnostico id={}", id);
         return this.repository.findById(id)
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Diagnostico", id));
     }
 
     public Diagnostico findByIdConsulta(Long idConsulta) {
+        log.info("Buscando diagnostico by consulta id={}", idConsulta);
         return this.repository.findByConsultaId(idConsulta);
     }
 
@@ -52,6 +56,7 @@ public class DiagnosticoService implements IBaseService<DiagnosticoCadastroDTO, 
     }
 
     public Diagnostico inserir(DiagnosticoCadastroDTO diagnosticoCadastroDTO) {
+        log.info("Insert diagnostico...");
         return Optional.ofNullable(diagnosticoCadastroDTO)
                 .map(this::validarInsert)
                 .map(this::prepareInsert)
@@ -60,6 +65,7 @@ public class DiagnosticoService implements IBaseService<DiagnosticoCadastroDTO, 
     }
 
     public Diagnostico update(Long id, DiagnosticoCadastroDTO diagnosticoCadastroDTO) {
+        log.info("Update diagnostico id={}", id);
         return Optional.ofNullable(diagnosticoCadastroDTO)
                 .map(aDto -> validarUpdate(aDto, id))
                 .map(diagnostico -> prepareUpdate(diagnostico ,id))
@@ -68,6 +74,7 @@ public class DiagnosticoService implements IBaseService<DiagnosticoCadastroDTO, 
     }
 
     public void delete(Long id) {
+        log.info("Delete diagnostico id={}", id);
         var diagnostico = this.findById(id);
 
         Optional.ofNullable(diagnostico)

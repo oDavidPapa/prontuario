@@ -30,6 +30,14 @@ public class PacienteController {
         return new BaseResponse<>(pessoaDTO);
     }
 
+    @GetMapping("consulta/{idConsulta}")
+    public BaseResponse<PacienteDTO> findByConsultaId(@PathVariable Long idConsulta) {
+        var pessoaDTO = Optional.ofNullable(service.findByConsultaId(idConsulta))
+                .map(PacienteConverter::toDTO).orElse(null);
+
+        return new BaseResponse<>(pessoaDTO);
+    }
+
     @GetMapping
     public BaseResponse<PacienteDTO> filter(
             @RequestParam(required = false) String nome,
